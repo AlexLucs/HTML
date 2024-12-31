@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adicionado para responsividade -->
+    <link id="favicon" rel="icon" href="https://www.svgrepo.com/show/452169/bitcoin.svg">
+    <title>BTC Status</title>
+    <style>
+        /* Resetando margens e padding padrão */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Garantir que ocupe toda a altura da tela */
+        }
+
+        /* Tamanhos das informações */
+        .info-large {
+            font-weight: 100;
+            font-size: 4vw; /* Usando % do tamanho da tela para ajustar */
+            color: white;
+            margin-top: 20px;
+        }
+
+        .info-medium {
+            font-weight: 100;
+            font-size: 3.5vw;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .info-small {
+            font-weight: 100;
+            font-size: 3vw;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .info-smaller {
+            font-weight: 100;
+            font-size: 2.5vw;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .info-brlsmll {
+            font-weight: 100;
+            font-size: 2vw;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .info-dollar {
+            font-weight: 100;
+            font-size: 2vw;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .bottom-left-info {
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            font-size: 2vw;
+            color: white;
+            width: 100%;
+            max-width: 500px; /* Para limitar a largura em dispositivos grandes */
+        }
+
+        .bottom-left-info table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .bottom-left-info td {
+            padding: 2px 5px;
+            text-align: left;
+        }
+
+        .separator {
+            border: none;
+            border-top: 1px solid white;
+            margin: 10px 0;
+        }
+
+        /* Estilos responsivos para telas menores */
+        @media (max-width: 768px) {
+            .info-large {
+                font-size: 5vw;
+            }
+
+            .info-medium {
+                font-size: 4vw;
+            }
+
+            .info-small {
+                font-size: 3.5vw;
+            }
+
+            .info-smaller {
+                font-size: 3vw;
+            }
+
+            .info-brlsmll,
+            .info-dollar {
+                font-size: 3vw;
+            }
+
+            .bottom-left-info table {
+                font-size: 3vw;
+            }
+        }
+
+        /* Estilos para dispositivos muito pequenos, como smartphones */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .info-large {
+                font-size: 6vw;
+            }
+
+            .info-medium {
+                font-size: 5vw;
+            }
+
+            .info-small {
+                font-size: 4.5vw;
+            }
+
+            .info-smaller {
+                font-size: 3.5vw;
+            }
+
+            .info-brlsmll,
+            .info-dollar {
+                font-size: 3.5vw;
+            }
+
+            .bottom-left-info table {
+                font-size: 3.5vw;
+            }
+        }
+    </style>
+    <script>
+        const REFRESH_UPDATE = 5000;
+
+        async function fetchAndUpdateTitle() {
+            try {
+                const responseUSD = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
+                const dataUSD = await responseUSD.json();
+                const lastPriceUSD = parseFloat(dataUSD.lastPrice);
+                const priceChangePercent = parseFloat(dataUSD.priceChangePercent);
+
+                const formattedPriceUSD = lastPriceUSD.toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
+                const formattedPercent = priceChangePercent.toFixed(2) + '%';
+
+                const now = new Date();
+                const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+
+                let titleText = `${formattedPriceUSD} | ${formattedPercent}`;
+
+                document.title = titleText;
+                document.getElementById('info-price').textContent = formattedPriceUSD;
+                document.getElementById('info-percent').textContent = formattedPercent;
+                document.getElementById('info-time').textContent = formattedTime;
+
+                // Atualizar informações no canto inferior esquerdo
+                document.getElementById('highPrice').textContent = parseFloat(dataUSD.highPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
+                document.getElementById('lowPrice').textContent = parseFloat(dataUSD.lowPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
+
+                // Atualizar preço em BRL e cotação do dólar
+                fetchAndUpdateBRL(lastPriceUSD);
+
+                // Atualizar taxas de transação
+                fetchAndUpdateFees();
+            } catch (error) {
+                console.error('Erro ao buscar dados da API:', error);
+                document.title = 'Erro ao buscar dados';
+                document.getElementById('info-price').textContent = 'Erro ao buscar dados';
+            }
+        }
+
+        async function fetchAndUpdateBRL(lastPriceUSD) {
+            try {
+                const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
+                const dataBRL = await responseBRL.json();
+                const lastPriceBRL = parseFloat(dataBRL.lastPrice);
+                const formattedPriceBRL = lastPriceBRL.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                document.getElementById('info-brl').textContent = `${formattedPriceBRL}`;
+
+                const dollarExchangeRate = (lastPriceBRL / lastPriceUSD).toFixed(2);
+                document.getElementById('info-dollar').textContent = `R$ ${dollarExchangeRate}`;
+            } catch (error) {
+                console.error('Erro ao buscar dados do BTC/BRL:', error);
+                document.getElementById('info-brl').textContent = 'Erro ao buscar BTC/BRL';
+                document.getElementById('info-dollar').textContent = 'Erro ao calcular cotação do dólar';
+            }
+        }
+
+        async function fetchAndUpdateFees() {
+            try {
+                const responseFees = await fetch('https://mempool.space/api/v1/fees/recommended');
+                const dataFees = await responseFees.json();
+
+                document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
+                document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
+                document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
+				document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
+				document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
+				
+				document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee+dataFees.economyFee+dataFees.hourFee+dataFees.halfHourFee+dataFees.fastestFee)/5} sat/vB`;
+            } catch (error) {
+                console.error('Erro ao buscar dados de taxas:', error);
+            }
+        }
+
+        setInterval(fetchAndUpdateTitle, REFRESH_UPDATE);
+        window.onload = fetchAndUpdateTitle;
+    </script>
+</head>
+<body>
+    <img src="https://www.svgrepo.com/show/452169/bitcoin.svg" alt="Bitcoin é uma moeda digital descentralizada, baseada em tecnologia blockchain, que permite transações seguras e anônimas sem a necessidade de intermediários, como bancos ou governos." width="70" height="70">
+    <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos(USD). Dados Binance."></div>
+    <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais (BRL). Dados Binance."></div>
+    <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar. Calculado com valor do Bitcoin em reais dividido pelo valor em dólar. Dados Binance."></div>
+    <div id="info-percent" class="info-medium" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
+    <div id="info-time" class="info-smaller" title="Horário da última atualização dos dados exibidos na página."></div>
+    <div class="bottom-left-info">
+        <table>
+            <tr>
+                <td colspan="2"><hr class="separator"></td>
+            </tr>
+            <tr>
+                <td>Máxima:</td>
+                <td id="highPrice"></td>
+            </tr>
+            <tr>
+                <td>Mínima:</td>
+                <td id="lowPrice"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr class="separator"></td>
+            </tr>
+			<tr>
+				<td colspan="2" style="text-align: center;">F E E's</td>
+			</tr>
+            <tr>
+                <td colspan="2"><hr class="separator"></td>
+            </tr>
+            <tr>
+                <td>Minima:</td>
+                <td id="minimumFee"></td>
+            </tr>
+            <tr>
+                <td>Econômica:</td>
+                <td id="economyFee"></td>
+            </tr>
+            <tr>
+                <td>Prioridade:</td>
+                <td id="fastestFee"></td>
+            </tr>
+            <tr>
+                <td>~30 min:</td>
+                <td id="halfHourFee"></td>
+            </tr>
+            <tr>
+                <td>~1 hora:</td>
+                <td id="hourFee"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr class="separator"></td>
+            </tr>
+            <tr>
+                <td>Média:</td>
+                <td id="mediumFee"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr class="separator"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

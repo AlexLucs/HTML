@@ -2,9 +2,17 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <link id="favicon" rel="icon" href="https://www.svgrepo.com/show/452169/bitcoin.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade -->
+    <link id="favicon" rel="icon" href="btc-logo.svg">
     <title>BTC Status</title>
     <style>
+        /* Resetando margens e padding padrão */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: black;
             color: white;
@@ -12,63 +20,78 @@
             margin: 0;
             padding: 20px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Garantir que ocupe toda a altura da tela */
         }
 
+        /* Tamanhos das informações */
         .info-large {
             font-weight: 100;
-            font-size: 56px;
+            font-size: 4vw; /* Usando % do tamanho da tela para ajustar */
             color: white;
             margin-top: 20px;
         }
 
         .info-medium {
             font-weight: 100;
-            font-size: 48px;
+            font-size: 3.5vw;
             color: white;
             margin-top: 10px;
         }
 
+        .info-logo {
+            margin-top: 1px;
+        }
+
         .info-small {
             font-weight: 100;
-            font-size: 40px;
+            font-size: 3vw;
             color: white;
             margin-top: 5px;
         }
 
         .info-smaller {
             font-weight: 100;
-            font-size: 16px;
+            font-size: 2.5vw;
             color: white;
             margin-top: 5px;
-        }   
+        }
 
         .info-brlsmll {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 2vw;
             color: white;
             margin-top: 5px;
         }
 
         .info-dollar {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 2vw;
             color: white;
             margin-top: 5px;
         }
+
         .bottom-left-info {
-	    display: flex;
+            display: flex;
             justify-content: center;
-	    padding-top: 20px;
-            font-size: 12px;
+            padding-top: 20px;
+            font-size: 2vw;
             color: white;
+            width: 100%;
+            max-width: 500px; /* Para limitar a largura em dispositivos grandes */
         }
 
         .bottom-left-info table {
             border-collapse: collapse;
+            width: 100%;
         }
 
         .bottom-left-info td {
             padding: 2px 5px;
+            text-align: left;
         }
 
         .separator {
@@ -76,9 +99,71 @@
             border-top: 1px solid white;
             margin: 10px 0;
         }
+
+        /* Estilos responsivos para telas menores */
+        @media (max-width: 768px) {
+            .info-large {
+                font-size: 5vw;
+            }
+
+            .info-medium {
+                font-size: 4vw;
+            }
+
+            .info-small {
+                font-size: 3.5vw;
+            }
+
+            .info-smaller {
+                font-size: 3vw;
+            }
+
+            .info-brlsmll,
+            .info-dollar {
+                font-size: 3vw;
+            }
+
+            .bottom-left-info table {
+                font-size: 3vw;
+            }
+        }
+
+        /* Estilos para dispositivos muito pequenos, como smartphones */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .info-large {
+                font-size: 6vw;
+            }
+
+            .info-medium {
+                font-size: 5vw;
+            }
+
+            .info-small {
+                font-size: 4.5vw;
+            }
+
+            .info-smaller {
+                font-size: 3.5vw;
+            }
+
+            .info-brlsmll,
+            .info-dollar {
+                font-size: 3.5vw;
+            }
+
+            .bottom-left-info table {
+                font-size: 3.5vw;
+            }
+        }
     </style>
     <script>
-        const REFRESH_UPDATE = 10000;
+        // Gerar valor aleatório entre 5000 e 10000 para tempo de atualização
+        const randomValue = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+        const REFRESH_UPDATE = randomValue;
 
         async function fetchAndUpdateTitle() {
             try {
@@ -142,10 +227,10 @@
                 document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
                 document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
                 document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
-				document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
-				document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
-				
-				document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee+dataFees.economyFee+dataFees.hourFee+dataFees.halfHourFee+dataFees.fastestFee)/5} sat/vB`;
+                document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
+                document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
+                
+                document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee + dataFees.economyFee + dataFees.hourFee + dataFees.halfHourFee + dataFees.fastestFee) / 5} sat/vB`;
             } catch (error) {
                 console.error('Erro ao buscar dados de taxas:', error);
             }
@@ -156,10 +241,12 @@
     </script>
 </head>
 <body>
-    <img src="https://www.svgrepo.com/show/452169/bitcoin.svg" alt="Bitcoin é uma moeda digital descentralizada, baseada em tecnologia blockchain, que permite transações seguras e anônimas sem a necessidade de intermediários, como bancos ou governos." width="70" height="70">
-    <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos(USD Binance)."></div>
-    <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais(BRL Binance)."></div>
-    <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar. Calculado com valor do Bitcoin em reais dividido pelo valor em dólar (BRL/USD Binance)."></div>
+    <div id="info-logo">
+        <img src="btc-logo.svg" alt="Logo do Bitcoin" width="70" height="70">
+    </div>
+    <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos (USD). Dados da Binance."></div>
+    <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais (BRL). Dados da Binance."></div>
+    <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar, calculado com base no valor do Bitcoin em reais."></div>
     <div id="info-percent" class="info-medium" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
     <div id="info-time" class="info-smaller" title="Horário da última atualização dos dados exibidos na página."></div>
     <div class="bottom-left-info">
@@ -178,9 +265,9 @@
             <tr>
                 <td colspan="2"><hr class="separator"></td>
             </tr>
-			<tr>
-				<td colspan="2" style="text-align: center;">F E E's</td>
-			</tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">FEE's</td>
+            </tr>
             <tr>
                 <td colspan="2"><hr class="separator"></td>
             </tr>

@@ -6,74 +6,67 @@
     <link id="favicon" rel="icon" href="btc-logo.svg">
     <title>BTC Status</title>
     <style>
-        /* Resetando margens e padding padrão */
+        /* Resetando margens, padding e definindo box-sizing padrão */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Estilos gerais para a imagem */
+        img {
+            width: 70px;
+            height: 70px;
+        }
+
+        /* Estilos gerais para o corpo da página */
         body {
             background-color: black;
             color: white;
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh; /* Garantir que ocupe toda a altura da tela */
+            width: 100vw;  /* Corrigido para garantir que ocupe toda a largura da tela */
         }
 
-        /* Tamanhos das informações */
-        .info-large {
+        /* Estilos gerais para as informações textuais */
+        .info-large, .info-medium, .info-small, .info-smaller, .info-brlsmll, .info-dollar {
             font-weight: 100;
-            font-size: 4vw; /* Usando % do tamanho da tela para ajustar */
             color: white;
-            margin-top: 20px;
+            margin-top: 5px;
+        }
+
+        .info-large {
+            font-size: 4vw; /* Usando % do tamanho da tela */
         }
 
         .info-medium {
-            font-weight: 100;
             font-size: 3.5vw;
-            color: white;
-            margin-top: 10px;
-        }
-
-        .info-logo {
-            margin-top: 1px;
         }
 
         .info-small {
-            font-weight: 100;
             font-size: 3vw;
-            color: white;
-            margin-top: 5px;
         }
 
         .info-smaller {
-            font-weight: 100;
             font-size: 2.5vw;
-            color: white;
-            margin-top: 5px;
         }
 
         .info-brlsmll {
-            font-weight: 100;
             font-size: 2vw;
-            color: white;
-            margin-top: 5px;
         }
 
         .info-dollar {
-            font-weight: 100;
             font-size: 2vw;
-            color: white;
-            margin-top: 5px;
         }
 
+        /* Estilos específicos para a tabela na parte inferior esquerda */
         .bottom-left-info {
             display: flex;
             justify-content: center;
@@ -81,7 +74,6 @@
             font-size: 2vw;
             color: white;
             width: 100%;
-            max-width: 500px; /* Para limitar a largura em dispositivos grandes */
         }
 
         .bottom-left-info table {
@@ -90,48 +82,62 @@
         }
 
         .bottom-left-info td {
-            padding: 2px 5px;
-            text-align: left;
+            padding: 2px;
         }
 
+        /* Separador horizontal */
         .separator {
             border: none;
             border-top: 1px solid white;
             margin: 10px 0;
         }
 
-        /* Estilos responsivos para telas menores */
-        @media (max-width: 768px) {
+        /* Estilos responsivos para telas maiores */
+        @media (min-width: 1950px) {
+            body {
+                padding: 40px;
+            }
+
+            img {
+                width: 100px;
+                height: 100px;
+            }
+
             .info-large {
-                font-size: 5vw;
-            }
-
-            .info-medium {
-                font-size: 4vw;
-            }
-
-            .info-small {
                 font-size: 3.5vw;
             }
 
+            .info-medium {
+                font-size: 2.5vw;
+            }
+
+            .info-small {
+                font-size: 2vw;
+            }
+
             .info-smaller {
-                font-size: 3vw;
+                font-size: 1.5vw;
             }
 
             .info-brlsmll,
             .info-dollar {
-                font-size: 3vw;
+                font-size: 1vw;
             }
 
             .bottom-left-info table {
-                font-size: 3vw;
+                font-size: 1vw;
             }
         }
 
-        /* Estilos para dispositivos muito pequenos, como smartphones */
-        @media (max-width: 480px) {
+        /* Estilos responsivos para telas menores */
+        @media (max-width: 1100px) {
             body {
-                padding: 10px;
+                padding: 1px;
+            }
+
+            img {
+                width: 80px;
+                height: 80px;
             }
 
             .info-large {
@@ -143,7 +149,7 @@
             }
 
             .info-small {
-                font-size: 4.5vw;
+                font-size: 4vw;
             }
 
             .info-smaller {
@@ -152,13 +158,51 @@
 
             .info-brlsmll,
             .info-dollar {
-                font-size: 3.5vw;
+                font-size: 3.0vw;
             }
 
             .bottom-left-info table {
-                font-size: 3.5vw;
+                font-size: 3.0vw;
             }
         }
+
+        /* Estilos para dispositivos muito pequenos (smartphones) */
+        @media (max-width: 500px) {
+            body {
+                padding: 1px;
+            }
+
+            img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .info-large {
+                font-size: 11vw;
+            }
+
+            .info-medium {
+                font-size: 9vw;
+            }
+
+            .info-small {
+                font-size: 7vw;
+            }
+
+            .info-smaller {
+                font-size: 6vw;  /* Corrigido de '6w' para '6vw' */
+            }
+
+            .info-brlsmll,
+            .info-dollar {
+                font-size: 5vw;
+            }
+
+            .bottom-left-info table {
+                font-size: 5vw;
+            }
+        }
+
     </style>
     <script>
         // Gerar valor aleatório entre 5000 e 10000 para tempo de atualização
@@ -179,13 +223,12 @@
                 const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
 
                 let titleText = `${formattedPriceUSD} | ${formattedPercent}`;
-
                 document.title = titleText;
                 document.getElementById('info-price').textContent = formattedPriceUSD;
                 document.getElementById('info-percent').textContent = formattedPercent;
                 document.getElementById('info-time').textContent = formattedTime;
 
-                // Atualizar informações no canto inferior esquerdo
+                // Atualizar informações de máxima e mínima de preços
                 document.getElementById('highPrice').textContent = parseFloat(dataUSD.highPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
                 document.getElementById('lowPrice').textContent = parseFloat(dataUSD.lowPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
 
@@ -210,8 +253,14 @@
 
                 document.getElementById('info-brl').textContent = `${formattedPriceBRL}`;
 
+                // Verificar se a cotação está correta
                 const dollarExchangeRate = (lastPriceBRL / lastPriceUSD).toFixed(2);
                 document.getElementById('info-dollar').textContent = `R$ ${dollarExchangeRate}`;
+
+                <!-- // Atualizar preços máximo e mínimo de BTC/BRL -->
+                <!-- document.getElementById('highPrice').textContent = parseFloat(dataBRL.highPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); -->
+                <!-- document.getElementById('lowPrice').textContent = parseFloat(dataBRL.lowPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); -->
+
             } catch (error) {
                 console.error('Erro ao buscar dados do BTC/BRL:', error);
                 document.getElementById('info-brl').textContent = 'Erro ao buscar BTC/BRL';
@@ -241,67 +290,66 @@
     </script>
 </head>
 <body>
-    <div id="info-logo">
-        <img src="btc-logo.svg" alt="Logo do Bitcoin" width="70" height="70">
-    </div>
-    <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos (USD). Dados da Binance."></div>
-    <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais (BRL). Dados da Binance."></div>
-    <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar, calculado com base no valor do Bitcoin em reais."></div>
-    <div id="info-percent" class="info-medium" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
-    <div id="info-time" class="info-smaller" title="Horário da última atualização dos dados exibidos na página."></div>
-    <div class="bottom-left-info">
-        <table>
-            <tr>
-                <td colspan="2"><hr class="separator"></td>
-            </tr>
-            <tr>
-                <td>Máxima:</td>
-                <td id="highPrice"></td>
-            </tr>
-            <tr>
-                <td>Mínima:</td>
-                <td id="lowPrice"></td>
-            </tr>
-            <tr>
-                <td colspan="2"><hr class="separator"></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: center;">FEE's</td>
-            </tr>
-            <tr>
-                <td colspan="2"><hr class="separator"></td>
-            </tr>
-            <tr>
-                <td>Minima:</td>
-                <td id="minimumFee"></td>
-            </tr>
-            <tr>
-                <td>Econômica:</td>
-                <td id="economyFee"></td>
-            </tr>
-            <tr>
-                <td>Prioridade:</td>
-                <td id="fastestFee"></td>
-            </tr>
-            <tr>
-                <td>~30 min:</td>
-                <td id="halfHourFee"></td>
-            </tr>
-            <tr>
-                <td>~1 hora:</td>
-                <td id="hourFee"></td>
-            </tr>
-            <tr>
-                <td colspan="2"><hr class="separator"></td>
-            </tr>
-            <tr>
-                <td>Média:</td>
-                <td id="mediumFee"></td>
-            </tr>
-            <tr>
-                <td colspan="2"><hr class="separator"></td>
-            </tr>
-        </table>
+    <div class="pywebview-drag-region">
+        <div id="info-logo">
+            <img src="btc-logo.svg" alt="Logo do Bitcoin">
+        </div>
+        <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos (USD). Dados da Binance."></div>
+        <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais (BRL). Dados da Binance."></div>
+        <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar, calculado com base no valor do Bitcoin em reais."></div>
+        <div id="info-percent" class="info-medium" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
+        <div id="info-time" class="info-smaller" title="Horário da última atualização dos dados exibidos na página."></div>
+        <div class="bottom-left-info">
+            <table>
+                <tr>
+                    <td colspan="2"><hr class="separator"></td>
+                </tr>
+                <tr>
+                    <td>Máxima:</td>
+                    <td id="highPrice"></td>
+                </tr>
+                <tr>
+                    <td>Mínima:</td>
+                    <td id="lowPrice"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr class="separator"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">Taxas</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr class="separator"></td>
+                </tr>
+                <tr>
+                    <td>Minima:</td>
+                    <td id="minimumFee"></td>
+                </tr>
+                <tr>
+                    <td>Econômica:</td>
+                    <td id="economyFee"></td>
+                </tr>
+                <tr>
+                    <td>Prioridade:</td>
+                    <td id="fastestFee"></td>
+                </tr>
+                <tr>
+                    <td>~30 min:</td>
+                    <td id="halfHourFee"></td>
+                </tr>
+                <tr>
+                    <td>~1 hora:</td>
+                    <td id="hourFee"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr class="separator"></td>
+                </tr>
+                <tr>
+                    <td>Média:</td>
+                    <td id="mediumFee"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 </body>
 </html>

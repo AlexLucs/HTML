@@ -44,21 +44,21 @@
 
         .info-brlsmll {
             font-weight: 100;
-            font-size: 12px;
+            font-size: 14px;
             color: white;
             margin-top: 5px;
         }
 
         .info-dollar {
             font-weight: 100;
-            font-size: 12px;
+            font-size: 14px;
             color: white;
             margin-top: 5px;
         }
         .bottom-left-info {
-			display: flex;
+	    display: flex;
             justify-content: center;
-			padding-top: 20px;
+	    padding-top: 20px;
             font-size: 12px;
             color: white;
         }
@@ -78,7 +78,7 @@
         }
     </style>
     <script>
-        const REFRESH_UPDATE = 5000;
+        const REFRESH_UPDATE = 10000;
 
         async function fetchAndUpdateTitle() {
             try {
@@ -157,9 +157,9 @@
 </head>
 <body>
     <img src="https://www.svgrepo.com/show/452169/bitcoin.svg" alt="Bitcoin é uma moeda digital descentralizada, baseada em tecnologia blockchain, que permite transações seguras e anônimas sem a necessidade de intermediários, como bancos ou governos." width="70" height="70">
-    <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos(USD). Dados Binance."></div>
-    <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais (BRL). Dados Binance."></div>
-    <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar. Calculado com valor do Bitcoin em reais dividido pelo valor em dólar. Dados Binance."></div>
+    <div id="info-price" class="info-large" title="Preço atual do Bitcoin em dólares americanos(USD Binance)."></div>
+    <div id="info-brl" class="info-brlsmll" title="Preço atual do Bitcoin em reais(BRL Binance)."></div>
+    <div id="info-dollar" class="info-dollar" title="Preço atual teórico do dólar. Calculado com valor do Bitcoin em reais dividido pelo valor em dólar (BRL/USD Binance)."></div>
     <div id="info-percent" class="info-medium" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
     <div id="info-time" class="info-smaller" title="Horário da última atualização dos dados exibidos na página."></div>
     <div class="bottom-left-info">

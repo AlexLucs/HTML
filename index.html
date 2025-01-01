@@ -173,7 +173,7 @@
 				
                 const dataBRL = await responseBRL.json();
                 const lastPriceBRL = parseFloat(dataBRL.lastPrice);
-				const formattedPriceBRL = lastPriceBRL.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+		const formattedPriceBRL = lastPriceBRL.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 				
                 const priceChangePercent = parseFloat(dataBRL.priceChangePercent);
                 const formattedPercent = priceChangePercent.toFixed(2) + '%';
@@ -209,6 +209,7 @@
 		async function atualiza_B3(dollarExchangeRate) {
 			try {
 				const responseBRLx = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+				
 				const dataBRLx = await responseBRLx.json();
 				const lastPriceBRLx = parseFloat(dataBRLx.USDBRL.ask);
 				const formattedPriceBRLx = lastPriceBRLx.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -224,15 +225,16 @@
         async function atualiza_USD(lastPriceBRL) {
             try {
                 const responseUSD = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
+		    
                 const dataUSD = await responseUSD.json();
                 const lastPriceUSD = parseFloat(dataUSD.lastPrice);
                 const formattedPriceUSD = lastPriceUSD.toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
 				
-				// Atualizar preço em USDT
+		// Atualizar preço em USDT
                 document.getElementById('info-usdt').textContent = formattedPriceUSD;
 				
-				// Calcula o valor do dólar dividindo o valor do BTC em reais pelo valor em dólares
-				const dollarExchangeRate = (lastPriceBRL / lastPriceUSD).toFixed(2);
+		// Calcula o valor do dólar dividindo o valor do BTC em reais pelo valor em dólares
+		const dollarExchangeRate = (lastPriceBRL / lastPriceUSD).toFixed(2);
 
                 // Atualizar informações de máxima e mínima de preços
                 document.getElementById('highPriceDol').textContent = parseFloat(dataUSD.highPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });

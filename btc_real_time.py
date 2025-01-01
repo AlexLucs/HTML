@@ -35,7 +35,7 @@ def abrir_janela():
         webview.menu.MenuAction("Fechar", fechar),
     ]
 
-    url = path + "btcph.html"
+    url = "index.html"
 
     window = webview.create_window(
         "Stack Stats",

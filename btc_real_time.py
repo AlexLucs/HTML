@@ -35,7 +35,7 @@ def abrir_janela():
         webview.menu.MenuAction("Fechar", fechar),
     ]
 
-    url = "index.html"
+    url = "https://alexlucs.github.io/HTML/index.html"
 
     window = webview.create_window(
         "Stack Stats",
@@ -43,6 +43,7 @@ def abrir_janela():
         width=500,
         height=950,
         frameless=True,
+        background_color="#000000",
         on_top=True,
         x=2077,
         y=-1,

@@ -35,25 +35,25 @@
 		/* Corrigido para garantir que ocupe toda a largura da tela */
 	}
 	/* Estilos gerais para as informações textuais */
-	 .info-large, .info-medium, .info-smaller, .info-brlsmll, .info-dolar {
+	 .btc_em_brl_principal, .percentual, .horario_atualizacao, .btc_em_usdt_secundariol, .dolar_btc_e_b3 {
 		 font-weight: 100;
 		 color: white;
 		 margin-top: 5px;
 	}
-	 .info-large {
+	 .btc_em_brl_principal {
 		 font-size: 3.5vw;
 		/* Usando % do tamanho da tela */
 	}
-	 .info-medium {
+	 .percentual {
 		 font-size: 4.5vw;
 	}
-	 .info-smaller {
+	 .horario_atualizacao {
 		 font-size: 1.5vw;
 	}
-	 .info-brlsmll {
+	 .btc_em_usdt_secundariol {
 		font-size: 2.5vw;
 	}
-	 .info-dolar {
+	 .dolar_btc_e_b3 {
 		 font-size: 1.4vw;
 	}
 	/* Estilos para a tabela */
@@ -82,19 +82,19 @@
 		 body {
 			 padding: 1px;
 		}
-		 .info-large {
+		 .btc_em_brl_principal {
 			 font-size: 2.7vw;
 		}
-		 .info-medium {
+		 .percentual {
 			 font-size: 3.5vw;
 		}
-		 .info-smaller {
+		 .horario_atualizacao {
 			 font-size: 1vw;
 		}
-		 .info-brlsmll {
+		 .btc_em_usdt_secundariol {
 			 font-size: 1.9vw;
 		}
-		 .info-dolar{
+		 .dolar_btc_e_b3{
 		 font-size: 1vw;
 		}
 		 .bottom-left-info, table {
@@ -106,19 +106,19 @@
 		 body {
 			 padding: 1px;
 		}
-		 .info-large {
+		 .btc_em_brl_principal {
 			 font-size: 6vw;
 		}
-		 .info-medium {
+		 .percentual {
 			 font-size: 7vw;
 		}
-		 .info-smaller {
+		 .horario_atualizacao {
 			 font-size: 2vw;
 		}
-		 .info-brlsmll {
+		 .btc_em_usdt_secundariol {
 			 font-size: 4vw;
 		}
-		 .info-dolar{
+		 .dolar_btc_e_b3{
 		 font-size: 2.5vw;
 		}
 		 .bottom-left-info, table {
@@ -130,19 +130,19 @@
 		 body {
 			 padding: 1px;
 		}
-		 .info-large {
+		 .btc_em_brl_principal {
 			 font-size: 14vw;
 		}
-		 .info-medium {
+		 .percentual {
 			 font-size: 16vw;
 		}
-		 .info-smaller {
+		 .horario_atualizacao {
 			 font-size: 5vw;
 		}
-		 .info-brlsmll {
+		 .btc_em_usdt_secundariol {
 			 font-size: 9vw;
 		}
-		 .info-dolar{
+		 .dolar_btc_e_b3{
 		 font-size: 5vw;
 		}
 		 .bottom-left-info, table {
@@ -263,11 +263,11 @@
         <div id="info-logo">
             <img src="btc-logo.svg" title="Logo Bitcoin" alt="Logo do Bitcoin">
         </div>
-        <div id="info-price" class="info-large" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance."></div>
-        <div id="info-usdt" class="info-brlsmll" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance."></div>
-        <div id="info-dolar" class="info-dolar" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI"></div>
-        <div id="info-percent" class="info-medium" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
-        <div id="info-time" class="info-smaller" title="Horário da última atualização dos dados exibidos na página."></div>
+        <div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
+        <div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
+        <div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
+        <div id="info-percent" class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
+        <div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
         <div class="bottom-left-info">
             <table>
                 <tr>
@@ -275,19 +275,19 @@
                 </tr>
                 <tr>
                     <td>Máxima:</td>
-                    <td id="highPrice" title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance."></td>
+                    <td id="highPrice" title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©."></td>
                 </tr>
                 <tr>
                     <td>Mínima:</td>
-                    <td id="lowPrice" title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance."></td>
+                    <td id="lowPrice" title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©."></td>
                 </tr>
 				<tr>
                     <td>Max. USDT:</td>
-                    <td id="highPriceDol" title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance."></td>
+                    <td id="highPriceDol" title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©."></td>
                 </tr>
                 <tr>
                     <td>Min. USDT:</td>
-                    <td id="lowPriceDol" title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance."></td>
+                    <td id="lowPriceDol" title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©."></td>
                 </tr>
                 <tr>
                     <td colspan="2"><hr class="separator"></td>
@@ -300,7 +300,7 @@
                 </tr>
                 <tr>
                     <td>Minima:</td>
-                    <td id="minimumFee" title="Taxa mínima sugerida pela Mempool."></td>
+                    <td id="minimumFee" title="Taxa mínima sugerida pela Mempool©."></td>
                 </tr>
                 <tr>
                     <td>Econômica:</td>
@@ -308,22 +308,22 @@
                 </tr>
                 <tr>
                     <td>Prioridade:</td>
-                    <td id="fastestFee" title="Taxa mais rápida sugerida pela Mempool."></td>
+                    <td id="fastestFee" title="Taxa mais rápida sugerida pela Mempool©."></td>
                 </tr>
                 <tr>
                     <td>~30 min:</td>
-                    <td id="halfHourFee" title="Taxa média dos últimos trinta minutos. Fonte Mempool."></td>
+                    <td id="halfHourFee" title="Taxa média dos últimos trinta minutos. Fonte Mempool©."></td>
                 </tr>
                 <tr>
                     <td>~1 hora:</td>
-                    <td id="hourFee" title="Taxa média da última hora. Fonte Mempool."></td>
+                    <td id="hourFee" title="Taxa média da última hora. Fonte Mempool©."></td>
                 </tr>
                 <tr>
                     <td colspan="2"><hr class="separator"></td>
                 </tr>
                 <tr>
                     <td>Média:</td>
-                    <td id="mediumFee" title="Média de todas as taxas. Fonte Mempool."></td>
+                    <td id="mediumFee" title="Média de todas as taxas. Fonte Mempool©."></td>
                 </tr>
             </table>
         </div>

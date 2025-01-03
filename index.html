@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -179,7 +178,7 @@
 	<script>		
 		let tempoInatividade = 0;
 		let ativo = true;
-		// Definir tempo para atualizar
+		// Definir tempo para atualizar em milisegundos
 		const update_Time = 10000;
 		// Definir tempo máximo de inatividade em segundos
 		const tempoLimite = 1000;
@@ -190,6 +189,10 @@
 			if (ativo) return;
 			tempoInatividade = 0;
 			ativo = true;
+			if (document.getElementById('info-percent').textContent == "PARADO") {
+				console.log("inicia");
+				inicial();
+			}
 			document.getElementById("info-logo").style.filter = "grayscale(0%)";
 		}
 		// Função para verificar inatividade
@@ -200,6 +203,7 @@
 			tempoInatividade++;
 			if(tempoInatividade >= tempoLimite) {
 				document.getElementById("info-logo").style.filter = "grayscale(100%)";
+				document.getElementById('info-percent').textContent = "PARADO";
 				ativo = false;
 			}
 		}
@@ -318,7 +322,6 @@
 		setInterval(verificarInatividade, 1000);
 	</script>
 </head>
-
 <body>
 	<div class="pywebview-drag-region">
 		<div id="info-logo"> <img src="btc-logo.svg" title="Logo Bitcoin" alt="Logo do Bitcoin"> </div>
@@ -392,5 +395,4 @@
 		</div>
 	</div>
 </body>
-
 </html>

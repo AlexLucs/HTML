@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link id="favicon" rel="icon" href="btc-logo.svg">
-	<title>BTC Status</title>
+	<title>BTC Status - Monitoramento de Preço de Bitcoin</title>
 	<style>
 	/* Resetando margens, padding e definindo box-sizing padrão */
 	
@@ -100,7 +100,7 @@
 	
 	@media (min-width: 1950px) {
 		body {
-			padding: 1px;
+			padding: 10px;
 		}
 		.btc_em_brl_principal {
 			font-size: 2.7vw;
@@ -126,7 +126,7 @@
 	
 	@media (max-width: 1100px) {
 		body {
-			padding: 1px;
+			padding: 10px;
 		}
 		.btc_em_brl_principal {
 			font-size: 6vw;
@@ -152,7 +152,7 @@
 	
 	@media (max-width: 500px) {
 		body {
-			padding: 1px;
+			padding: 10px;
 		}
 		.btc_em_brl_principal {
 			font-size: 14vw;
@@ -190,7 +190,7 @@
 			tempoInatividade = 0;
 			ativo = true;
 			if (document.getElementById('info-percent').textContent == "PARADO") {
-				console.log("inicia");
+				document.getElementById('info-percent').textContent = "";
 				inicial();
 			}
 			document.getElementById("info-logo").style.filter = "grayscale(0%)";
@@ -213,6 +213,9 @@
 		document.addEventListener('mousemove', resetarInatividade);
 		async function inicial() {
 			if(ativo) {
+				// Verificar se o percentual está como "PARADO", caso sim, não fazer a atualização
+				const percentElement = document.getElementById('info-percent');
+				if (percentElement.textContent == "PARADO") return;
 				try {
 					const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
 					const dataBRL = await responseBRL.json();
@@ -238,7 +241,9 @@
 					});
 					// Atualizar preço em BRL, percentual de aumento e hora da última atualização
 					document.getElementById('info-price').textContent = formattedPriceBRL;
-					document.getElementById('info-percent').textContent = formattedPercent;
+					if (ativo) {
+						document.getElementById('info-percent').textContent = formattedPercent;
+					}
 					document.getElementById('info-time').textContent = formattedTime;
 					// Atualizar preço em USD (indice BTC) e USD B3
 					atualiza_USD(lastPriceBRL);

@@ -3,7 +3,6 @@ import webview
 from filelock import FileLock
 from screeninfo import get_monitors
 
-
 path = os.path.dirname(os.path.abspath(__file__)) + "/"
 lockfile = path + "btc_real_time.lock"
 
@@ -33,12 +32,19 @@ def obter_posicao_monitor_e_centralizar(window_width, window_height):
     # Obter informações sobre os monitores
     monitors = get_monitors()
 
+    # Caso não haja monitores, usamos a posição 0,0
     if not monitors:
-        print("Nenhum monitor encontrado.")
-        return 0, 0  # Se não houver monitores, retorna posição 0,0
+        print("Nenhum monitor encontrado. Usando a posição padrão.")
+        return 0, 0  # Posição padrão em caso de não encontrar nenhum monitor
 
-    # Pegar o primeiro monitor (pode alterar para outro índice se necessário)
-    monitor = monitors[0]
+    # Verificar se há mais de um monitor
+    if len(monitors) > 1:
+        # Pegar o segundo monitor (índice 1)
+        monitor = monitors[1]
+    else:
+        # Caso haja apenas um monitor, pegar o primeiro (índice 0)
+        monitor = monitors[0]
+
     monitor_width = monitor.width
     monitor_height = monitor.height
     monitor_x = monitor.x
@@ -49,6 +55,7 @@ def obter_posicao_monitor_e_centralizar(window_width, window_height):
     y_position = monitor_y + (monitor_height - window_height) // 2
 
     return x_position, y_position
+
 def abrir_janela():
     global window
     lock = FileLock(lockfile)
@@ -62,7 +69,7 @@ def abrir_janela():
             ]
 
             # url = "https://alexlucs.github.io/HTML/index.html"
-            url = os.environ.get("USERPROFILE")+"/Downloads/Bot/btcstatus/index.html"
+            url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
 
             window_width = 500
             window_height = 950

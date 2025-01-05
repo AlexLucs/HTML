@@ -178,8 +178,10 @@
 	<script>		
 		let tempoInatividade = 0;
 		let ativo = true;
-		// Definir tempo para atualizar em milisegundos
+		// Definir tempo para atualizar iniciar em milisegundos
 		const update_Time = 10000;
+		// Definir tempo para atualizar taxas em milisegundos
+		const update_Taxas = 60000;
 		// Definir tempo máximo de inatividade em segundos
 		const tempoLimite = 1000;
 		// Função para resetar o tempo de inatividade
@@ -247,8 +249,6 @@
 					document.getElementById('info-time').textContent = formattedTime;
 					// Atualizar preço em USD (indice BTC) e USD B3
 					atualiza_USD(lastPriceBRL);
-					// Atualizar taxas de transação
-					atualiza_taxas();
 				} catch(error) {
 					console.error('Erro ao buscar dados da API BTC/BRL Binance:', error);
 					document.title = 'Erro ao buscar dados';
@@ -307,22 +307,27 @@
 			}
 		}
 		async function atualiza_taxas() {
-			try {
-				const responseFees = await fetch('https://mempool.space/api/v1/fees/recommended');
-				const dataFees = await responseFees.json();
-				document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
-				document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
-				document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
-				document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
-				document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
-				document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee + dataFees.economyFee + dataFees.hourFee + dataFees.halfHourFee + dataFees.fastestFee) / 5} sat/vB`;
-			} catch(error) {
-				console.error('Erro ao buscar dados de taxas:', error);
+			if(ativo) {
+				try {
+					const responseFees = await fetch('https://mempool.space/api/v1/fees/recommended');
+					const dataFees = await responseFees.json();
+					document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
+					document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
+					document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
+					document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
+					document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
+					document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee + dataFees.economyFee + dataFees.hourFee + dataFees.halfHourFee + dataFees.fastestFee) / 5} sat/vB`;
+				} catch(error) {
+					console.error('Erro ao buscar dados de taxas:', error);
+				}
 			}
 		}
-		window.onload = inicial;
+		window.addEventListener('load', inicial);
+		window.addEventListener('load', atualiza_taxas);
 		// Inicia a atualização se não estiver pausado
 		setInterval(inicial, update_Time);
+		// Atualizar taxas de transação
+		setInterval(atualiza_taxas, update_Taxas);
 		// Verificando a inatividade a cada segundo
 		setInterval(verificarInatividade, 1000);
 	</script>
@@ -362,7 +367,7 @@
 						<hr class="separator"> </td>
 				</tr>
 				<tr>
-					<td colspan="2" style="text-align: center;" title="Valores pagos nas transações em Bitcoins.">Taxas</td>
+					<td colspan="2" style="text-align: center;" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
 				</tr>
 				<tr>
 					<td colspan="2">

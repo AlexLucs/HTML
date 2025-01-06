@@ -20,37 +20,10 @@ class exposedApi():
         global window
         monitors = get_monitors()
 
-        if not monitors:
-            return 0, 0
+        if not move==1:
+            if monitors:
+                monitor = monitors[0]
 
-        if len(monitors) > 1:
-            monitor = monitors[1]
-        else:
-            monitor = monitors[0]
-        
-        monitor_width = monitor.width
-        monitor_height = monitor.height
-        monitor_x = monitor.x
-        monitor_y = monitor.y
-
-        x_position = monitor_x + (monitor_width - 500) // 2
-        y_position = monitor_y + (monitor_height - 950) // 2
-       
-        if move==1:            
-            
-            window_title = 'Stack Stats'
-            windows = gw.getWindowsWithTitle(window_title)
-
-            if windows:
-                window1 = windows[0]
-                x_position = window1.left
-                y_position = window1.top
-                
-                if x_position > -1:
-                    monitor = monitors[0]
-                else:
-                    monitor = monitors[1]
-                
                 monitor_width = monitor.width
                 monitor_height = monitor.height
                 monitor_x = monitor.x
@@ -58,14 +31,39 @@ class exposedApi():
 
                 x_position = monitor_x + (monitor_width - 500) // 2
                 y_position = monitor_y + (monitor_height - 950) // 2
-        
+
             else:
                 x_position = 0
                 y_position = 0
-            
+
+            return x_position, y_position
+        else:
+            window_title = 'Stack Stats'
+            windows = gw.getWindowsWithTitle(window_title)
+
+            if windows:
+                window1 = windows[0]
+                x_position = window1.left
+                y_position = window1.top
+
+                if x_position > -1:
+                    monitor = monitors[0]
+                else:
+                    monitor = monitors[1]
+
+                monitor_width = monitor.width
+                monitor_height = monitor.height
+                monitor_x = monitor.x
+                monitor_y = monitor.y
+
+                x_position = monitor_x + (monitor_width - 500) // 2
+                y_position = monitor_y + (monitor_height - 950) // 2
+
+            else:
+                x_position = 0
+                y_position = 0
+
             window.move(x_position, y_position)
-        
-        return x_position, y_position
 
 
 def abrir_janela():
@@ -94,6 +92,6 @@ def abrir_janela():
     except Exception as e:
         print(f"Erro ao tentar abrir: {e}")
 
-    
+
 if __name__ == "__main__":
     abrir_janela()

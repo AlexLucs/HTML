@@ -72,8 +72,8 @@ def abrir_janela():
     global window
 
     try:
-        # url = "https://alexlucs.github.io/HTML/index.html"
-        url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
+        url = "https://alexlucs.github.io/HTML/index.html"
+        # url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
 
         x_position, y_position = exposedApi.centralizar()
 

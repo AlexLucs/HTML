@@ -38,19 +38,28 @@
 		/* Corrigido para garantir que ocupe toda a largura da tela */
 	}
 	
-	#close-btn, #reload-btn {
+	#close-btn, #reload-btn, #minimize-btn, #centralizar-btn {
 		position: absolute;
 		top: 4px;
-		right: 4px;
 		width: 20px;
 		height: 20px;
-		<!-- text-align: right; -->
+	}
+	
+	#close-btn {
+		right: 4px;
+	}
+	
+	#minimize-btn {
+		right: 24px;
 	}
 	
 	#reload-btn {
 		left: 4px;
-		text-align: left;
-	}		
+	}
+	
+	#centralizar-btn {
+		left: 24px;
+	}
 		
 	/* Estilos gerais para as informações textuais */
 	
@@ -231,8 +240,16 @@
 		// Monitorando eventos de movimento do mouse
 		document.addEventListener('mousemove', resetarInatividade);
 		
-		function xFechar() {
+		function pyWebviewFechar() {
 			window.pywebview.api.fechar();
+		}
+		
+		function pyWebviewMinimize() {
+			window.pywebview.api.minimizar();
+		}
+
+		function pyWebviewCentralizar() {
+			window.pywebview.api.centralizar(mover=1);
 		}
 		
 		async function inicial() {
@@ -361,7 +378,9 @@
 </head>
 <body>
 	<div class="pywebview-drag-region">
-		<div id="close-btn" title="Fechar" onclick="xFechar()" alt="Fechar">x</div>
+		<div id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
+		<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>	
+		<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">◉</div>
 		<div id="reload-btn" title="Atualizar" onclick="location.reload()" alt="Atualizar">↻</div>
 		<div id="info-logo"> <img src="btc-logo.svg" title="Logo Bitcoin" alt="Logo do Bitcoin"> </div>
 		<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>

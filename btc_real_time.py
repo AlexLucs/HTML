@@ -37,6 +37,7 @@ class exposedApi():
                 y_position = 0
 
             return x_position, y_position
+            
         else:
             window_title = 'Stack Stats'
             windows = gw.getWindowsWithTitle(window_title)
@@ -47,9 +48,9 @@ class exposedApi():
                 y_position = window1.top
 
                 if x_position > -1:
-                    monitor = monitors[0]
-                else:
                     monitor = monitors[1]
+                else:
+                    monitor = monitors[0]
 
                 monitor_width = monitor.width
                 monitor_height = monitor.height

@@ -1,493 +1,518 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link id="favicon" rel="icon" href="btc-logo.svg">
-	<title>BTC Status - Monitoramento de Preço do Bitcoin</title>
-	<style>
-		/* Resetando margens, padding e definindo box-sizing padrão */
-		* {
-		  margin: 0;
-		  padding: 0;
-		  box-sizing: border-box;
-		}
-		
-		/* Estilos gerais para o corpo da página */
-		body {
-		  background-color: black;
-		  color: white;
-		  font-family: Arial, sans-serif;
-		  margin: 0;
-		  padding: 5px;
-		  text-align: center;
-		  display: flex;
-		  flex-direction: column;
-		  justify-content: center;
-		  align-items: center;
-		  height: 100vh;
-		  width: 100vw; /* Garantir que ocupe toda a largura da tela */
-		}
-
-		/* Botões posicionados na tela */
-		#close-btn, #reload-btn, #minimize-btn, #centralizar-btn {
-		  position: absolute;
-		  top: 4px;
-		  width: 20px;
-		  height: 20px;
-		}
-
-		#close-btn {
-		  right: 4px;
-		}
-
-		#minimize-btn {
-		  right: 24px;
-		}
-
-		#reload-btn {
-		  left: 4px;
-		}
-
-		#centralizar-btn {
-		  left: 24px;
-		}
-
-		#info-logo {
-			color: #F7931A;
-			font-weight: bold;
-		}
-
-		/* Estilos para os textos das informações */
-		#highPrice, #lowPrice, #highPriceDol, #lowPriceDol, #minimumFee, 
-		#economyFee, #fastestFee, #halfHourFee, #hourFee, #mediumFee {
-		  color: #FFFFFF;
-		}
-
-		#taxa_topico, #info-time, #info-dolar {
-		  color: #646464;
-		}
-
-		#info-usdt {
-		  color: #B5B5B5;
-		}
-
-		#info-price {
-		  color: #F7931A;
-		}
-
-		/* Estilos gerais para as informações textuais */
-		.btc_em_brl_principal,
-		.percentual,
-		.horario_atualizacao,
-		.btc_em_usdt_secundariol,
-		.dolar_btc_e_b3 {
-		  font-weight: 100;
-		  color: white;
-		  margin-top: 0px;
-		}
-
-		.btc_em_brl_principal {
-		  font-size: 3.5vw; /* Usando % do tamanho da tela */
-		}
-
-		.percentual {
-		  font-size: 4.5vw;
-		}
-
-		.horario_atualizacao {
-		  font-size: 1.5vw;
-		}
-
-		.btc_em_usdt_secundariol {
-		  font-size: 2.5vw;
-		}
-
-		.dolar_btc_e_b3 {
-		  font-size: 1.4vw;
-		}
-		
-		#info-logo {
-		  font-size: 5vw;
-		}
-
-		/* Estilos para a tabela */
-		.bottom-left-info {
-		  display: flex;
-		  justify-content: center;
-		  font-size: 1.4vw;
-		  color: white;
-		  width: 100%;
-		}
-
-		.bottom-left-info, table {
-		  border-collapse: collapse;
-		  width: 100%;
-		}
-
-		.bottom-left-info, td {
-		  padding: 2px;
-		  color: #F7931A;
-		}
-
-		/* Separador horizontal */
-		.separator {
-		  border: none;
-		  border-top: 1px solid white;
-		  margin: 5px 0;
-		}
-
-		/* Estilos responsivos para telas maiores */
-		@media (min-width: 1950px) {
-		  .btc_em_brl_principal {
-			font-size: 2.7vw;
-		  }
-
-		  .percentual {
-			font-size: 3.4vw;
-		  }
-
-		  .horario_atualizacao {
-			font-size: 1vw;
-		  }
-
-		  .btc_em_usdt_secundariol {
-			font-size: 1.9vw;
-		  }
-
-		  .dolar_btc_e_b3 {
-			font-size: 1vw;
-		  }
-
-		  .bottom-left-info, table {
-			font-size: 1vw;
-		  }
-		  
-		  #info-logo {
-		    font-size: 3.2vw;
-		  }
-		}
-
-		/* Estilos responsivos para telas menores */
-		@media (max-width: 1100px) {
-		  .btc_em_brl_principal {
-			font-size: 6vw;
-		  }
-
-		  .percentual {
-			font-size: 7vw;
-		  }
-
-		  .horario_atualizacao {
-			font-size: 2vw;
-		  }
-
-		  .btc_em_usdt_secundariol {
-			font-size: 4vw;
-		  }
-
-		  .dolar_btc_e_b3 {
-			font-size: 2.5vw;
-		  }
-
-		  .bottom-left-info, table {
-			font-size: 2.5vw;
-		  }
-		  
-		  #info-logo {
-			font-size: 10vw;
-		  }
-		}
-
-		/* Estilos para dispositivos muito pequenos (smartphones) */
-		@media (max-width: 500px) {
-		  .btc_em_brl_principal {
-			font-size: 14vw;
-		  }
-
-		  .percentual {
-			font-size: 16vw;
-		  }
-
-		  .horario_atualizacao {
-			font-size: 5vw;
-		  }
-
-		  .btc_em_usdt_secundariol {
-			font-size: 9vw;
-		  }
-
-		  .dolar_btc_e_b3 {
-			font-size: 5vw;
-		  }
-
-		  .bottom-left-info, table {
-			font-size: 5vw;
-		  }
-		  
-		  #info-logo {
-		    font-size: 20vw;
-		  }
-		}
-	</style>
-	<script>		
-		let tempoInatividade = 0;
-		let ativo = true;
-		// Definir tempo para atualizar iniciar em milisegundos
-		const update_Time = 10000;
-		// Definir tempo para atualizar taxas em milisegundos
-		const update_Taxas = 60000;
-		// Definir tempo máximo de inatividade em segundos
-		const tempoLimite = 1000;
-		
-		// Função para resetar o tempo de inatividade
-		function resetarInatividade() {
-			tempoInatividade = 0;
-			// Se já estiver ativo, não fazer nada
-			if (ativo) return;
-			tempoInatividade = 0;
-			ativo = true;
-			if (document.getElementById('info-percent').textContent == "PARADO") {
-				document.getElementById('info-percent').textContent = "";
-				inicial();
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link id="favicon" rel="icon" href="btc-logo.svg">
+		<title>BTC Status - Monitoramento de Preço do Bitcoin</title>
+		<style>
+			/* Resetando margens, padding e definindo box-sizing padrão */
+			* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
 			}
-			document.getElementById("info-logo").style.filter = "grayscale(0%)";
-		}
-		
-		function verificarInatividade() {
-			// Se já está inativo não faça nada
-			if (!ativo) return;
-			// Adiciona tempo de inatividade
-			tempoInatividade++;
-			if(tempoInatividade >= tempoLimite) {
-				document.getElementById("info-logo").style.filter = "grayscale(100%)";
-				document.getElementById('info-percent').textContent = "PARADO";
+
+			/* Estilos gerais para o corpo da página */
+			body {
+			background-color: black;
+			color: white;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 5px;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100vw; /* Garantir que ocupe toda a largura da tela */
+			}
+
+			/* Botões posicionados na tela */
+			#close-btn,
+			#reload-btn,
+			#minimize-btn,
+			#centralizar-btn {
+			position: absolute;
+			top: 4px;
+			width: 20px;
+			height: 20px;
+			}
+
+			#close-btn {
+			right: 4px;
+			}
+
+			#minimize-btn {
+			right: 24px;
+			}
+
+			#reload-btn {
+			left: 4px;
+			}
+
+			#centralizar-btn {
+			left: 24px;
+			}
+
+			#info-logo {
+			color: #f7931a;
+			font-weight: bold;
+			}
+
+			#highPriceE,
+			#lowPriceE,
+			#highPriceDolE,
+			#lowPriceDolE,
+			#minimumFeeE,
+			#economyFeeE,
+			#fastestFeeE,
+			#halfHourFeeE,
+			#hourFeeE,
+			#mediumFeeE {
+			text-align: left;
+			}
+
+			/* Estilos para os textos das informações */
+			#highPrice,
+			#lowPrice,
+			#highPriceDol,
+			#lowPriceDol,
+			#minimumFee,
+			#economyFee,
+			#fastestFee,
+			#halfHourFee,
+			#hourFee,
+			#mediumFee {
+			color: #ffffff;
+			display: flex;
+			justify-content: flex-end;
+			}
+
+			#taxa_topico,
+			#info-time,
+			#info-dolar {
+			color: #646464;
+			}
+
+			#info-usdt {
+			color: #b5b5b5;
+			}
+
+			#info-price {
+			color: #f7931a;
+			}
+
+			/* Estilos gerais para as informações textuais */
+			.btc_em_brl_principal,
+			.percentual,
+			.horario_atualizacao,
+			.btc_em_usdt_secundariol,
+			.dolar_btc_e_b3 {
+			font-weight: 100;
+			color: white;
+			margin-top: 0px;
+			}
+
+			.btc_em_brl_principal {
+			font-size: 3.5vw; /* Usando % do tamanho da tela */
+			}
+
+			.percentual {
+			font-size: 4.5vw;
+			}
+
+			.horario_atualizacao {
+			font-size: 1.5vw;
+			}
+
+			.btc_em_usdt_secundariol {
+			font-size: 2.5vw;
+			}
+
+			.dolar_btc_e_b3 {
+			font-size: 1.4vw;
+			}
+
+			#info-logo {
+			font-size: 5vw;
+			}
+
+			/* Estilos para a tabela */
+			.bottom-left-info {
+			font-size: 1.4vw;
+			color: white;
+			width: 100%;
+			}
+
+			.bottom-left-info,
+			table {
+			border-collapse: collapse;
+			width: 100%;
+			}
+
+			.bottom-left-info,
+			td {
+			padding: 2px;
+			color: #f7931a;
+			}
+
+			/* Separador horizontal */
+			.separator {
+			border: none;
+			border-top: 1px solid white;
+			margin: 5px 0;
+			}
+
+			/* Estilos responsivos para telas maiores */
+			@media (min-width: 1950px) {
+			.btc_em_brl_principal {
+			font-size: 2.7vw;
+			}
+
+			.percentual {
+			font-size: 3.4vw;
+			}
+
+			.horario_atualizacao {
+			font-size: 1vw;
+			}
+
+			.btc_em_usdt_secundariol {
+			font-size: 1.9vw;
+			}
+
+			.dolar_btc_e_b3 {
+			font-size: 1vw;
+			}
+
+			.bottom-left-info,
+			table {
+			font-size: 1vw;
+			}
+
+			#info-logo {
+			font-size: 3.2vw;
+			}
+			}
+
+			/* Estilos responsivos para telas menores */
+			@media (max-width: 1100px) {
+			.btc_em_brl_principal {
+			font-size: 6vw;
+			}
+
+			.percentual {
+			font-size: 7vw;
+			}
+
+			.horario_atualizacao {
+			font-size: 2vw;
+			}
+
+			.btc_em_usdt_secundariol {
+			font-size: 4vw;
+			}
+
+			.dolar_btc_e_b3 {
+			font-size: 2.5vw;
+			}
+
+			.bottom-left-info,
+			table {
+			font-size: 2.5vw;
+			}
+
+			#info-logo {
+			font-size: 10vw;
+			}
+			}
+
+			/* Estilos para dispositivos muito pequenos (smartphones) */
+			@media (max-width: 500px) {
+			.btc_em_brl_principal {
+			font-size: 14vw;
+			}
+
+			.percentual {
+			font-size: 16vw;
+			}
+
+			.horario_atualizacao {
+			font-size: 5vw;
+			}
+
+			.btc_em_usdt_secundariol {
+			font-size: 9vw;
+			}
+
+			.dolar_btc_e_b3 {
+			font-size: 5vw;
+			}
+
+			.bottom-left-info,
+			table {
+			font-size: 5vw;
+			}
+
+			#info-logo {
+			font-size: 20vw;
+			}
+			}
+		</style>
+		<script>
+			let tempoInatividade = 0;
+			let ativo = true;
+			// Definir tempo para atualizar iniciar em milisegundos
+			const update_Time = 10000;
+			// Definir tempo para atualizar taxas em milisegundos
+			const update_Taxas = 60000;
+			// Definir tempo máximo de inatividade em segundos
+			const tempoLimite = 1000;
+			// Função para resetar o tempo de inatividade
+			function resetarInatividade() {
+				tempoInatividade = 0;
+				// Se já estiver ativo, não fazer nada
+				if (ativo) return;
+				tempoInatividade = 0;
+				ativo = true;
+				if (document.getElementById('info-percent').textContent == "PARADO") {
+					document.getElementById('info-percent').textContent = "";
+					inicial();
+				}
+				document.getElementById("info-logo").style.filter = "grayscale(0%)";
+			}
+
+			function verificarInatividade() {
+				// Se já está inativo não faça nada
+				if (!ativo) return;
+				// Adiciona tempo de inatividade
+				tempoInatividade++;
+				if (tempoInatividade >= tempoLimite) {
+					document.getElementById("info-logo").style.filter = "grayscale(100%)";
+					document.getElementById('info-percent').textContent = "PARADO";
+					ativo = false;
+				}
+			}
+			// Monitorando eventos de teclado
+			document.addEventListener('keydown', resetarInatividade);
+			// Monitorando eventos de movimento do mouse
+			document.addEventListener('mousemove', resetarInatividade);
+
+			function pyWebviewFechar() {
+				window.pywebview.api.fechar();
+			}
+
+			function pyWebviewMinimize() {
+				window.pywebview.api.minimizar();
 				ativo = false;
 			}
-		}
-		
-		// Monitorando eventos de teclado
-		document.addEventListener('keydown', resetarInatividade);
-		// Monitorando eventos de movimento do mouse
-		document.addEventListener('mousemove', resetarInatividade);
-		
-		function pyWebviewFechar() {
-			window.pywebview.api.fechar();
-		}
-		
-		function pyWebviewMinimize() {
-			window.pywebview.api.minimizar();
-			ativo = false;
-		}
 
-		function pyWebviewCentralizar() {
-			window.pywebview.api.centralizar('True');
-		}
-		
-		async function inicial() {
-			// Limpar o intervalo de atualização
-			clearInterval(intervaloID);
-			
-			if(ativo) {
-				const percentElement = document.getElementById('info-percent');
-				if (percentElement.textContent == "PARADO") return;
-				try {
-					const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
-					const dataBRL = await responseBRL.json();
-					const lastPriceBRL = parseFloat(dataBRL.lastPrice);
-					const formattedPriceBRL = lastPriceBRL.toLocaleString('pt-BR', {
-						style: 'currency',
-						currency: 'BRL'
-					});
-					const priceChangePercent = parseFloat(dataBRL.priceChangePercent);
-					const formattedPercent = priceChangePercent.toFixed(2) + '%';
-					const now = new Date();
-					const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-					let titleText = `${formattedPriceBRL} | ${formattedPercent}`;
-					document.title = titleText;
-					// Atualizar informações de máxima e mínima de preços
-					document.getElementById('highPrice').textContent = parseFloat(dataBRL.highPrice).toLocaleString('pt-BR', {
-						style: 'currency',
-						currency: 'BRL'
-					});
-					document.getElementById('lowPrice').textContent = parseFloat(dataBRL.lowPrice).toLocaleString('pt-BR', {
-						style: 'currency',
-						currency: 'BRL'
-					});
-					// Atualizar preço em BRL, percentual de aumento e hora da última atualização
-					document.getElementById('info-price').textContent = formattedPriceBRL;
-					if (ativo) {
-						document.getElementById('info-percent').textContent = formattedPercent;
+			function pyWebviewCentralizar() {
+				window.pywebview.api.centralizar('True');
+			}
+			async function inicial() {
+				// Limpar o intervalo de atualização
+				clearInterval(intervaloID);
+				if (ativo) {
+					const percentElement = document.getElementById('info-percent');
+					if (percentElement.textContent == "PARADO") return;
+					try {
+						const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
+						const dataBRL = await responseBRL.json();
+						const lastPriceBRL = parseFloat(dataBRL.lastPrice);
+						const formattedPriceBRL = lastPriceBRL.toLocaleString('pt-BR', {
+							style: 'currency',
+							currency: 'BRL'
+						});
+						const priceChangePercent = parseFloat(dataBRL.priceChangePercent);
+						const formattedPercent = priceChangePercent.toFixed(2) + '%';
+						const now = new Date();
+						const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+						let titleText = `${formattedPriceBRL} | ${formattedPercent}`;
+						document.title = titleText;
+						// Atualizar informações de máxima e mínima de preços
+						document.getElementById('highPrice').textContent = parseFloat(dataBRL.highPrice).toLocaleString('pt-BR', {
+							style: 'currency',
+							currency: 'BRL'
+						});
+						document.getElementById('lowPrice').textContent = parseFloat(dataBRL.lowPrice).toLocaleString('pt-BR', {
+							style: 'currency',
+							currency: 'BRL'
+						});
+						// Atualizar preço em BRL, percentual de aumento e hora da última atualização
+						document.getElementById('info-price').textContent = formattedPriceBRL;
+						if (ativo) {
+							document.getElementById('info-percent').textContent = formattedPercent;
+						}
+						document.getElementById('info-time').textContent = formattedTime;
+						// Atualizar preço em USD (indice BTC) e USD B3
+						atualiza_USD(lastPriceBRL);
+					} catch (error) {
+						console.error('Erro ao buscar dados da API BTC/BRL Binance:', error);
+						document.title = 'Erro ao buscar dados';
+						document.getElementById('info-price').textContent = 'Erro ao buscar dados';
 					}
-					document.getElementById('info-time').textContent = formattedTime;
-					// Atualizar preço em USD (indice BTC) e USD B3
-					atualiza_USD(lastPriceBRL);
-				} catch(error) {
-					console.error('Erro ao buscar dados da API BTC/BRL Binance:', error);
-					document.title = 'Erro ao buscar dados';
-					document.getElementById('info-price').textContent = 'Erro ao buscar dados';
+					let novoIntervalo = Math.floor(Math.random() * 5001 + 5000);
+					intervaloID = setInterval(inicial, novoIntervalo);
 				}
-				let novoIntervalo = Math.floor(Math.random() * 5001 + 5000);
-				intervaloID = setInterval(inicial, novoIntervalo);
 			}
-		}
-		
-		async function atualiza_B3(dollarExchangeRate) {
-			try {
-				const responseBRLx = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
-				const dataBRLx = await responseBRLx.json();
-				const lastPriceBRLaskx = parseFloat(dataBRLx.USDBRL.ask);
-				const lastPriceBRLbidx = parseFloat(dataBRLx.USDBRL.bid);
-				const lastPriceBRLx = (lastPriceBRLaskx + lastPriceBRLbidx) / 2
-				const formattedPriceBRLx = lastPriceBRLx.toLocaleString('pt-BR', {
-					style: 'currency',
-					currency: 'BRL'
-				});
-				document.getElementById('info-dolar').textContent = `${dollarExchangeRate} | ${formattedPriceBRLx}`;
-			} catch(error) {
-				console.error('Erro ao buscar dados do BRL/USDT AwesomeAPI:', error);
-				document.getElementById('info-dolar').textContent = 'Erro ao buscar cotação do dólar';
-			}
-		}
-		
-		async function atualiza_USD(lastPriceBRL) {
-			try {
-				const responseUSD = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
-				const dataUSD = await responseUSD.json();
-				const lastPriceUSD = parseFloat(dataUSD.lastPrice);
-				const formattedPriceUSD = lastPriceUSD.toLocaleString('pt-BR', {
-					style: 'currency',
-					currency: 'USD'
-				});
-				// Atualizar preço em USDT
-				document.getElementById('info-usdt').textContent = formattedPriceUSD;
-				// Calcula o valor do dólar dividindo o valor do BTC em reais pelo valor em dólares
-				const dollarExchangeRate = (lastPriceBRL / lastPriceUSD).toLocaleString('pt-BR', {
-					style: 'currency',
-					currency: 'BRL'
-				});
-				// Atualizar informações de máxima e mínima de preços
-				document.getElementById('highPriceDol').textContent = parseFloat(dataUSD.highPrice).toLocaleString('pt-BR', {
-					style: 'currency',
-					currency: 'USD'
-				});
-				document.getElementById('lowPriceDol').textContent = parseFloat(dataUSD.lowPrice).toLocaleString('pt-BR', {
-					style: 'currency',
-					currency: 'USD'
-				});
-				// Atualizar preço em Dólar
-				atualiza_B3(dollarExchangeRate)
-			} catch(error) {
-				console.error('Erro ao buscar dados do BTC/BRL:', error);
-				document.getElementById('info-usdt').textContent = 'Erro ao buscar BTC/BRL';
-				document.getElementById('info-dolar').textContent = 'Erro ao calcular cotação do dólar';
-			}
-		}
-		
-		async function atualiza_taxas() {
-			if(ativo) {
+			async function atualiza_B3(dollarExchangeRate) {
 				try {
-					const responseFees = await fetch('https://mempool.space/api/v1/fees/recommended');
-					const dataFees = await responseFees.json();
-					document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
-					document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
-					document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
-					document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
-					document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
-					document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee + dataFees.economyFee + dataFees.hourFee + dataFees.halfHourFee + dataFees.fastestFee) / 5} sat/vB`;
-				} catch(error) {
-					console.error('Erro ao buscar dados de taxas:', error);
+					const responseBRLx = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+					const dataBRLx = await responseBRLx.json();
+					const lastPriceBRLaskx = parseFloat(dataBRLx.USDBRL.ask);
+					const lastPriceBRLbidx = parseFloat(dataBRLx.USDBRL.bid);
+					const lastPriceBRLx = (lastPriceBRLaskx + lastPriceBRLbidx) / 2
+					const formattedPriceBRLx = lastPriceBRLx.toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'BRL'
+					});
+					document.getElementById('info-dolar').textContent = `${dollarExchangeRate} | ${formattedPriceBRLx}`;
+				} catch (error) {
+					console.error('Erro ao buscar dados do BRL/USDT AwesomeAPI:', error);
+					document.getElementById('info-dolar').textContent = 'Erro ao buscar cotação do dólar';
 				}
 			}
-		}
-		
-		window.addEventListener('load', inicial);
-		window.addEventListener('load', atualiza_taxas);
-
-		// Inicia a atualização se não estiver pausado
-		let intervaloID = setInterval(inicial, update_Time);
-		// Atualizar taxas de transação
-		setInterval(atualiza_taxas, update_Taxas);
-		// Verificando a inatividade a cada segundo
-		setInterval(verificarInatividade, 1000);
-		
-	</script>
-</head>
-<body>
-	<div class="pywebview-drag-region">
-		<div id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
-		<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>	
-		<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">◉</div>
-		<div id="reload-btn" title="Atualizar" onclick="location.reload()" alt="Atualizar">↻</div>
-		<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
-		<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
-		<div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
-		<div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
-		<div id="info-percent" class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
-		<div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
-		<div class="bottom-left-info">
-			<table>
-				<tr>
-					<td colspan="2">
-						<hr class="separator"> </td>
-				</tr>
-				<tr title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
-					<td>Máxima:</td>
-					<td id="highPrice"></td>
-				</tr>
-				<tr title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
-					<td>Mínima:</td>
-					<td id="lowPrice"></td>
-				</tr>
-				<tr title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
-					<td>Max. USDT:</td>
-					<td id="highPriceDol"></td>
-				</tr>
-				<tr title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
-					<td>Min. USDT:</td>
-					<td id="lowPriceDol"></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<hr class="separator"> </td>
-				</tr>
-				<tr>
-					<td id="taxa_topico" colspan="2" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<hr class="separator"> </td>
-				</tr>
-				<tr title="Taxa mínima sugerida pela Mempool©.">
-					<td>Minima:</td>
-					<td id="minimumFee"></td>
-				</tr>
-				<tr title="Taxa econômica sugerida pela Mempool.">
-					<td>Econômica:</td>
-					<td id="economyFee"></td>
-				</tr>
-				<tr title="Taxa mais rápida sugerida pela Mempool©.">
-					<td>Prioridade:</td>
-					<td id="fastestFee"></td>
-				</tr>
-				<tr title="Taxa média dos últimos trinta minutos. Fonte Mempool©.">
-					<td>~30 min:</td>
-					<td id="halfHourFee"></td>
-				</tr>
-				<tr title="Taxa média da última hora. Fonte Mempool©.">
-					<td>~1 hora:</td>
-					<td id="hourFee"></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<hr class="separator"> </td>
-				</tr>
-				<tr title="Média de todas as taxas. Fonte Mempool©.">
-					<td>Média:</td>
-					<td id="mediumFee"></td>
-				</tr>
-			</table>
+			async function atualiza_USD(lastPriceBRL) {
+				try {
+					const responseUSD = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
+					const dataUSD = await responseUSD.json();
+					const lastPriceUSD = parseFloat(dataUSD.lastPrice);
+					const formattedPriceUSD = lastPriceUSD.toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'USD'
+					});
+					// Atualizar preço em USDT
+					document.getElementById('info-usdt').textContent = formattedPriceUSD;
+					// Calcula o valor do dólar dividindo o valor do BTC em reais pelo valor em dólares
+					const dollarExchangeRate = (lastPriceBRL / lastPriceUSD).toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'BRL'
+					});
+					// Atualizar informações de máxima e mínima de preços
+					document.getElementById('highPriceDol').textContent = parseFloat(dataUSD.highPrice).toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'USD'
+					});
+					document.getElementById('lowPriceDol').textContent = parseFloat(dataUSD.lowPrice).toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'USD'
+					});
+					// Atualizar preço em Dólar
+					atualiza_B3(dollarExchangeRate)
+				} catch (error) {
+					console.error('Erro ao buscar dados do BTC/BRL:', error);
+					document.getElementById('info-usdt').textContent = 'Erro ao buscar BTC/BRL';
+					document.getElementById('info-dolar').textContent = 'Erro ao calcular cotação do dólar';
+				}
+			}
+			async function atualiza_taxas() {
+				if (ativo) {
+					try {
+						const responseFees = await fetch('https://mempool.space/api/v1/fees/recommended');
+						const dataFees = await responseFees.json();
+						document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
+						document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
+						document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
+						document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
+						document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
+						document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee + dataFees.economyFee + dataFees.hourFee + dataFees.halfHourFee + dataFees.fastestFee) / 5} sat/vB`;
+					} catch (error) {
+						console.error('Erro ao buscar dados de taxas:', error);
+					}
+				}
+			}
+			window.addEventListener('load', inicial);
+			window.addEventListener('load', atualiza_taxas);
+			// Inicia a atualização se não estiver pausado
+			let intervaloID = setInterval(inicial, update_Time);
+			// Atualizar taxas de transação
+			setInterval(atualiza_taxas, update_Taxas);
+			// Verificando a inatividade a cada segundo
+			setInterval(verificarInatividade, 1000);
+		</script>
+	</head>
+	<body>
+		<div class="pywebview-drag-region">
+			<div id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
+			<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
+			<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">◉</div>
+			<div id="reload-btn" title="Atualizar" onclick="location.reload()" alt="Atualizar">↻</div>
+			<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
+			<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
+			<div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
+			<div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
+			<div id="info-percent" class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
+			<div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
+			<div class="bottom-left-info">
+				<table>
+					<tr>
+						<td colspan="2">
+							<hr class="separator">
+						</td>
+					</tr>
+					<tr title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
+						<td id="highPriceE">Máxima:</td>
+						<td id="highPrice"></td>
+					</tr>
+					<tr title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
+						<td id="lowPriceE">Mínima:</td>
+						<td id="lowPrice"></td>
+					</tr>
+					<tr title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
+						<td id="highPriceDolE">Max. USDT:</td>
+						<td id="highPriceDol"></td>
+					</tr>
+					<tr title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
+						<td id="lowPriceDolE">Min. USDT:</td>
+						<td id="lowPriceDol"></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<hr class="separator">
+						</td>
+					</tr>
+					<tr>
+						<td id="taxa_topico" colspan="2" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<hr class="separator">
+						</td>
+					</tr>
+					<tr title="Taxa mínima sugerida pela Mempool©.">
+						<td id="minimumFeeE">Minima:</td>
+						<td id="minimumFee"></td>
+					</tr>
+					<tr title="Taxa econômica sugerida pela Mempool.">
+						<td id="economyFeeE">Econômica:</td>
+						<td id="economyFee"></td>
+					</tr>
+					<tr title="Taxa mais rápida sugerida pela Mempool©.">
+						<td id="fastestFeeE">Prioridade:</td>
+						<td id="fastestFee"></td>
+					</tr>
+					<tr title="Taxa média dos últimos trinta minutos. Fonte Mempool©.">
+						<td id="halfHourFeeE">~30 min:</td>
+						<td id="halfHourFee"></td>
+					</tr>
+					<tr title="Taxa média da última hora. Fonte Mempool©.">
+						<td id="hourFeeE">~1 hora:</td>
+						<td id="hourFee"></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<hr class="separator">
+						</td>
+					</tr>
+					<tr title="Média de todas as taxas. Fonte Mempool©.">
+						<td id="mediumFeeE">Média:</td>
+						<td id="mediumFee"></td>
+					</tr>
+				</table>
+			</div>
 		</div>
-	</div>
-</body>
+	</body>
 </html>

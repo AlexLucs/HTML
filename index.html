@@ -60,7 +60,23 @@
 	#centralizar-btn {
 		left: 24px;
 	}
-		
+	
+	#highPrice, #lowPrice, #highPriceDol, #lowPriceDol, #minimumFee, #economyFee, #fastestFee, #halfHourFee, #hourFee, #mediumFee {
+		color: #FFFFFF;
+	}
+	
+	#taxa_topico, #info-time, #info-dolar {
+		color: #646464;
+	}
+	
+	#info-usdt {
+		color: #B5B5B5;
+	}
+	
+	#info-price {
+		color: #F7931A;
+	}
+	
 	/* Estilos gerais para as informações textuais */
 	
 	.btc_em_brl_principal,
@@ -93,8 +109,8 @@
 	.dolar_btc_e_b3 {
 		font-size: 1.4vw;
 	}
-	/* Estilos para a tabela */
 	
+	/* Estilos para a tabela */
 	.bottom-left-info {
 		display: flex;
 		justify-content: center;
@@ -112,6 +128,7 @@
 	.bottom-left-info,
 	td {
 		padding: 2px;
+		color: #F7931A;
 	}
 	/* Separador horizontal */
 	
@@ -250,7 +267,7 @@
 		}
 
 		function pyWebviewCentralizar() {
-			window.pywebview.api.centralizar(mover=1);
+			window.pywebview.api.centralizar(move=1);
 		}
 		
 		async function inicial() {
@@ -416,7 +433,7 @@
 						<hr class="separator"> </td>
 				</tr>
 				<tr>
-					<td colspan="2" style="text-align: center;" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
+					<td id="taxa_topico" colspan="2" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
 				</tr>
 				<tr>
 					<td colspan="2">

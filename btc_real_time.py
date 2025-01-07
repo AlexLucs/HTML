@@ -5,6 +5,10 @@ from screeninfo import get_monitors
 import pygetwindow as gw
 
 
+window_title = 'Stack Stats'
+width_btc=500
+height_btc=950
+
 class exposedApi():
     def fechar(var=None):
         global window
@@ -23,49 +27,35 @@ class exposedApi():
         if not move==1:
             if monitors:
                 monitor = monitors[0]
-
-                monitor_width = monitor.width
-                monitor_height = monitor.height
-                monitor_x = monitor.x
-                monitor_y = monitor.y
-
-                x_position = monitor_x + (monitor_width - 500) // 2
-                y_position = monitor_y + (monitor_height - 950) // 2
-
-            else:
-                x_position = 0
-                y_position = 0
-
+            x_position, y_position = exposedApi.centrar("", monitor)            
             return x_position, y_position
             
         else:
-            window_title = 'Stack Stats'
             windows = gw.getWindowsWithTitle(window_title)
-
             if windows:
                 window1 = windows[0]
-                x_position = window1.left
-                y_position = window1.top
-
-                if x_position > -1:
-                    monitor = monitors[1]
-                else:
+                x_position1 = window1.left
+                y_position1 = window1.top
+                if x_position1 > -1:
                     monitor = monitors[0]
-
-                monitor_width = monitor.width
-                monitor_height = monitor.height
-                monitor_x = monitor.x
-                monitor_y = monitor.y
-
-                x_position = monitor_x + (monitor_width - 500) // 2
-                y_position = monitor_y + (monitor_height - 950) // 2
-
+                else:
+                    monitor = monitors[1]
+                x_position, y_position = exposedApi.centrar("", monitor)
             else:
                 x_position = 0
                 y_position = 0
 
             window.move(x_position, y_position)
 
+    def centrar(self, monitor):
+        monitor_width = monitor.width
+        monitor_height = monitor.height
+        monitor_x = monitor.x
+        monitor_y = monitor.y
+        x_position = monitor_x + (monitor_width - width_btc) // 2
+        y_position = monitor_y + (monitor_height - height_btc) // 2
+        
+        return x_position, y_position
 
 def abrir_janela():
     global window
@@ -77,10 +67,10 @@ def abrir_janela():
         x_position, y_position = exposedApi.centralizar()
 
         window = webview.create_window(
-            "Stack Stats",
+            window_title,
             url,
-            width=500,
-            height=950,
+            width=width_btc,
+            height=height_btc,
             frameless=True,
             background_color="#000000",
             x=x_position,

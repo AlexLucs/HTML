@@ -5,32 +5,26 @@ from screeninfo import get_monitors
 import pygetwindow as gw
 
 
-window_title = 'Stack Stats'
+window_title = "BTC Status"
 width_btc=500
 height_btc=950
 
-class exposedApi():
-    def fechar(var=None):
+class exposedApi():    
+    def fechar(self):
         global window
         if window:
             window.destroy()
 
-    def minimizar(var=None):
+    def minimizar(self):
         global window
         if window:
             window.minimize()
 
-    def centralizar(var=None, move=None):
+    def centralizar(self, move=False):
         global window
         monitors = get_monitors()
 
-        if not move==1:
-            if monitors:
-                monitor = monitors[0]
-            x_position, y_position = exposedApi.centrar("", monitor)            
-            return x_position, y_position
-            
-        else:
+        if move:
             windows = gw.getWindowsWithTitle(window_title)
             if windows:
                 window1 = windows[0]
@@ -40,12 +34,17 @@ class exposedApi():
                     monitor = monitors[0]
                 else:
                     monitor = monitors[1]
-                x_position, y_position = exposedApi.centrar("", monitor)
+                x_position, y_position = exposedApi.centrar("self", monitor)
             else:
                 x_position = 0
                 y_position = 0
 
             window.move(x_position, y_position)
+        else:
+            if monitors:
+                monitor = monitors[0]
+            x_position, y_position = exposedApi().centrar(monitor)            
+            return x_position, y_position
 
     def centrar(self, monitor):
         monitor_width = monitor.width
@@ -59,12 +58,13 @@ class exposedApi():
 
 def abrir_janela():
     global window
-
     try:
-        url = "https://alexlucs.github.io/HTML/index.html"
-        # url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
+        if getattr(sys, "frozen", False):
+            url = os.path.join(sys._MEIPASS, "index.html")
+        else:
+            url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
 
-        x_position, y_position = exposedApi.centralizar()
+        x_position, y_position = exposedApi().centralizar()
 
         window = webview.create_window(
             window_title,

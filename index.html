@@ -296,6 +296,9 @@
 		}
 		
 		async function inicial() {
+			// Limpar o intervalo de atualização
+			clearInterval(intervaloID);
+			
 			if(ativo) {
 				const percentElement = document.getElementById('info-percent');
 				if (percentElement.textContent == "PARADO") return;
@@ -335,6 +338,8 @@
 					document.title = 'Erro ao buscar dados';
 					document.getElementById('info-price').textContent = 'Erro ao buscar dados';
 				}
+				let novoIntervalo = Math.floor(Math.random() * 5001 + 5000);
+				intervaloID = setInterval(inicial, novoIntervalo);
 			}
 		}
 		
@@ -411,7 +416,7 @@
 		window.addEventListener('load', atualiza_taxas);
 
 		// Inicia a atualização se não estiver pausado
-		setInterval(inicial, update_Time);
+		let intervaloID = setInterval(inicial, update_Time);
 		// Atualizar taxas de transação
 		setInterval(atualiza_taxas, update_Taxas);
 		// Verificando a inatividade a cada segundo

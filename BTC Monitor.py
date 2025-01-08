@@ -4,6 +4,8 @@ import webview
 from screeninfo import get_monitors
 import pygetwindow as gw
 import configparser
+import win32gui
+import win32con
 
 
 window_title = "BTC Status"
@@ -12,6 +14,9 @@ height_btc = 900
 
 
 class exposedApi:
+    def __init__(self):
+        self.window_on_top = True  # Variável para manter o estado
+
     def fechar(self):
         global window
         if window:
@@ -58,24 +63,34 @@ class exposedApi:
 
         return x_position, y_position
 
+    def fixarTopo(self):
+        hwnd = win32gui.GetForegroundWindow()
+        estilo = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
+        if estilo & win32con.WS_EX_TOPMOST:
+            win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, estilo & ~win32con.WS_EX_TOPMOST)
+            win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+        else:
+            win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, estilo | win32con.WS_EX_TOPMOST)
+            win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
 def salvar_janela():
     windows = gw.getWindowsWithTitle(window_title)
     config = configparser.ConfigParser()
-    
+
     try:
         window1 = windows[0]
         x_position1 = window1.left
         y_position1 = window1.top
-        
-        appdata_dir = os.getenv('APPDATA')        
-        config_dir = os.path.join(appdata_dir, 'btcstatus')        
+
+        appdata_dir = os.getenv('APPDATA')
+        config_dir = os.path.join(appdata_dir, 'btcstatus')
         if not os.path.exists(config_dir):
-            os.makedirs(config_dir)        
+            os.makedirs(config_dir)
         config_file = os.path.join(config_dir, "BTC Monitor.ini")
-        
-        
+
+
         config['Position'] = {'x': str(x_position1), 'y': str(y_position1)}
-        
+
         with open(config_file, 'w') as configfile:
             config.write(configfile)
     except Exception as e:
@@ -87,11 +102,11 @@ def cordenadas_validas(x, y):
         if x >= monitor.x and x <= (monitor.x + monitor.width) and y >= monitor.y and y <= (monitor.y + monitor.height):
             return True
     return False
-    
+
 def posicao_janela():
-    config = configparser.ConfigParser()    
+    config = configparser.ConfigParser()
     appdata_dir = os.getenv('APPDATA')
-    config_dir = os.path.join(appdata_dir, 'btcstatus')  
+    config_dir = os.path.join(appdata_dir, 'btcstatus')
     config_file = os.path.join(config_dir, "BTC Monitor.ini")
     if os.path.exists(config_file):
         config.read(config_file)
@@ -105,7 +120,7 @@ def posicao_janela():
         except:
             return 0,0
     return 0,0
-    
+
 def abrir_janela():
     global window
     try:
@@ -113,7 +128,7 @@ def abrir_janela():
             url = os.path.join(sys._MEIPASS, "index.html")
         else:
             url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
-        
+
         x_position, y_position = posicao_janela()
         if (x_position == 0 and y_position == 0):
             x_position, y_position = exposedApi().centralizar()
@@ -127,11 +142,11 @@ def abrir_janela():
             background_color="#000000",
             x=x_position,
             y=y_position,
-            js_api=exposedApi(),
+            js_api=exposedApi()
         )
-        
+
         window.events.closing += salvar_janela
-        
+
         webview.start()
 
     except Exception as e:

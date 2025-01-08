@@ -6,14 +6,14 @@
 		<link id="favicon" rel="icon" href="btc-logo.svg">
 		<title>BTC Status - Monitoramento de Preço do Bitcoin</title>
 		<style>
-			/* Resetando margens, padding e definindo box-sizing padrão */
-			* {
+			*,
+			*::before,
+			*::after {
+			padding-bottom: 0;
 			margin: 0;
-			padding: 0;
 			box-sizing: border-box;
 			}
 
-			/* Estilos gerais para o corpo da página */
 			body {
 			background-color: black;
 			color: white;
@@ -26,9 +26,9 @@
 			justify-content: center;
 			align-items: center;
 			height: 100vh;
-			width: 100vw; /* Garantir que ocupe toda a largura da tela */
+			width: 100vw;
 			}
-			
+
 			#overlay {
 			display: none;
 			position: fixed;
@@ -36,30 +36,36 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-color: rgba(0, 0, 0, 0.9); /* Cor semitransparente */
-			color: black;
-			font-size: 5rem;
+			background-color: rgba(0, 0, 0, 0.7);
+			color: white;
+			font-size: 15rem;
 			justify-content: center;
 			align-items: center;
 			z-index: 1000;
 			text-align: center;
 			flex-direction: column;
 			font-family: Arial, sans-serif;
-			}			
-			
-			/* Botões posicionados na tela */
+			}
+
 			#close-btn,
 			#reload-btn,
 			#minimize-btn,
-			#centralizar-btn {
+			#centralizar-btn,
+			#pausar-btn,
+			#fixar-btn {
 			position: absolute;
 			top: 4px;
 			width: 20px;
 			height: 20px;
+			justify-content: center;
 			}
 
 			#close-btn {
 			right: 4px;
+			}
+
+			#info-seta {
+			font-weight: bold;
 			}
 
 			#minimize-btn {
@@ -67,10 +73,19 @@
 			}
 
 			#reload-btn {
+			left: 24px;
+			}
+
+			#centralizar-btn {
 			left: 4px;
 			}
-			#centralizar-btn {
-			left: 24px;
+
+			#fixar-btn {
+			left: 72px;
+			}
+
+			#pausar-btn {
+			left: 48px;
 			}
 
 			#info-logo {
@@ -91,7 +106,6 @@
 			text-align: left;
 			}
 
-			/* Estilos para os textos das informações */
 			#highPrice,
 			#lowPrice,
 			#highPriceDol,
@@ -121,7 +135,6 @@
 			color: #f7931a;
 			}
 
-			/* Estilos gerais para as informações textuais */
 			.btc_em_brl_principal,
 			.percentual,
 			.horario_atualizacao,
@@ -133,11 +146,11 @@
 			}
 
 			.btc_em_brl_principal {
-			font-size: 3.5vw; /* Usando % do tamanho da tela */
+			font-size: 3vw;
 			}
 
 			.percentual {
-			font-size: 4.5vw;
+			font-size: 4vw;
 			}
 
 			.horario_atualizacao {
@@ -153,10 +166,9 @@
 			}
 
 			#info-logo {
-			font-size: 5vw;
+			font-size: 4vw;
 			}
 
-			/* Estilos para a tabela */
 			.bottom-left-info {
 			font-size: 1.4vw;
 			color: white;
@@ -175,113 +187,112 @@
 			color: #f7931a;
 			}
 
-			/* Separador horizontal */
 			.separator {
 			border: none;
 			border-top: 1px solid white;
 			margin: 5px 0;
 			}
 
-			/* Estilos responsivos para telas maiores */
 			@media (min-width: 1950px) {
-			.btc_em_brl_principal {
-			font-size: 2.7vw;
+				.btc_em_brl_principal {
+				font-size: 3vw;
+				}
+
+				.percentual {
+				font-size: 3vw;
+				}
+
+				.horario_atualizacao {
+				font-size: 1vw;
+				}
+
+				.btc_em_usdt_secundariol {
+				font-size: 2vw;
+				}
+
+				.dolar_btc_e_b3 {
+				font-size: 1vw;
+				}
+
+				.bottom-left-info,
+				table {
+				font-size: 1vw;
+				}
+
+				#info-logo {
+				font-size: 3vw;
+				}
 			}
 
-			.percentual {
-			font-size: 3.4vw;
-			}
-
-			.horario_atualizacao {
-			font-size: 1vw;
-			}
-
-			.btc_em_usdt_secundariol {
-			font-size: 1.9vw;
-			}
-
-			.dolar_btc_e_b3 {
-			font-size: 1vw;
-			}
-
-			.bottom-left-info,
-			table {
-			font-size: 1vw;
-			}
-
-			#info-logo {
-			font-size: 3.2vw;
-			}
-			}
-
-			/* Estilos responsivos para telas menores */
 			@media (max-width: 1100px) {
-			.btc_em_brl_principal {
-			font-size: 6vw;
+				.btc_em_brl_principal {
+				font-size: 4vw;
+				}
+
+				.percentual {
+				font-size: 5vw;
+				}
+
+				.horario_atualizacao {
+				font-size: 2vw;
+				}
+
+				.btc_em_usdt_secundariol {
+				font-size: 3vw;
+				}
+
+				.dolar_btc_e_b3 {
+				font-size: 2vw;
+				}
+
+				.bottom-left-info,
+				table {
+				font-size: 2vw;
+				}
+
+				#info-logo {
+				font-size: 7vw;
+				}
 			}
 
-			.percentual {
-			font-size: 7vw;
-			}
-
-			.horario_atualizacao {
-			font-size: 2vw;
-			}
-
-			.btc_em_usdt_secundariol {
-			font-size: 4vw;
-			}
-
-			.dolar_btc_e_b3 {
-			font-size: 2.5vw;
-			}
-
-			.bottom-left-info,
-			table {
-			font-size: 2.5vw;
-			}
-
-			#info-logo {
-			font-size: 10vw;
-			}
-			}
-
-			/* Estilos para dispositivos muito pequenos (smartphones) */
 			@media (max-width: 500px) {
-			.btc_em_brl_principal {
-			font-size: 14vw;
-			}
+				.btc_em_brl_principal {
+				font-size: 14vw;
+				}
 
-			.percentual {
-			font-size: 16vw;
-			}
+				.percentual {
+				font-size: 14vw;
+				}
 
-			.horario_atualizacao {
-			font-size: 5vw;
-			}
+				.horario_atualizacao {
+				font-size: 5vw;
+				}
 
-			.btc_em_usdt_secundariol {
-			font-size: 9vw;
-			}
+				.btc_em_usdt_secundariol {
+				font-size: 9vw;
+				}
 
-			.dolar_btc_e_b3 {
-			font-size: 5vw;
-			}
+				.dolar_btc_e_b3 {
+				font-size: 5vw;
+				}
 
-			.bottom-left-info,
-			table {
-			font-size: 5vw;
-			}
+				.bottom-left-info,
+				table {
+				font-size: 5vw;
+				}
 
-			#info-logo {
-			font-size: 20vw;
-			}
+				#info-logo {
+				font-size: 18vw;
+				}
 			}
 		</style>
 		<script>
 			let tempoInatividade = 0;
 			let varSetaMostrar;
 			let ativo = true;
+			let falhas = 0;
+			let novoIntervalo = 0;
+			const maxFalhas = 10;
 			// Definir tempo para atualizar iniciar em milisegundos
 			const update_Time = 5000;
 			// Definir tempo para atualizar taxas em milisegundos
@@ -291,13 +302,14 @@
 			// Função para resetar o tempo de inatividade
 			function resetarInatividade() {
 				tempoInatividade = 0;
-				// Se já estiver ativo, não fazer nada
 				if (ativo) return;
 				document.getElementById('overlay').style.display = 'none';
 				ativo = true;
 				inicial();
 				atualiza_taxas();
+				clearInterval(intervaloID);
 				intervaloID = setInterval(inicial, update_Time);
+				clearInterval(taxaIntervaloID);
 				taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 			}
 
@@ -324,15 +336,57 @@
 
 			function pyWebviewMinimize() {
 				window.pywebview.api.minimizar();
-				ativo = false;
 			}
 
 			function pyWebviewCentralizar() {
 				window.pywebview.api.centralizar('True');
 			}
+
+			function pyWebviewFixar() {				
+				const btn = document.getElementById('fixar-btn');
+				if (btn.textContent === '↑') {
+					btn.setAttribute('title', 'Desafixar');
+					btn.setAttribute('alt', 'Desafixar');
+					btn.textContent = '↓';
+				} else {
+					btn.setAttribute('title', 'Fixar');
+					btn.setAttribute('alt', 'Fixar');
+					btn.textContent = '↑';
+				}
+				window.pywebview.api.fixarTopo();
+			}
+			function reiniciar() {
+				if (document.getElementById('fixar-btn').textContent === '↓') {
+					window.pywebview.api.fixarTopo();					
+				}
+				location.reload();
+			}
+			function pararIniciar() {
+				if (document.getElementById('pausar-btn').textContent == '⏸') {
+					document.getElementById('pausar-btn').textContent = '▶'
+					ativo = false;
+					document.getElementById('overlay').style.display = 'flex';
+					clearInterval(intervaloID);
+					clearInterval(taxaIntervaloID);
+					document.removeEventListener('keydown', resetarInatividade);
+					document.removeEventListener('mousemove', resetarInatividade);
+				} else {
+					document.getElementById('pausar-btn').textContent = '⏸'
+					ativo = true;
+					document.getElementById('overlay').style.display = 'none';
+					inicial();
+					atualiza_taxas();
+					clearInterval(intervaloID);
+					intervaloID = setInterval(inicial, update_Time);
+					clearInterval(taxaIntervaloID);
+					taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
+					document.addEventListener('keydown', resetarInatividade);
+					document.addEventListener('mousemove', resetarInatividade);
+				}
+			}
+
 			async function inicial() {
 				// Limpar o intervalo de atualização
-				clearInterval(intervaloID);
 				if (ativo) {
 					const percentElement = document.getElementById('info-percent');
 					try {
@@ -357,9 +411,9 @@
 							varSetaOld = priceChangePercent;
 						} else {
 							varSetaOld = priceChangePercent;
-							varSetaMostrar = "  ";
+							varSetaMostrar = "~";
 						}
-						const formattedPercent = priceChangePercent.toFixed(2) + '%';
+						const formattedPercent = priceChangePercent.toFixed(2) + '% ';
 
 						const now = new Date();
 						const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
@@ -379,9 +433,9 @@
 						if (ativo) {
 							document.getElementById('info-percent').textContent = formattedPercent;
 							if (varSetaMostrar=='↑') {
-								document.getElementById('info-seta').style.color = "green";
-							} else {
-								document.getElementById('info-seta').style.color = "red";
+								document.getElementById('info-seta').style.color = "#f7931a";
+							} else if (varSetaMostrar=='↓') {
+								document.getElementById('info-seta').style.color = "white";
 							}
 							document.getElementById('info-seta').textContent = varSetaMostrar;
 						}
@@ -390,10 +444,11 @@
 						atualiza_USD(lastPriceBRL);
 					} catch (error) {
 						console.error('Erro ao buscar dados da API BTC/BRL Binance:', error);
-						document.title = 'Erro ao buscar dados';
-						document.getElementById('info-price').textContent = 'Erro ao buscar dados';
+						document.title = 'Sem Dados';
+						document.getElementById('info-price').textContent = 'Sem Dados';
 					}
-					let novoIntervalo = Math.floor(Math.random() * 5001 + 3000);
+					novoIntervalo = Math.floor(Math.random() * 5001 + 3000);
+					clearInterval(intervaloID);
 					intervaloID = setInterval(inicial, novoIntervalo);
 				}
 			}
@@ -411,7 +466,7 @@
 					document.getElementById('info-dolar').textContent = `${dollarExchangeRate} | ${formattedPriceBRLx}`;
 				} catch (error) {
 					console.error('Erro ao buscar dados do BRL/USDT AwesomeAPI:', error);
-					document.getElementById('info-dolar').textContent = 'Erro ao buscar cotação do dólar';
+					document.getElementById('info-dolar').textContent = 'Sem Dados';
 				}
 			}
 			async function atualiza_USD(lastPriceBRL) {
@@ -443,8 +498,8 @@
 					atualiza_B3(dollarExchangeRate)
 				} catch (error) {
 					console.error('Erro ao buscar dados do BTC/BRL:', error);
-					document.getElementById('info-usdt').textContent = 'Erro ao buscar BTC/BRL';
-					document.getElementById('info-dolar').textContent = 'Erro ao calcular cotação do dólar';
+					document.getElementById('info-usdt').textContent = 'Sem Dados';
+					document.getElementById('info-dolar').textContent = 'Sem Dados';
 				}
 			}
 			async function atualiza_taxas() {
@@ -475,17 +530,20 @@
 	</head>
 	<body>
 		<div class="pywebview-drag-region">
-			<div id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
-			<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 			<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">◉</div>
-			<div id="reload-btn" title="Atualizar" onclick="location.reload()" alt="Atualizar">↻</div>
-			<div id="overlay" class="overlay">⏸️</div>
+			<div id="reload-btn" title="Atualizar" onclick="reiniciar()" alt="Atualizar">↻</div>
+			<div id="pausar-btn" title="Pausar" onclick="pararIniciar()" alt="Pausar">⏸</div>
+			<div id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">↑</div>
+			<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
+			<div id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
+
+			<div id="overlay" class="overlay" onclick="pararIniciar()">⏸</div>
 			<div id= "conteudoMenosBotoes" class="conteudoMenosBotoes">
 				<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
 				<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
 				<div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
 				<div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
-				<div class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."><span id="info-percent"></span><span id="info-seta"> </span></div>
+				<div class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."><span id="info-percent"></span><span id="info-seta"></span></div>
 				<div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
 				<div class="bottom-left-info">
 					<table>

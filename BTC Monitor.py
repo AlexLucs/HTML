@@ -3,6 +3,7 @@ import sys
 import webview
 from screeninfo import get_monitors
 import pygetwindow as gw
+import configparser
 
 
 window_title = "BTC Status"
@@ -57,7 +58,54 @@ class exposedApi:
 
         return x_position, y_position
 
+def salvar_janela():
+    windows = gw.getWindowsWithTitle(window_title)
+    config = configparser.ConfigParser()
+    
+    try:
+        window1 = windows[0]
+        x_position1 = window1.left
+        y_position1 = window1.top
+        
+        appdata_dir = os.getenv('APPDATA')        
+        config_dir = os.path.join(appdata_dir, 'btcstatus')        
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir)        
+        config_file = os.path.join(config_dir, "BTC Monitor.ini")
+        
+        
+        config['Position'] = {'x': str(x_position1), 'y': str(y_position1)}
+        
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)
+    except Exception as e:
+        print(f"Erro ao salvar posição: {e}")
 
+def cordenadas_validas(x, y):
+    monitors = get_monitors()
+    for monitor in monitors:
+        if x >= monitor.x and x <= (monitor.x + monitor.width) and y >= monitor.y and y <= (monitor.y + monitor.height):
+            return True
+    return False
+    
+def posicao_janela():
+    config = configparser.ConfigParser()    
+    appdata_dir = os.getenv('APPDATA')
+    config_dir = os.path.join(appdata_dir, 'btcstatus')  
+    config_file = os.path.join(config_dir, "BTC Monitor.ini")
+    if os.path.exists(config_file):
+        config.read(config_file)
+        try:
+            x_position = int(config['Position']['x'])
+            y_position = int(config['Position']['y'])
+            if cordenadas_validas(x_position, y_position):
+                return x_position, y_position
+            else:
+                return 0,0
+        except:
+            return 0,0
+    return 0,0
+    
 def abrir_janela():
     global window
     try:
@@ -65,8 +113,10 @@ def abrir_janela():
             url = os.path.join(sys._MEIPASS, "index.html")
         else:
             url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
-
-        x_position, y_position = exposedApi().centralizar()
+        
+        x_position, y_position = posicao_janela()
+        if (x_position == 0 and y_position == 0):
+            x_position, y_position = exposedApi().centralizar()
 
         window = webview.create_window(
             window_title,
@@ -79,12 +129,13 @@ def abrir_janela():
             y=y_position,
             js_api=exposedApi(),
         )
-
+        
+        window.events.closing += salvar_janela
+        
         webview.start()
 
     except Exception as e:
         print(f"Erro ao tentar abrir: {e}")
-
 
 if __name__ == "__main__":
     abrir_janela()

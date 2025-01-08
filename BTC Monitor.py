@@ -7,7 +7,7 @@ import pygetwindow as gw
 
 window_title = "BTC Status"
 width_btc = 500
-height_btc = 860
+height_btc = 900
 
 
 class exposedApi:

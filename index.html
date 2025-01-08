@@ -28,7 +28,25 @@
 			height: 100vh;
 			width: 100vw; /* Garantir que ocupe toda a largura da tela */
 			}
-
+			
+			#overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.9); /* Cor semitransparente */
+			color: black;
+			font-size: 5rem;
+			justify-content: center;
+			align-items: center;
+			z-index: 1000;
+			text-align: center;
+			flex-direction: column;
+			font-family: Arial, sans-serif;
+			}			
+			
 			/* Botões posicionados na tela */
 			#close-btn,
 			#reload-btn,
@@ -51,7 +69,6 @@
 			#reload-btn {
 			left: 4px;
 			}
-
 			#centralizar-btn {
 			left: 24px;
 			}
@@ -263,9 +280,10 @@
 		</style>
 		<script>
 			let tempoInatividade = 0;
+			let varSetaMostrar;
 			let ativo = true;
 			// Definir tempo para atualizar iniciar em milisegundos
-			const update_Time = 10000;
+			const update_Time = 5000;
 			// Definir tempo para atualizar taxas em milisegundos
 			const update_Taxas = 60000;
 			// Definir tempo máximo de inatividade em segundos
@@ -275,13 +293,12 @@
 				tempoInatividade = 0;
 				// Se já estiver ativo, não fazer nada
 				if (ativo) return;
-				tempoInatividade = 0;
+				document.getElementById('overlay').style.display = 'none';
 				ativo = true;
-				if (document.getElementById('info-percent').textContent == "PARADO") {
-					document.getElementById('info-percent').textContent = "";
-					inicial();
-				}
-				document.getElementById("info-logo").style.filter = "grayscale(0%)";
+				inicial();
+				atualiza_taxas();
+				intervaloID = setInterval(inicial, update_Time);
+				taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 			}
 
 			function verificarInatividade() {
@@ -290,9 +307,10 @@
 				// Adiciona tempo de inatividade
 				tempoInatividade++;
 				if (tempoInatividade >= tempoLimite) {
-					document.getElementById("info-logo").style.filter = "grayscale(100%)";
-					document.getElementById('info-percent').textContent = "PARADO";
+					document.getElementById('overlay').style.display = 'flex';
 					ativo = false;
+					clearInterval(intervaloID);
+					clearInterval(taxaIntervaloID);
 				}
 			}
 			// Monitorando eventos de teclado
@@ -317,7 +335,6 @@
 				clearInterval(intervaloID);
 				if (ativo) {
 					const percentElement = document.getElementById('info-percent');
-					if (percentElement.textContent == "PARADO") return;
 					try {
 						const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
 						const dataBRL = await responseBRL.json();
@@ -327,7 +344,23 @@
 							currency: 'BRL'
 						});
 						const priceChangePercent = parseFloat(dataBRL.priceChangePercent);
+						// Calcular se houve aumento ou diminuição do preço e mostrar a seta correspondente
+						if (typeof varSetaOld !== 'undefined') {
+							let varSetaNew = priceChangePercent;
+							if (varSetaOld > varSetaNew) {
+								varSetaMostrar = "↓";
+							} else if (varSetaOld < varSetaNew) {
+								varSetaMostrar = "↑";
+							} else {
+								varSetaMostrar = varSetaMostrar;
+							}
+							varSetaOld = priceChangePercent;
+						} else {
+							varSetaOld = priceChangePercent;
+							varSetaMostrar = "  ";
+						}
 						const formattedPercent = priceChangePercent.toFixed(2) + '%';
+
 						const now = new Date();
 						const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
 						let titleText = `${formattedPriceBRL} | ${formattedPercent}`;
@@ -345,6 +378,12 @@
 						document.getElementById('info-price').textContent = formattedPriceBRL;
 						if (ativo) {
 							document.getElementById('info-percent').textContent = formattedPercent;
+							if (varSetaMostrar=='↑') {
+								document.getElementById('info-seta').style.color = "green";
+							} else {
+								document.getElementById('info-seta').style.color = "red";
+							}
+							document.getElementById('info-seta').textContent = varSetaMostrar;
 						}
 						document.getElementById('info-time').textContent = formattedTime;
 						// Atualizar preço em USD (indice BTC) e USD B3
@@ -354,7 +393,7 @@
 						document.title = 'Erro ao buscar dados';
 						document.getElementById('info-price').textContent = 'Erro ao buscar dados';
 					}
-					let novoIntervalo = Math.floor(Math.random() * 5001 + 5000);
+					let novoIntervalo = Math.floor(Math.random() * 5001 + 3000);
 					intervaloID = setInterval(inicial, novoIntervalo);
 				}
 			}
@@ -429,7 +468,7 @@
 			// Inicia a atualização se não estiver pausado
 			let intervaloID = setInterval(inicial, update_Time);
 			// Atualizar taxas de transação
-			setInterval(atualiza_taxas, update_Taxas);
+			let taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 			// Verificando a inatividade a cada segundo
 			setInterval(verificarInatividade, 1000);
 		</script>
@@ -440,78 +479,81 @@
 			<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 			<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">◉</div>
 			<div id="reload-btn" title="Atualizar" onclick="location.reload()" alt="Atualizar">↻</div>
-			<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
-			<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
-			<div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
-			<div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
-			<div id="info-percent" class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."></div>
-			<div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
-			<div class="bottom-left-info">
-				<table>
-					<tr>
-						<td colspan="2">
-							<hr class="separator">
-						</td>
-					</tr>
-					<tr title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
-						<td id="highPriceE">Máxima:</td>
-						<td id="highPrice"></td>
-					</tr>
-					<tr title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
-						<td id="lowPriceE">Mínima:</td>
-						<td id="lowPrice"></td>
-					</tr>
-					<tr title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
-						<td id="highPriceDolE">Max. USDT:</td>
-						<td id="highPriceDol"></td>
-					</tr>
-					<tr title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
-						<td id="lowPriceDolE">Min. USDT:</td>
-						<td id="lowPriceDol"></td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<hr class="separator">
-						</td>
-					</tr>
-					<tr>
-						<td id="taxa_topico" colspan="2" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<hr class="separator">
-						</td>
-					</tr>
-					<tr title="Taxa mínima sugerida pela Mempool©.">
-						<td id="minimumFeeE">Minima:</td>
-						<td id="minimumFee"></td>
-					</tr>
-					<tr title="Taxa econômica sugerida pela Mempool.">
-						<td id="economyFeeE">Econômica:</td>
-						<td id="economyFee"></td>
-					</tr>
-					<tr title="Taxa mais rápida sugerida pela Mempool©.">
-						<td id="fastestFeeE">Prioridade:</td>
-						<td id="fastestFee"></td>
-					</tr>
-					<tr title="Taxa média dos últimos trinta minutos. Fonte Mempool©.">
-						<td id="halfHourFeeE">~30 min:</td>
-						<td id="halfHourFee"></td>
-					</tr>
-					<tr title="Taxa média da última hora. Fonte Mempool©.">
-						<td id="hourFeeE">~1 hora:</td>
-						<td id="hourFee"></td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<hr class="separator">
-						</td>
-					</tr>
-					<tr title="Média de todas as taxas. Fonte Mempool©.">
-						<td id="mediumFeeE">Média:</td>
-						<td id="mediumFee"></td>
-					</tr>
-				</table>
+			<div id="overlay" class="overlay">⏸️</div>
+			<div id= "conteudoMenosBotoes" class="conteudoMenosBotoes">
+				<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
+				<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
+				<div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
+				<div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
+				<div class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."><span id="info-percent"></span><span id="info-seta"> </span></div>
+				<div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
+				<div class="bottom-left-info">
+					<table>
+						<tr>
+							<td colspan="2">
+								<hr class="separator">
+							</td>
+						</tr>
+						<tr title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
+							<td id="highPriceE">Máxima:</td>
+							<td id="highPrice"></td>
+						</tr>
+						<tr title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
+							<td id="lowPriceE">Mínima:</td>
+							<td id="lowPrice"></td>
+						</tr>
+						<tr title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
+							<td id="highPriceDolE">Max. USDT:</td>
+							<td id="highPriceDol"></td>
+						</tr>
+						<tr title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
+							<td id="lowPriceDolE">Min. USDT:</td>
+							<td id="lowPriceDol"></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<hr class="separator">
+							</td>
+						</tr>
+						<tr>
+							<td id="taxa_topico" colspan="2" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<hr class="separator">
+							</td>
+						</tr>
+						<tr title="Taxa mínima sugerida pela Mempool©.">
+							<td id="minimumFeeE">Minima:</td>
+							<td id="minimumFee"></td>
+						</tr>
+						<tr title="Taxa econômica sugerida pela Mempool.">
+							<td id="economyFeeE">Econômica:</td>
+							<td id="economyFee"></td>
+						</tr>
+						<tr title="Taxa mais rápida sugerida pela Mempool©.">
+							<td id="fastestFeeE">Prioridade:</td>
+							<td id="fastestFee"></td>
+						</tr>
+						<tr title="Taxa para confirmação em aproximadamente 30 minutos. Fonte Mempool©.">
+							<td id="halfHourFeeE">~30 min:</td>
+							<td id="halfHourFee"></td>
+						</tr>
+						<tr title="Taxa para confirmação em aproximadamente 1 hora. Fonte Mempool©.">
+							<td id="hourFeeE">~1 hora:</td>
+							<td id="hourFee"></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<hr class="separator">
+							</td>
+						</tr>
+						<tr title="Média de todas as taxas. Fonte Mempool©.">
+							<td id="mediumFeeE">Média:</td>
+							<td id="mediumFee"></td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 	</body>

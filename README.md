@@ -1,4 +1,3 @@
 # BTC STATUS
 
-
-![Captura de tela 2025-01-07 030629](https://github.com/user-attachments/assets/fdbc8863-a486-4054-9a54-eda3a157e40f)
+[Captura de tela 2025-01-08 001123](https://github.com/user-attachments/assets/a5f480e2-34c0-4db6-b8be-9eeee4735202)

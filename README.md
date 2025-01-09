@@ -1,3 +1,4 @@
 # BTC STATUS
 
-![Screenshot_20250109_004203_Firefox](https://github.com/user-attachments/assets/419b6131-de00-423b-ac69-324b414fcc56)
+
+![Screenshot_20250109_103103_Firefox](https://github.com/user-attachments/assets/63d94104-4e57-42c5-970c-c8ed8b4b7e27)

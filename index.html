@@ -388,7 +388,7 @@
 				if (ativo) {
 					const percentElement = document.getElementById('info-percent');
 					try {
-						const responseBRL = await fetch('https://cors-anywhere.herokuapp.com/https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
+						const responseBRL = await fetch('https://test.cors.workers.dev/?https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
 						const dataBRL = await responseBRL.json();
 						const lastPriceBRL = parseFloat(dataBRL.lastPrice);
 						const formattedPriceBRL = lastPriceBRL.toLocaleString('pt-BR', {
@@ -469,7 +469,7 @@
 			}
 			async function atualiza_USD(lastPriceBRL) {
 				try {
-					const responseUSD = await fetch('https://cors-anywhere.herokuapp.com/https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
+					const responseUSD = await fetch('https://test.cors.workers.dev/?https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
 					const dataUSD = await responseUSD.json();
 					const lastPriceUSD = parseFloat(dataUSD.lastPrice);
 					const formattedPriceUSD = lastPriceUSD.toLocaleString('pt-BR', {

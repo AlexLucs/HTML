@@ -10,13 +10,10 @@ import win32con
 
 window_title = "BTC Status"
 width_btc = 500
-height_btc = 900
+height_btc = 850
 
 
 class exposedApi:
-    def __init__(self):
-        self.window_on_top = True  # Variável para manter o estado
-
     def fechar(self):
         global window
         if window:

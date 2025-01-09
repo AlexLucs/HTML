@@ -81,11 +81,11 @@
 			}
 
 			#fixar-btn {
-			left: 72px;
+			left: 64px;
 			}
 
 			#pausar-btn {
-			left: 48px;
+			left: 44px;
 			}
 
 			#info-logo {
@@ -344,26 +344,25 @@
 
 			function pyWebviewFixar() {				
 				const btn = document.getElementById('fixar-btn');
-				if (btn.textContent === '↑') {
+				if (btn.textContent === '△') {
 					btn.setAttribute('title', 'Desafixar');
 					btn.setAttribute('alt', 'Desafixar');
-					btn.textContent = '↓';
+					btn.textContent = '▽';
 				} else {
 					btn.setAttribute('title', 'Fixar');
 					btn.setAttribute('alt', 'Fixar');
-					btn.textContent = '↑';
+					btn.textContent = '△';
 				}
 				window.pywebview.api.fixarTopo();
 			}
 			function reiniciar() {
-				if (document.getElementById('fixar-btn').textContent === '↓') {
+				if (document.getElementById('fixar-btn').textContent === '▽') {
 					window.pywebview.api.fixarTopo();					
 				}
 				location.reload();
 			}
 			function pararIniciar() {
-				if (document.getElementById('pausar-btn').textContent == '⏸') {
-					document.getElementById('pausar-btn').textContent = '▶'
+				if (document.getElementById('pausar-btn').textContent == '■') {
 					ativo = false;
 					document.getElementById('overlay').style.display = 'flex';
 					clearInterval(intervaloID);
@@ -371,13 +370,12 @@
 					document.removeEventListener('keydown', resetarInatividade);
 					document.removeEventListener('mousemove', resetarInatividade);
 				} else {
-					document.getElementById('pausar-btn').textContent = '⏸'
 					ativo = true;
 					document.getElementById('overlay').style.display = 'none';
 					inicial();
-					atualiza_taxas();
 					clearInterval(intervaloID);
-					intervaloID = setInterval(inicial, update_Time);
+					intervaloID = setInterval(inicial, update_Time);					
+					atualiza_taxas();
 					clearInterval(taxaIntervaloID);
 					taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 					document.addEventListener('keydown', resetarInatividade);
@@ -530,10 +528,10 @@
 	</head>
 	<body>
 		<div class="pywebview-drag-region">
-			<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">◉</div>
+			<div id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">▣</div>
 			<div id="reload-btn" title="Atualizar" onclick="reiniciar()" alt="Atualizar">↻</div>
-			<div id="pausar-btn" title="Pausar" onclick="pararIniciar()" alt="Pausar">⏸</div>
-			<div id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">↑</div>
+			<div id="pausar-btn" title="Pausar" onclick="pararIniciar()" alt="Pausar">■</div>
+			<div id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">△</div>
 			<div id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 			<div id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
 

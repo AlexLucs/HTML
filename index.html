@@ -362,7 +362,7 @@
 				location.reload();
 			}
 			function pararIniciar() {
-				if (document.getElementById('pausar-btn').textContent == '■') {
+				if (ativo) {
 					ativo = false;
 					document.getElementById('overlay').style.display = 'flex';
 					clearInterval(intervaloID);

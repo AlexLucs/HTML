@@ -28,7 +28,34 @@
 			height: 100vh;
 			width: 100vw;
 			}
-			
+
+			#tela-carregamento {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 1);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 100px;
+			color: #f7931a;
+			z-index: 9999;
+			}
+
+			.girando {
+			animation: girandosimbolo 0.3s infinite linear;
+			}
+
+			@keyframes girandosimbolo {
+			0% { transform: rotate(0deg); }
+			25% { transform: rotate(90deg); }
+			50% { transform: rotate(180deg); }
+			75% { transform: rotate(270deg); }
+			100% { transform: rotate(360deg); }
+			}
+
 			.pywebview-drag-region {
 			position: fixed;
 			top: 0;
@@ -38,7 +65,7 @@
 			#overlay {
 			display: none;
 			position: fixed;
-			top: 30px;
+			top: 25px;
 			left: 0;
 			width: 100%;
 			height: 100%;
@@ -56,8 +83,8 @@
 			.btns {
 			position: absolute;
 			top: 4px;
-			width: 30px;
-			height: 30px;
+			width: 20px;
+			height: 20px;
 			justify-content: center;
 			font-size: larger;
 			font-weight: lighter;
@@ -72,8 +99,14 @@
 			display: none;
 			}
 
+			@keyframes surgindo {
+			0% {opacity: 0;}
+			100% {opacity: 1;}
+			}
+
 			#info-seta {
 			font-weight: bold;
+			opacity: 0;
 			}
 
 			#minimize-btn {
@@ -102,9 +135,9 @@
 			}
 
 			#info-logo {
-			margin-top: 40px;
 			color: #f7931a;
 			font-weight: bold;
+			margin-top: 20px;
 			}
 
 			#highPriceE,
@@ -164,7 +197,7 @@
 			border-collapse: collapse;
 			width: 100%;
 			}
-			
+
 			.bottom-left-info {
 			font-size: 1.5vw;
 			color: white;
@@ -213,7 +246,7 @@
 				font-size: 0.8vw;
 				}
 			}
-			
+
 			@media (max-width: 1920px) {
 				#info-logo {
 				font-size: 5vw;
@@ -315,7 +348,7 @@
 			let novoIntervalo = 0;
 			const maxFalhas = 10;
 			// Definir tempo para atualizar iniciar em milisegundos
-			const update_Time = 2000;
+			const update_Time = 3000;
 			// Definir tempo para atualizar taxas em milisegundos
 			const update_Taxas = 60000;
 			// Definir tempo máximo de inatividade em segundos
@@ -376,7 +409,7 @@
 				}
 				window.pywebview.api.fixarTopo();
 			}
-			
+
 			function reiniciar() {
 				if (document.getElementById('fixar-btn').textContent == '▽') {
 					document.getElementById('fixar-btn').textContent == '△'
@@ -384,7 +417,7 @@
 				}
 				location.reload();
 			}
-			
+
 			function pararIniciar() {
 				if (ativo) {
 					ativo = false;
@@ -408,7 +441,7 @@
 			}
 
 			function botoesPywebview() {
-				 if (navigator.userAgent=="pywebview") {
+				if (navigator.userAgent=="pywebview") {
 					document.getElementById("reload-btn").style.display = "flex";
 					document.getElementById("centralizar-btn").style.display = "flex";
 					document.getElementById("fixar-btn").style.display = "flex";
@@ -423,7 +456,7 @@
 					document.getElementById("reload-btn").style.display = "flex";
 				}
 			}
-			
+
 			async function inicial() {
 				if (ativo) {
 					const percentElement = document.getElementById('info-percent');
@@ -452,7 +485,6 @@
 							varSetaMostrar = "↑";
 						}
 						const formattedPercent = priceChangePercent.toFixed(2) + '% ';
-
 						const now = new Date();
 						const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
 						let titleText = `${formattedPriceBRL} | ${formattedPercent}`;
@@ -475,6 +507,11 @@
 							} else if (varSetaMostrar=='↓') {
 								document.getElementById('info-seta').style.color = "white";
 							}
+							// Atualiza a seta indicando a última variação depois apaga e reativa a animação
+							document.getElementById('info-seta').style.opacity = '0';
+							document.getElementById('info-seta').style.animation = 'none';
+							document.getElementById('info-seta').offsetHeight;
+							document.getElementById('info-seta').style.animation = 'surgindo 1s forwards';
 							document.getElementById('info-seta').textContent = varSetaMostrar;
 						}
 						document.getElementById('info-time').textContent = formattedTime;
@@ -490,6 +527,7 @@
 					intervaloID = setInterval(inicial, novoIntervalo);
 				}
 			}
+
 			async function atualiza_B3(dollarExchangeRate) {
 				try {
 					const responseBRLx = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
@@ -507,6 +545,7 @@
 					document.getElementById('info-dolar').textContent = 'Sem Dados';
 				}
 			}
+
 			async function atualiza_USD(lastPriceBRL) {
 				try {
 					const responseUSD = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
@@ -540,6 +579,7 @@
 					document.getElementById('info-dolar').textContent = 'Sem Dados';
 				}
 			}
+
 			async function atualiza_taxas() {
 				if (ativo) {
 					try {
@@ -556,19 +596,26 @@
 					}
 				}
 			}
+
 			window.addEventListener('load', botoesPywebview);
 			window.addEventListener('load', inicial);
-			window.addEventListener('load', atualiza_taxas);			
+			window.addEventListener('load', atualiza_taxas);
+			window.onload = function() {
+				setTimeout(function() {
+					document.getElementById('tela-carregamento').style.display = 'none';
+					document.getElementById('conteudo').style.display = 'block';
+				},1000);
+			}
 			// Inicia a atualização se não estiver pausado
 			let intervaloID = setInterval(inicial, update_Time);
 			// Atualizar taxas de transação
 			let taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 			// Verificando a inatividade a cada segundo
-			setInterval(verificarInatividade, 1000);;
+			setInterval(verificarInatividade, 1000);
 		</script>
 	</head>
 	<body>
-		<div class="pywebview-drag-region">
+		<div id="conteudo" class="pywebview-drag-region">
 			<div class="botao">
 				<div class="btns" id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">▣</div>
 				<div class="btns" id="reload-btn" title="Atualizar" onclick="reiniciar()" alt="Atualizar">↻</div>
@@ -576,14 +623,15 @@
 				<div class="btns" id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">△</div>
 				<div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 				<div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
-			</div>			
+			</div>
 			<div id="overlay" class="overlay" onclick="pararIniciar()">⏸</div>
+			<div id="tela-carregamento" content="width=device-width, initial-scale=1.0"><div class="girando">⟳</div></div>
 			<div id= "conteudoMenosBotoes" class="conteudoMenosBotoes">
 				<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
 				<div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
 				<div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
 				<div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
-				<div class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."><span id="info-percent"></span><span id="info-seta"></span></div>
+				<div class="percentual" title="Variação percentual do preço do Bitcoin em relação ao fechamento anterior."><span id="info-percent"></span><span id="info-seta" class="aparecer"></span></div>
 				<div id="info-time" class="horario_atualizacao" title="Horário da última atualização dos dados exibidos na página."></div>
 				<div class="bottom-left-info">
 					<table>

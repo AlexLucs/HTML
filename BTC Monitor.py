@@ -141,10 +141,12 @@ def abrir_janela():
             y=y_position,
             js_api=exposedApi()
         )
-
+        
         window.events.closing += salvar_janela
 
-        webview.start()
+        webview.start(
+            user_agent='pywebview'
+        )
 
     except Exception as e:
         print(f"Erro ao tentar abrir: {e}")

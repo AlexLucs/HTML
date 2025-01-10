@@ -28,7 +28,7 @@
 			height: 100vh;
 			width: 100vw;
 			}
-
+			
 			.pywebview-drag-region {
 			position: fixed;
 			top: 0;
@@ -59,7 +59,6 @@
 			width: 30px;
 			height: 30px;
 			justify-content: center;
-			color: white;
 			font-size: larger;
 			font-weight: lighter;
 			}
@@ -70,6 +69,7 @@
 
 			#close-btn {
 			right: 0px;
+			display: none;
 			}
 
 			#info-seta {
@@ -78,22 +78,27 @@
 
 			#minimize-btn {
 			right: 25px;
+			display: none;
 			}
 
 			#reload-btn {
 			left: 25px;
+			display: none;
 			}
 
 			#centralizar-btn {
 			left: 0px;
+			display: none;
 			}
 
 			#fixar-btn {
 			left: 69px;
+			display: none;
 			}
 
 			#pausar-btn {
 			left: 47px;
+			display: none;
 			}
 
 			#info-logo {
@@ -126,8 +131,8 @@
 			#hourFee,
 			#mediumFee {
 			color: #ffffff;
-			display: flex;
 			justify-content: flex-end;
+			display: flex;
 			}
 
 			#taxa_topico,
@@ -211,7 +216,7 @@
 			
 			@media (max-width: 1920px) {
 				#info-logo {
-				font-size: 6vw;
+				font-size: 5vw;
 				}
 
 				.btc_em_brl_principal {
@@ -223,20 +228,20 @@
 				}
 
 				.dolar_btc_e_b3 {
-				font-size: 1vw;
+				font-size: 1.5vw;
 				}
 
 				.percentual {
-				font-size: 6vw;
+				font-size: 5vw;
 				}
 
 				.horario_atualizacao {
-				font-size: 1vw;
+				font-size: 1.5vw;
 				}
 
 				.bottom-left-info,
 				table {
-				font-size: 1vw;
+				font-size: 1.5vw;
 				}
 			}
 
@@ -371,6 +376,7 @@
 				}
 				window.pywebview.api.fixarTopo();
 			}
+			
 			function reiniciar() {
 				if (document.getElementById('fixar-btn').textContent == '▽') {
 					document.getElementById('fixar-btn').textContent == '△'
@@ -378,6 +384,7 @@
 				}
 				location.reload();
 			}
+			
 			function pararIniciar() {
 				if (ativo) {
 					ativo = false;
@@ -400,8 +407,24 @@
 				}
 			}
 
+			function botoesPywebview() {
+				 if (navigator.userAgent=="pywebview") {
+					document.getElementById("reload-btn").style.display = "flex";
+					document.getElementById("centralizar-btn").style.display = "flex";
+					document.getElementById("fixar-btn").style.display = "flex";
+					document.getElementById("minimize-btn").style.display = "flex";
+					document.getElementById("close-btn").style.display = "flex";
+					document.getElementById("pausar-btn").style.display = "flex";
+				} else {
+					document.getElementById("pausar-btn").style.left = "unset";
+					document.getElementById("pausar-btn").style.right = "0px";
+					document.getElementById("pausar-btn").style.display = "flex";
+					document.getElementById("reload-btn").style.left = "0px";
+					document.getElementById("reload-btn").style.display = "flex";
+				}
+			}
+			
 			async function inicial() {
-				// Limpar o intervalo de atualização
 				if (ativo) {
 					const percentElement = document.getElementById('info-percent');
 					try {
@@ -462,7 +485,7 @@
 						document.title = 'Sem Dados';
 						document.getElementById('info-price').textContent = 'Sem Dados';
 					}
-					novoIntervalo = Math.floor(Math.random() * 5001 + 3000);
+					novoIntervalo = Math.floor(Math.random() * 3001 + 3000);
 					clearInterval(intervaloID);
 					intervaloID = setInterval(inicial, novoIntervalo);
 				}
@@ -533,14 +556,15 @@
 					}
 				}
 			}
+			window.addEventListener('load', botoesPywebview);
 			window.addEventListener('load', inicial);
-			window.addEventListener('load', atualiza_taxas);
+			window.addEventListener('load', atualiza_taxas);			
 			// Inicia a atualização se não estiver pausado
 			let intervaloID = setInterval(inicial, update_Time);
 			// Atualizar taxas de transação
 			let taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 			// Verificando a inatividade a cada segundo
-			setInterval(verificarInatividade, 1000);
+			setInterval(verificarInatividade, 1000);;
 		</script>
 	</head>
 	<body>
@@ -552,7 +576,7 @@
 				<div class="btns" id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">△</div>
 				<div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 				<div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
-			</div>
+			</div>			
 			<div id="overlay" class="overlay" onclick="pararIniciar()">⏸</div>
 			<div id= "conteudoMenosBotoes" class="conteudoMenosBotoes">
 				<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>

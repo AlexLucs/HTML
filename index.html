@@ -28,13 +28,13 @@
 			height: 100vh;
 			width: 100vw;
 			}
-			
+
 			.pywebview-drag-region {
 			position: fixed;
 			top: 0;
 			height: 100%;
 			}
-			
+
 			#overlay {
 			display: none;
 			position: fixed;
@@ -52,7 +52,7 @@
 			flex-direction: column;
 			font-family: Arial, sans-serif;
 			}
-			
+
 			.btns {
 			position: absolute;
 			top: 4px;
@@ -63,7 +63,7 @@
 			font-size: larger;
 			font-weight: lighter;
 			}
-			
+
 			.btns:hover {
 			color: #f7931a;
 			}
@@ -153,12 +153,13 @@
 			color: white;
 			margin-top: 0px;
 			}
-			
+
 			.bottom-left-info,
 			table {
 			border-collapse: collapse;
 			width: 100%;
 			}
+			
 			.bottom-left-info {
 			font-size: 1.5vw;
 			color: white;
@@ -177,17 +178,44 @@
 			margin: 5px 0;
 			}
 
-			@media (min-width: 1950px) {
+			@media (min-width: 1921px) {
+				#info-logo {
+				font-size: 4vw;
+				}
+
 				.btc_em_brl_principal {
-				font-size: 3vw;
+				font-size: 3.5vw;
+				}
+
+				.btc_em_usdt_secundariol {
+				font-size: 2vw;
+				}
+
+				.dolar_btc_e_b3 {
+				font-size: 0.8vw;
 				}
 
 				.percentual {
-				font-size: 3.5vw;
+				font-size: 4vw;
 				}
 
 				.horario_atualizacao {
 				font-size: 0.8vw;
+				}
+
+				.bottom-left-info,
+				table {
+				font-size: 0.8vw;
+				}
+			}
+			
+			@media (max-width: 1920px) {
+				#info-logo {
+				font-size: 6vw;
+				}
+
+				.btc_em_brl_principal {
+				font-size: 4vw;
 				}
 
 				.btc_em_usdt_secundariol {
@@ -196,51 +224,6 @@
 
 				.dolar_btc_e_b3 {
 				font-size: 1vw;
-				}
-
-				.bottom-left-info,
-				table {
-				font-size: 0.9vw;
-				}
-
-				#info-logo {
-				font-size: 3vw;
-				}
-			}
-			@media (max-width: 1949px) {
-				.btc_em_brl_principal {
-				font-size: 3.5vw;
-				}
-
-				.percentual {
-				font-size: 4.5vw;
-				}
-
-				.horario_atualizacao {
-				font-size: 1vw;
-				}
-
-				.btc_em_usdt_secundariol {
-				font-size: 2.5vw;
-				}
-
-				.dolar_btc_e_b3 {
-				font-size: 1.5vw;
-				}
-				
-				.bottom-left-info,
-				table {
-				font-size: 1.5vw;
-				}
-				
-				#info-logo {
-				font-size: 5vw;
-				}
-			}
-			
-			@media (max-width: 1100px) {
-				.btc_em_brl_principal {
-				font-size: 5vw;
 				}
 
 				.percentual {
@@ -248,7 +231,22 @@
 				}
 
 				.horario_atualizacao {
-				font-size: 2vw;
+				font-size: 1vw;
+				}
+
+				.bottom-left-info,
+				table {
+				font-size: 1vw;
+				}
+			}
+
+			@media (max-width: 1024px) {
+				#info-logo {
+				font-size: 8vw;
+				}
+
+				.btc_em_brl_principal {
+				font-size: 7vw;
 				}
 
 				.btc_em_usdt_secundariol {
@@ -259,44 +257,48 @@
 				font-size: 3vw;
 				}
 
+				.percentual {
+				font-size: 8vw;
+				}
+
+				.horario_atualizacao {
+				font-size: 3vw;
+				}
+
 				.bottom-left-info,
 				table {
 				font-size: 3vw;
 				}
-
-				#info-logo {
-				font-size: 8vw;
-				}
 			}
 
-			@media (max-width: 500px) {
+			@media (max-width: 640px) {
+				#info-logo {
+				font-size: 16vw;
+				}
+
 				.btc_em_brl_principal {
 				font-size: 14vw;
 				}
 
-				.percentual {
-				font-size: 14vw;
-				}
-
-				.horario_atualizacao {
-				font-size: 5vw;
-				}
-
 				.btc_em_usdt_secundariol {
-				font-size: 9vw;
+				font-size: 8vw;
 				}
 
 				.dolar_btc_e_b3 {
-				font-size: 5vw;
+				font-size: 4vw;
+				}
+
+				.percentual {
+				font-size: 16vw;
+				}
+
+				.horario_atualizacao {
+				font-size: 4vw;
 				}
 
 				.bottom-left-info,
 				table {
-				font-size: 5vw;
-				}
-
-				#info-logo {
-				font-size: 18vw;
+				font-size: 4vw;
 				}
 			}
 		</style>
@@ -356,7 +358,7 @@
 				window.pywebview.api.centralizar('True');
 			}
 
-			function pyWebviewFixar() {				
+			function pyWebviewFixar() {
 				const btn = document.getElementById('fixar-btn');
 				if (btn.textContent === '△') {
 					btn.setAttribute('title', 'Desafixar');
@@ -372,7 +374,7 @@
 			function reiniciar() {
 				if (document.getElementById('fixar-btn').textContent == '▽') {
 					document.getElementById('fixar-btn').textContent == '△'
-					window.pywebview.api.fixarTopo();					
+					window.pywebview.api.fixarTopo();
 				}
 				location.reload();
 			}
@@ -389,7 +391,7 @@
 					document.getElementById('overlay').style.display = 'none';
 					inicial();
 					clearInterval(intervaloID);
-					intervaloID = setInterval(inicial, update_Time);					
+					intervaloID = setInterval(inicial, update_Time);
 					atualiza_taxas();
 					clearInterval(taxaIntervaloID);
 					taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);

@@ -9,8 +9,8 @@ import win32con
 
 
 window_title = "BTC Status"
-width_btc = 500
-height_btc = 850
+width_btc = 640
+height_btc = 960
 
 
 class exposedApi:

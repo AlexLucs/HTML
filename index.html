@@ -427,6 +427,7 @@
 					clearInterval(taxaIntervaloID);
 					document.removeEventListener('keydown', resetarInatividade);
 					document.removeEventListener('mousemove', resetarInatividade);
+					alternarBtnPausa();
 				} else {
 					ativo = true;
 					document.getElementById('overlay').style.display = 'none';
@@ -438,6 +439,15 @@
 					taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 					document.addEventListener('keydown', resetarInatividade);
 					document.addEventListener('mousemove', resetarInatividade);
+					alternarBtnPausa();
+				}
+			}
+			
+			function alternarBtnPausa() {
+				if (document.getElementById("pausar-btn").getAttribute("title") == "Pausar") {
+					document.getElementById("pausar-btn").setAttribute("title", "Reiniciar");
+				} else {
+					document.getElementById("pausar-btn").setAttribute("title", "Pausar");
 				}
 			}
 
@@ -625,7 +635,7 @@
 				<div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 				<div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
 			</div>
-			<div id="overlay" class="overlay" onclick="pararIniciar()">⏸</div>
+			<div id="overlay" class="overlay" title="Clique para Reiniciar" onclick="pararIniciar()" alt="Clique para Reiniciar">⏸</div>
 			<div id="tela-carregamento" content="width=device-width, initial-scale=1.0"><div class="girando">⟳</div></div>
 			<div id= "conteudoMenosBotoes" class="conteudoMenosBotoes">
 				<div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>

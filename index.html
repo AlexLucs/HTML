@@ -547,7 +547,9 @@
 						document.getElementById('info-price').textContent = '▶Sem Dados◀';
 					}
 					intervaloVariavelInicial = Math.floor(Math.random() * 3001 + update_Time);
-					clearInterval(intervaloID);
+					if (typeof intervaloID !== 'undefined') {
+						clearInterval(intervaloID);
+					}
 					intervaloID = setInterval(inicial, intervaloVariavelInicial);
 				}
 			}
@@ -619,7 +621,9 @@
 						console.error('Erro ao buscar dados de taxas:', error);
 					}
 					intervaloVariavelTaxas = Math.floor(Math.random() * 20001 + update_Taxas);
-					clearInterval(taxaIntervaloID);
+					if (typeof taxaIntervaloID !== 'undefined') {
+						clearInterval(taxaIntervaloID);
+					}
 					taxaIntervaloID = setInterval(atualiza_taxas, novoIntervalo);
 				}
 			}

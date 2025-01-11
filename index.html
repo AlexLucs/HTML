@@ -4,7 +4,6 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link id="favicon" rel="icon" href="btc-logo.svg">
-		<link href="Roboto.woff2" rel="stylesheet">
 		<title>BTC Status - Monitoramento de Preço do Bitcoin</title>
 		<style>
 			*,
@@ -13,6 +12,13 @@
 			padding: 0;
 			margin: 0;
 			box-sizing: border-box;
+			}
+			
+			@font-face {
+			font-family: 'Roboto';
+			src: url('Roboto.woff2') format('woff2');
+			font-weight: normal;
+			font-style: normal;
 			}
 
 			body {
@@ -219,38 +225,38 @@
 
 			@media (min-width: 1921px) {
 				#info-logo {
-				font-size: 4vw;
+				font-size: 3.7vw;
 				}
 
 				.btc_em_brl_principal {
-				font-size: 3.5vw;
+				font-size: 3.2vw;
 				}
 
 				.btc_em_usdt_secundariol {
-				font-size: 2vw;
+				font-size: 1.8vw;
 				}
 
 				.dolar_btc_e_b3 {
-				font-size: 0.8vw;
+				font-size: 0.7vw;
 				}
 
 				.percentual {
-				font-size: 4vw;
+				font-size: 3.7vw;
 				}
 
 				.horario_atualizacao {
-				font-size: 0.8vw;
+				font-size: 0.7vw;
 				}
 
 				.bottom-left-info,
 				table {
-				font-size: 0.8vw;
+				font-size: 0.7vw;
 				}
 			}
 
 			@media (max-width: 1920px) {
 				#info-logo {
-				font-size: 5vw;
+				font-size: 4.5vw;
 				}
 
 				.btc_em_brl_principal {
@@ -262,20 +268,20 @@
 				}
 
 				.dolar_btc_e_b3 {
-				font-size: 1.5vw;
+				font-size: 1.4vw;
 				}
 
 				.percentual {
-				font-size: 5vw;
+				font-size: 4.5vw;
 				}
 
 				.horario_atualizacao {
-				font-size: 1.5vw;
+				font-size: 1.4vw;
 				}
 
 				.bottom-left-info,
 				table {
-				font-size: 1.5vw;
+				font-size: 1.4vw;
 				}
 			}
 
@@ -293,7 +299,7 @@
 				}
 
 				.dolar_btc_e_b3 {
-				font-size: 3vw;
+				font-size: 2.7vw;
 				}
 
 				.percentual {
@@ -301,12 +307,12 @@
 				}
 
 				.horario_atualizacao {
-				font-size: 3vw;
+				font-size: 2.7vw;
 				}
 
 				.bottom-left-info,
 				table {
-				font-size: 3vw;
+				font-size: 2.7vw;
 				}
 			}
 
@@ -324,7 +330,7 @@
 				}
 
 				.dolar_btc_e_b3 {
-				font-size: 4vw;
+				font-size: 3.5vw;
 				}
 
 				.percentual {
@@ -332,16 +338,18 @@
 				}
 
 				.horario_atualizacao {
-				font-size: 4vw;
+				font-size: 3.5vw;
 				}
 
 				.bottom-left-info,
 				table {
-				font-size: 4vw;
+				font-size: 3.5vw;
 				}
 			}
 		</style>
 		<script>
+			const tempoVerificarInatividade = 1000;
+			let loadingTime = 100;
 			let tempoInatividade = 0;
 			let varSetaMostrar;
 			let ativo = true;
@@ -352,9 +360,10 @@
 			const update_Time = 3000;
 			// Definir tempo para atualizar taxas em milisegundos
 			const update_Taxas = 60000;
-			// Definir tempo máximo de inatividade em segundos
+			// Definir tempo máximo de inatividade em segundos(1000s=~17m)
 			const tempoLimite = 1000;
 			// Função para resetar o tempo de inatividade
+			
 			function resetarInatividade() {
 				tempoInatividade = 0;
 				if (ativo) return;
@@ -380,6 +389,7 @@
 					clearInterval(taxaIntervaloID);
 				}
 			}
+			
 			// Monitorando eventos de teclado
 			document.addEventListener('keydown', resetarInatividade);
 			// Monitorando eventos de movimento do mouse
@@ -607,22 +617,34 @@
 					}
 				}
 			}
-
-			window.addEventListener('load', botoesPywebview);
-			window.addEventListener('load', inicial);
-			window.addEventListener('load', atualiza_taxas);
-			window.onload = function() {
-				setTimeout(function() {
+			
+			function verificarCarregamento() {
+				if (document.getElementById('info-dolar').textContent == '' || document.getElementById('info-seta').textContent == '' || document.getElementById('mediumFee').textContent == '') {
+					loadingTime *= 1.2;
+					setTimeout(verificarCarregamento, loadingTime);
+				} else {
 					document.getElementById('tela-carregamento').style.display = 'none';
 					document.getElementById('conteudo').style.display = 'block';
-				},1000);
+					loadingTime = 100;
+				}
 			}
-			// Inicia a atualização se não estiver pausado
-			let intervaloID = setInterval(inicial, update_Time);
-			// Atualizar taxas de transação
-			let taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
-			// Verificando a inatividade a cada segundo
-			setInterval(verificarInatividade, 1000);
+			
+			// Função anônima para executar várias funções no load
+			window.addEventListener('load', () => {
+				botoesPywebview();
+				inicial();
+				atualiza_taxas();
+				// Inicia o intervalo para o inicial e atualiza_taxas após a primeira execução
+				intervaloID = setInterval(inicial, update_Time);
+				taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
+				// Remove a tela de carregamento depois do loadingTime e mostra o conteúdo
+				setTimeout(verificarCarregamento, loadingTime);
+				// Monitora o teclado e o mouse por qualquer ação para resetar a inatividade
+				document.addEventListener('keydown', resetarInatividade);
+				document.addEventListener('mousemove', resetarInatividade);
+				// Verificando a inatividade a cada segundo
+				setInterval(verificarInatividade, tempoVerificarInatividade);
+			});
 		</script>
 	</head>
 	<body>

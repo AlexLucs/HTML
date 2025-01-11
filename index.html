@@ -359,7 +359,7 @@
 			// Definir tempo para atualizar iniciar em milisegundos
 			const update_Time = 3000;
 			// Definir tempo para atualizar taxas em milisegundos
-			const update_Taxas = 60000;
+			const update_Taxas = 50000;
 			// Definir tempo máximo de inatividade em segundos(1000s=~17m)
 			const tempoLimite = 1000;
 			// Função para resetar o tempo de inatividade
@@ -383,6 +383,7 @@
 				// Adiciona tempo de inatividade
 				tempoInatividade++;
 				if (tempoInatividade >= tempoLimite) {
+					wakeLock.release();
 					document.getElementById('overlay').style.display = 'flex';
 					ativo = false;
 					clearInterval(intervaloID);
@@ -437,6 +438,7 @@
 					clearInterval(taxaIntervaloID);
 					document.removeEventListener('keydown', resetarInatividade);
 					document.removeEventListener('mousemove', resetarInatividade);
+					wakeLock.release();
 					alternarBtnPausa();
 				} else {
 					ativo = true;
@@ -480,6 +482,7 @@
 
 			async function inicial() {
 				if (ativo) {
+					const wakeLock = await navigator.wakeLock.request('screen');
 					const percentElement = document.getElementById('info-percent');
 					try {
 						const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL');
@@ -543,9 +546,9 @@
 						document.title = 'Sem Dados';
 						document.getElementById('info-price').textContent = '▶Sem Dados◀';
 					}
-					novoIntervalo = Math.floor(Math.random() * 3001 + 3000);
+					intervaloVariavelInicial = Math.floor(Math.random() * 3001 + update_Time);
 					clearInterval(intervaloID);
-					intervaloID = setInterval(inicial, novoIntervalo);
+					intervaloID = setInterval(inicial, intervaloVariavelInicial);
 				}
 			}
 
@@ -615,6 +618,9 @@
 					} catch (error) {
 						console.error('Erro ao buscar dados de taxas:', error);
 					}
+					intervaloVariavelTaxas = Math.floor(Math.random() * 20001 + update_Taxas);
+					clearInterval(taxaIntervaloID);
+					taxaIntervaloID = setInterval(atualiza_taxas, novoIntervalo);
 				}
 			}
 			
@@ -637,9 +643,6 @@
 				botoesPywebview();
 				inicial();
 				atualiza_taxas();
-				// Inicia o intervalo para o inicial e atualiza_taxas após a primeira execução
-				intervaloID = setInterval(inicial, update_Time);
-				taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 				// Remove a tela de carregamento depois do loadingTime e mostra o conteúdo
 				setTimeout(verificarCarregamento, loadingTime);
 				// Monitora o teclado e o mouse por qualquer ação para resetar a inatividade

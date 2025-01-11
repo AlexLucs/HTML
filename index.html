@@ -52,7 +52,7 @@
 			}
 
 			.girando {
-			animation: girandosimbolo 0.3s infinite linear;
+			animation: girandosimbolo 0.4s infinite linear;
 			}
 
 			@keyframes girandosimbolo {
@@ -541,7 +541,7 @@
 					} catch (error) {
 						console.error('Erro ao buscar dados da API BTC/BRL Binance:', error);
 						document.title = 'Sem Dados';
-						document.getElementById('info-price').textContent = 'Sem Dados';
+						document.getElementById('info-price').textContent = '▶Sem Dados◀';
 					}
 					novoIntervalo = Math.floor(Math.random() * 3001 + 3000);
 					clearInterval(intervaloID);
@@ -621,6 +621,9 @@
 			function verificarCarregamento() {
 				if (document.getElementById('info-dolar').textContent == '' || document.getElementById('info-seta').textContent == '' || document.getElementById('mediumFee').textContent == '') {
 					loadingTime *= 1.2;
+					if (loadingTime > 2000) {
+						location.reload();
+					}
 					setTimeout(verificarCarregamento, loadingTime);
 				} else {
 					document.getElementById('tela-carregamento').style.display = 'none';

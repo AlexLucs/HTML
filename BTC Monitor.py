@@ -141,7 +141,7 @@ def abrir_janela():
             y=y_position,
             js_api=exposedApi()
         )
-        
+
         window.events.closing += salvar_janela
 
         webview.start(

@@ -76,9 +76,9 @@
 			.modal {
 			position: fixed;
 			z-index: 1;
-			top: 30%;
+			top: 50%;
 			left: 50%;
-			transform: translate(-50%, -70%);
+			transform: translate(-50%, -50%);
 			background-color: black;
 			color: white;
 			font-family: 'Roboto', sans-serif;
@@ -111,7 +111,6 @@
 			background-color: black;
 			}
 			
-			<!-- Remover os botões do lado direito dos campos de numero -->
 			input[type="number"]::-webkit-outer-spin-button,
 			input[type="number"]::-webkit-inner-spin-button {
 			-webkit-appearance: none;
@@ -120,6 +119,10 @@
 
 			input[type="number"] {
 			-moz-appearance: textfield;
+			}
+			
+			#botoesAlerta {
+				margin-top: 10px;
 			}
 			
 			button[type="button"] {
@@ -140,8 +143,28 @@
 			line-height: 40px;
 			}
 
+			#botaoApagar {
+			background-color: black;
+			color: #f7931a;
+			padding: 0;
+			border: 1px outset white;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 50px;
+			height: 30px;
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			margin: 0 10px 10px;
+			box-sizing: border-box;
+			}
 
 			button[type="button"]:hover {
+			background-color: #f7931a;
+			color: white;
+			}
+			
+			#botaoApagar:hover {
 			background-color: #f7931a;
 			color: white;
 			}
@@ -461,22 +484,6 @@
 			const tempoLimite = 1000;
 			// Função para resetar o tempo de inatividade
 
-			function tocarAlerta(repeticoes = 1, volume = 1) {
-				const audio = new Audio('alerta.mp3');
-				audio.volume = volume;
-				let contador = 0;
-				const tocar = () => {
-					if (contador < repeticoes) {
-						audio.play().catch(error => {
-							alert('Não foi possível reproduzir o áudio.');
-						});
-						contador++;
-						audio.onended = tocar;
-					}
-				};
-				tocar();
-			}
-			
 			function resetarInatividade() {
 				tempoInatividade = 0;
 				if (ativo) return;
@@ -535,6 +542,21 @@
 				window.pywebview.api.fixarTopo();
 			}
 
+			function pyWebviewSalvarAlerta(json) {
+				window.pywebview.api.salvar_alerta(json);
+			}
+			
+			async function pyWebviewCarregarAlerta() {
+				try {
+					let alertas = await window.pywebview.api.carregar_alerta();
+					return alertas;
+				} catch (erro) {
+					console.error("Erro ao carregar alertas:", erro);  // Loga o erro
+					return [];  // Retorna um array vazio em caso de erro
+				}
+			}
+
+			
 			function reiniciar() {
 				if (document.getElementById('fixar-btn').textContent == '▽') {
 					document.getElementById('fixar-btn').textContent == '△'
@@ -750,35 +772,125 @@
 					taxaIntervaloID = setInterval(atualiza_taxas, intervaloVariavelTaxas);
 				}
 			}
-			function alertas() {
-				limparValor();
-				if (document.getElementById("modalAlerta").style.display == "block") {
-					document.getElementById("modalAlerta").style.display = "none";
-				} else {
-					document.getElementById("modalAlerta").style.display = "block";
+			
+			function apagarAlertas(index) {
+				let alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];
+				alertas.splice(index, 1);
+				localStorage.setItem('alertasjson', JSON.stringify(alertas));
+				if (navigator.userAgent=="pywebview") {
+					pyWebviewSalvarAlerta(alertas);
 				}
-				if (document.getElementById("valorAlerta").value != "") {
-					
-				}	
+				carregarAlertas();
 			}
 			
+			function carregarAlertas() {
+				const tabela = document.getElementById("alertasTabela").getElementsByTagName('tbody')[0];
+				tabela.innerHTML = '';
+				let alertas = [];
+				try {
+					alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];
+				} catch (e) {
+					console.error("Erro ao parsear o JSON:", e);
+				}
+				if (alertas.length > 0) {
+					alertas.forEach((valorAlerta, index) => {
+						const novaLinha = tabela.insertRow();
+
+						const celulaValor = novaLinha.insertCell(0);
+						celulaValor.textContent = `R$ ${parseFloat(valorAlerta).toFixed(2)}`;
+
+						const celulaAcao = novaLinha.insertCell(1);
+						const botaoApagar = document.createElement("button");
+						botaoApagar.id = "botaoApagar";
+						botaoApagar.textContent = "Apagar";
+						botaoApagar.onclick = function() {
+							apagarAlertas(index);
+						};
+						celulaAcao.appendChild(botaoApagar);
+					});
+				}
+			}			
+
+			// Chamar a tela de alertas
+			function mostrarTelaAlerta() {
+				const modal = document.getElementById("modalAlerta");
+				if (modal.style.display === "block") {
+					modal.style.display = "none";
+				} else {
+					modal.style.display = "block";
+				}
+				carregarAlertas()
+			}
+			
+			async function sincronizaAlertas() {
+				let alertasPython = await pyWebviewCarregarAlerta();
+				let alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];
+				let alertasSalvos = alertasPython || [];
+				if (JSON.stringify(alertasSalvos) !== JSON.stringify(alertas)) {
+					localStorage.setItem('alertasjson', JSON.stringify(alertasSalvos));
+				}
+			}
+			
+			// Criar alertas
 			function criarAlerta() {
-				const valor = document.getElementById("valorAlerta").value;
+				valor = document.getElementById("valorAlerta").value;
+				
 				if (validarValor(valor)) {
-					alert("Valor válido: " + parseFloat(valor));
+					salvarAlerta(valor);
 				} else {
 					alert("Digite um valor válido.");
 				}
-				limparValor();	
+				carregarAlertas();
 			}
 			
-			function limparValor() {
-				document.getElementById('valorAlerta').value = "";
-			}
-			
+			// Testes de validação se é um número
 			function validarValor(numero) {
 				const paraValidar = parseFloat(numero);
 				return !isNaN(paraValidar) && numero.trim() !== "";
+			}
+			
+			// Salvar valor dos alertas
+			function salvarAlerta(numero) {
+				let alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];
+				// Checar se o alerta já existe
+				if (alertas.includes(numero)) {
+					alert("Já existe um alarme para esse valor.");
+				} else {
+					alertas.push(numero);
+					localStorage.setItem('alertasjson', JSON.stringify(alertas));
+				}				
+				if (navigator.userAgent=="pywebview") {
+					pyWebviewSalvarAlerta(alertas);
+				}
+			}
+			
+			// Voltar sem criar alerta
+			function voltarAlerta() {
+				limparValor();
+				mostrarTelaAlerta();
+			}
+			
+			// Limpar campo de alerta
+			function limparValor() {
+				if (document.getElementById('valorAlerta').value != "") {
+					document.getElementById('valorAlerta').value = "";
+				}
+			}
+
+			function tocarAlerta(repeticoes = 1, volume = 1) {
+				const audio = new Audio('alerta.mp3');
+				audio.volume = volume;
+				let contador = 0;
+				const tocar = () => {
+					if (contador < repeticoes) {
+						audio.play().catch(error => {
+							alert('Não foi possível reproduzir o áudio.');
+						});
+						contador++;
+						audio.onended = tocar;
+					}
+				};
+				tocar();
 			}
 
 			function verificarCarregamento() {
@@ -792,9 +904,13 @@
 					document.getElementById('tela-carregamento').style.display = 'none';
 					document.getElementById('conteudo').style.display = 'block';
 					loadingTime = 100;
+					// Iniciar a função de sincronia com o Backend Python
+					if (navigator.userAgent=="pywebview") {
+						sincronizaAlertas();
+					}
 				}
 			}
-
+			
 			// Função anônima para executar várias funções no load
 			window.addEventListener('load', () => {
 				botoesPywebview();
@@ -817,7 +933,7 @@
 				<div class="btns" id="reload-btn" title="Atualizar" onclick="reiniciar()" alt="Atualizar">↻</div>
 				<div class="btns" id="pausar-btn" title="Pausar" onclick="pararIniciar()" alt="Pausar">■</div>
 				<div class="btns" id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">△</div>
-				<div class="btns" id="alerta-btn" title="Alertas" onclick="alertas()" alt="Alertas">⏱︎</div>
+				<div class="btns" id="alerta-btn" title="Alertas" onclick="mostrarTelaAlerta()" alt="Alertas">⏱︎</div>
 				<div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
 				<div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
 			</div>
@@ -831,8 +947,13 @@
 					<p>Alertas</p>
 					<form id="inputForm">
 						<input type="number" id="valorAlerta" name="valor" title="Valor em Reais a ser monitorado." required></br>
-						<button type="button" onclick="criarAlerta()">Salvar</button>
-						<button type="button" onclick="alertas()">Voltar</button>
+						<table id="alertasTabela">
+							<tbody></tbody>
+						</table>
+						<div id="botoesAlerta">
+							<button type="button" onclick="criarAlerta()">Salvar</button>
+							<button type="button" onclick="voltarAlerta()">Voltar</button>
+						</div>
 					</form>
 				</div>
 			</div>

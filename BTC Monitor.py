@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import webview
 from screeninfo import get_monitors
 import pygetwindow as gw
@@ -19,10 +20,12 @@ class exposedApi:
         if window:
             window.destroy()
 
+
     def minimizar(self):
         global window
         if window:
             window.minimize()
+
 
     def centralizar(self, move=False):
         global window
@@ -50,6 +53,7 @@ class exposedApi:
             x_position, y_position = exposedApi().centrar(monitor)
             return x_position, y_position
 
+
     def centrar(self, monitor):
         monitor_width = monitor.width
         monitor_height = monitor.height
@@ -60,6 +64,7 @@ class exposedApi:
 
         return x_position, y_position
 
+
     def fixarTopo(self):
         hwnd = win32gui.GetForegroundWindow()
         estilo = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
@@ -69,6 +74,39 @@ class exposedApi:
         else:
             win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, estilo | win32con.WS_EX_TOPMOST)
             win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
+
+    def salvar_alerta(self, alerta):
+        pasta_alertas = os.path.join(os.getenv('APPDATA'), 'btcstatus')
+        if not os.path.exists(pasta_alertas):
+            os.makedirs(pasta_alertas)
+        
+        arquivo_json = os.path.join(pasta_alertas, "Alertas.json")
+        try:
+            with open(arquivo_json, 'w') as file:
+                json.dump(alerta, file, indent=4)
+        except (FileNotFoundError, json.JSONDecodeError):
+            print("erro")
+
+
+    def carregar_alerta(self):
+        pasta_alertas = os.path.join(os.getenv('APPDATA'), 'btcstatus')
+        
+        if not os.path.exists(pasta_alertas):
+            return []
+        
+        arquivo_json = os.path.join(pasta_alertas, "Alertas.json")
+        if not os.path.isfile(arquivo_json):
+            return []
+        
+        try:
+            with open(arquivo_json, 'r') as file:
+                dados = json.load(file)
+            return dados
+        except (json.JSONDecodeError, FileNotFoundError) as e:
+            print(f"Erro ao carregar o arquivo JSON: {e}")
+            return []
+
 
 def salvar_janela():
     windows = gw.getWindowsWithTitle(window_title)
@@ -93,12 +131,14 @@ def salvar_janela():
     except Exception as e:
         print(f"Erro ao salvar posição: {e}")
 
+
 def cordenadas_validas(x, y):
     monitors = get_monitors()
     for monitor in monitors:
         if x >= monitor.x and x <= (monitor.x + monitor.width) and y >= monitor.y and y <= (monitor.y + monitor.height):
             return True
     return False
+
 
 def posicao_janela():
     config = configparser.ConfigParser()
@@ -117,6 +157,7 @@ def posicao_janela():
         except:
             return 0,0
     return 0,0
+
 
 def abrir_janela():
     global window

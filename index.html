@@ -5,8 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link id="favicon" rel="icon" href="btc-logo.svg">
 		<title>BTC Status - Monitoramento de Preço do Bitcoin</title>
-		<!-- <link rel="stylesheet" href="jquery-confirm.min.css"> -->
-		<style>			
+		<link rel="stylesheet" href="jquery-confirm.min.css">
+		<style>
 			*,
 			*::before,
 			*::after {
@@ -129,7 +129,7 @@
 
 			button[type="button"] {
 			background-color: black;
-			color: #f7931a;			
+			color: #f7931a;
 			border: 1px outset white;
 			transition: background-color 0.5s ease;
 			text-align: center;
@@ -143,12 +143,12 @@
 			width: 100px;
 			height: 30px;
 			}
-			
+
 			#voltarBotao {
 			width: 100px;
 			height: 30px;
 			}
-			
+
 			#botaoApagar {
 			background-color: black;
 			color: #f7931a;
@@ -163,7 +163,7 @@
 			box-sizing: border-box;
 			width: 50px;
 			}
-			
+
 			#botaoTipo {
 			background-color: black;
 			color: #f7931a;
@@ -178,7 +178,7 @@
 			box-sizing: border-box;
 			width: 70px;
 			}
-			
+
 			button[type="button"]:hover {
 			background-color: #f7931a;
 			color: white;
@@ -899,7 +899,7 @@
 			function mudarTipo(index) {
 				let alertas = [];
 				try {
-					alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];					
+					alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];
 				} catch (e) {
 					console.error("Erro ao parsear o JSON:", e);
 				}
@@ -932,8 +932,15 @@
 
 				if (alertaExistente) {
 					$.alert({
-						title: 'Alert!',
-						content: 'Já existe um alarme com esse valor e tipo!',
+						title: 'Falha',
+						content: 'Existe um alerta com esse mesmo valor',
+						theme: 'dark',
+						draggable: false,
+						boxWidth: '300px',
+						useBootstrap: false,
+						autoClose: 'ok|5000',
+						closeIcon: true,
+						closeIconClass: 'fa fa-close'
 					});
 				} else {
 					try {
@@ -951,7 +958,7 @@
 				carregarAlertas();
 			}
 
-			
+
 			// Chamar a tela de alertas
 			function mostrarTelaAlerta() {
 				const modal = document.getElementById("modalAlerta");
@@ -980,8 +987,15 @@
 					salvarAlerta(valor,"maior",0);
 				} else {
 					$.alert({
-					title: 'Alert!',
-					content: 'Digite um número válido!',
+						title: 'Falha',
+						content: 'Digite um número válido',
+						theme: 'dark',
+						draggable: false,
+						boxWidth: '300px',
+						useBootstrap: false,
+						autoClose: 'ok|15000',
+						closeIcon: true,
+						closeIconClass: 'fa fa-close'
 					});
 				}
 				carregarAlertas();
@@ -1006,8 +1020,15 @@
 
 				if (alertaExistente) {
 					$.alert({
-						title: 'Alert!',
-						content: 'Já existe um alarme igual a esse!',
+						title: 'Falha',
+						content: 'Existe um alerta com esse mesmo valor',
+						theme: 'dark',
+						draggable: false,
+						boxWidth: '300px',
+						useBootstrap: false,
+						autoClose: 'ok|15000',
+						closeIcon: true,
+						closeIconClass: 'fa fa-close'
 					});
 				} else {
 					alertas.push(novoAlerta); // Adicionar o novo alerta
@@ -1032,6 +1053,13 @@
 				}
 			}
 
+			function limparMoeda(numero) {
+				let valorSemSimbolo = numero.replace('R$', '').trim();
+				let valorSemMilhar = valorSemSimbolo.replace('.', '').replace(',', '.');
+				let preco = parseFloat(valorSemMilhar);
+				return preco;
+			}
+
 			function tocarAlerta(repeticoes = 1, volume = 1) {
 				const audio = new Audio('alerta.mp3');
 				audio.volume = volume;
@@ -1046,8 +1074,15 @@
 						if (contador < repeticoes) {
 							audio.play().catch(error => {
 								$.alert({
-									title: 'Alert!',
-									content: 'Falha ao tentar reproduzir o áudio!',
+									title: 'Falha',
+									content: 'Falha ao reproduzir áudio',
+									theme: 'dark',
+									draggable: false,
+									boxWidth: '300px',
+									useBootstrap: false,
+									autoClose: 'ok|3000',
+									closeIcon: true,
+									closeIconClass: 'fa fa-close'
 								});
 							});
 							contador++;
@@ -1084,7 +1119,7 @@
 					}
 				}
 			}
-			
+
 			function prepararNotificacao(conteudo="") {
 				if ("Notification" in window) {
 					if (Notification.permission === "default") {

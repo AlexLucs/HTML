@@ -186,7 +186,8 @@ def abrir_janela():
         window.events.closing += salvar_janela
 
         webview.start(
-            user_agent='pywebview'
+            user_agent='pywebview',
+            debug=True
         )
 
     except Exception as e:

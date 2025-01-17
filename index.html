@@ -610,7 +610,6 @@
 					atualiza_taxas();
 					clearInterval(taxaIntervaloID);
 					taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
-					checarAlarmes();
 
 					document.addEventListener('keydown', resetarInatividade);
 					document.addEventListener('mousemove', resetarInatividade);
@@ -842,8 +841,6 @@
 			}
 
 			function carregarAlertas() {
-				clearTimeout(alarmesID);
-				alarmesID = setTimeout(checarAlarmes, 1000);
 				const tabela = document.getElementById("alertasTabela").getElementsByTagName('tbody')[0];
 				tabela.innerHTML = '';
 				let alertas = [];
@@ -1047,20 +1044,28 @@
 				const audio = new Audio('alerta.mp3');
 				audio.volume = volume;
 				let contador = 0;
+
 				const tocar = () => {
 					if (contador < repeticoes) {
 						audio.play().catch(error => {
 							$.alert({
-							title: 'Alert!',
-							content: 'Falha ao tentar reproduzir o audio!',
-						});
+								title: 'Alert!',
+								content: 'Falha ao tentar reproduzir o áudio!',
+							});
 						});
 						contador++;
-						audio.onended = tocar;
+
+						// Usar setTimeout para criar um pequeno atraso entre as repetições
+						audio.onended = () => {
+							setTimeout(tocar, 100); // 100ms de atraso
+						};
 					}
 				};
+
+				// Começar a reprodução
 				tocar();
 			}
+
 
 			function verificarCarregamento() {
 				if (document.getElementById('info-dolar').textContent == '' || document.getElementById('info-seta').textContent == '' || document.getElementById('mediumFee').textContent == '') {

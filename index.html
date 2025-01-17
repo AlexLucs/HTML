@@ -1032,40 +1032,40 @@
 				}
 			}
 
-			// Limpar número em "R$ 1.000,00" e retornar 1000.00
-			function limparMoeda(numero) {
-				let valorSemSimbolo = numero.replace('R$', '').trim();
-				let valorSemMilhar = valorSemSimbolo.replace('.', '').replace(',', '.');
-				let preco = parseFloat(valorSemMilhar);
-				return preco;
-			}
-
 			function tocarAlerta(repeticoes = 1, volume = 1) {
 				const audio = new Audio('alerta.mp3');
 				audio.volume = volume;
 				let contador = 0;
 
-				const tocar = () => {
-					if (contador < repeticoes) {
-						audio.play().catch(error => {
-							$.alert({
-								title: 'Alert!',
-								content: 'Falha ao tentar reproduzir o áudio!',
+				// Definir o preload para carregar o áudio automaticamente
+				audio.preload = 'auto';
+
+				// Garantir que o áudio esteja carregado antes de tocar
+				audio.addEventListener('canplaythrough', () => {
+					const tocar = () => {
+						if (contador < repeticoes) {
+							audio.play().catch(error => {
+								$.alert({
+									title: 'Alert!',
+									content: 'Falha ao tentar reproduzir o áudio!',
+								});
 							});
-						});
-						contador++;
+							contador++;
 
-						// Usar setTimeout para criar um pequeno atraso entre as repetições
-						audio.onended = () => {
-							setTimeout(tocar, 100); // 100ms de atraso
-						};
-					}
-				};
+							// Usar setTimeout para criar um pequeno atraso entre as repetições
+							audio.onended = () => {
+								setTimeout(tocar, 100); // 100ms de atraso
+							};
+						}
+					};
 
-				// Começar a reprodução
-				tocar();
+					// Começar a reprodução
+					tocar();
+				});
+
+				// Carregar o áudio
+				audio.load();
 			}
-
 
 			function verificarCarregamento() {
 				if (document.getElementById('info-dolar').textContent == '' || document.getElementById('info-seta').textContent == '' || document.getElementById('mediumFee').textContent == '') {

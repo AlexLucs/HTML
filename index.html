@@ -816,7 +816,7 @@
 					alertas.forEach((alerta, index) => {
 						if (alerta.tipo == "maior") {
 							if (lastPriceBRL >= alerta.valor) {
-								tocarAlerta(1,0.5);
+								tocarAlerta();
 							}
 						}
 						else if (alerta.tipo == "menor") {

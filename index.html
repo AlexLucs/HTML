@@ -141,12 +141,12 @@
 
 			#salvarBotao {
 			width: 100px;
-			height: 30px;
+			height: 40px;
 			}
 
 			#voltarBotao {
 			width: 100px;
-			height: 30px;
+			height: 40px;
 			}
 
 			#botaoApagar {
@@ -155,13 +155,13 @@
 			padding: 0;
 			border: 1px outset white;
 			transition: background-color 0.1s ease;
-			height: 20px;
+			height: 40px;
 			text-align: center;
 			white-space: nowrap;
 			overflow: hidden;
-			margin: 0;
+			margin: 2px;
 			box-sizing: border-box;
-			width: 50px;
+			width: 70px;
 			}
 
 			#botaoTipo {
@@ -170,7 +170,7 @@
 			padding: 0;
 			border: 1px outset white;
 			transition: background-color 0.1s ease;
-			height: 20px;
+			height: 40px;
 			text-align: center;
 			white-space: nowrap;
 			overflow: hidden;
@@ -844,24 +844,34 @@
 							}
 						}
 						else if (alerta.tipo == "menor") {
-							if (lastPriceBRL <= alerta.valor && contadorAlerta == 0) {
-								tocarAlerta();
-								$.alert({
-									title: 'ALERTA',
-									content: 'O Preço do Bitcoin caiu abaixo de<br>' + (parseFloat(alerta.valor) || 0).toLocaleString('pt-BR', {
-										style: 'currency',
-										currency: 'BRL'
-									}),
-									theme: 'dark',
-									draggable: false,
-									boxWidth: '300px',
-									useBootstrap: false,
-									closeIcon: true,
-								});
+							if (lastPriceBRL <= alerta.valor) {
+								if (contadorAlerta == 0) {
+									$.alert({
+										title: 'ALERTA',
+										content: 'O Preço do Bitcoin caiu abaixo de<br>' + (parseFloat(alerta.valor) || 0).toLocaleString('pt-BR', {
+											style: 'currency',
+											currency: 'BRL'
+										}),
+										theme: 'dark',
+										onClose: function() {
+											contadorSom = 0;
+											contadorAlerta = 0;
+											mudarTipo(index,desativar=1);
+										},
+										draggable: false,
+										boxWidth: '300px',
+										useBootstrap: false,
+										closeIcon: true,
+									});
+								}
 								contadorAlerta = 1;
+								if (contadorSom < 100) {
+									contadorSom += 1;
+									tocarAlerta();
+								}
 							}
 						} else if (alerta.tipo == "desativado") {
-							console.log("O que fazer caso desativado?");
+							// O que fazer caso esteja desativado.
 						} else {
 							console.log("Falha de tipo de alarme.");
 						}
@@ -1006,7 +1016,7 @@
 				carregarAlertas();
 			}
 
-			// Chamar a tela de alertas
+			// Mostra ou esconder a tela de alertas
 			function mostrarTelaAlerta() {
 				const modal = document.getElementById("modalAlerta");
 				if (modal.style.display === "block") {
@@ -1017,6 +1027,24 @@
 				carregarAlertas()
 			}
 
+			// Monitora se houve click fora da Janela de alerta
+			<!-- function fecharClicarFora(event) { -->
+				<!-- const modalAlerta = document.getElementById('modalAlerta'); -->
+				<!-- const botaoclick = document.getElementById('alerta-btn'); -->
+				<!-- const botoes = document.querySelectorAll('button'); -->
+				
+				<!-- let clicouFora = true; -->
+				<!-- botoes.forEach((elemento) => { -->
+					<!-- if (elemento.contains(event.target)) { -->
+						<!-- clicouFora = false; -->
+					<!-- } -->
+				<!-- }); -->
+				
+				<!-- if (!modalAlerta.contains(event.target) && !botaoclick.contains(event.target) && !clicouFora) { -->
+					<!-- mostrarTelaAlerta(); -->
+				<!-- } -->
+			<!-- } -->
+			
 			async function sincronizaAlertas() {
 				let alertasPython = await pyWebviewCarregarAlerta();
 				let alertas = JSON.parse(localStorage.getItem('alertasjson')) || [];

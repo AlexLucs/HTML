@@ -662,9 +662,9 @@
 					atualiza_taxas();
 					clearInterval(taxaIntervaloID);
 					taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
-
 					document.addEventListener('keydown', resetarInatividade);
 					document.addEventListener('mousemove', resetarInatividade);
+					fazerTransicaoAlarme();
 					alternarBtnPausa();
 				}
 			}

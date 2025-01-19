@@ -212,10 +212,10 @@
 			cursor: pointer;
 			position: absolute;
 			top: 4px;
-			width: 20px;
-			height: 20px;
+			width: 40px;
+			height: 40px;
 			justify-content: center;
-			font-size: larger;
+			font-size: x-large;
 			font-weight: lighter;
 			color: white;
 			}
@@ -234,8 +234,8 @@
 			right: 4px;
 			position: absolute;
 			top: 0px;
-			width: 20px;
-			height: 20px;
+			width: 40px;
+			height: 40px;
 			justify-content: center;
 			font-size: 1.5rem;
 			color: white;
@@ -252,12 +252,12 @@
 			}
 
 			#minimize-btn {
-			right: 25px;
+			right: 40px;
 			display: none;
 			}
 
 			#reload-btn {
-			left: 25px;
+			left: 40px;
 			display: none;
 			}
 
@@ -267,24 +267,24 @@
 			}
 
 			#alerta-btn {
-			left: 92px;
+			left: 160px;
 			display: none;
 			}
 
 			#fixar-btn {
-			left: 69px;
+			left: 120px;
 			display: none;
 			}
 
 			#pausar-btn {
-			left: 47px;
+			left: 80px;
 			display: none;
 			}
 
 			#info-logo {
 			color: #f7931a;
 			font-weight: bold;
-			margin-top: 20px;
+			margin-top: 40px;
 			}
 
 			#highPriceE,
@@ -651,9 +651,7 @@
 					document.getElementById("pausar-btn").style.left = "unset";
 					document.getElementById("pausar-btn").style.right = "0px";
 					document.getElementById("pausar-btn").style.display = "flex";
-					document.getElementById("reload-btn").style.left = "0px";
-					document.getElementById("reload-btn").style.display = "flex";
-					document.getElementById("alerta-btn").style.left = "20px";
+					document.getElementById("alerta-btn").style.left = "0px";
 					document.getElementById("alerta-btn").style.display = "flex";
 				}
 			}
@@ -1125,6 +1123,7 @@
 					if (navigator.userAgent == "pywebview") {
 						pyWebviewSalvarAlerta(alertas);
 					}
+					fazerTransicaoAlarme()
 				}
 			}
 

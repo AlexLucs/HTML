@@ -968,10 +968,13 @@
 						};
 						if (tipo == "maior") {
 							botaotipo.textContent = "Maior que";
+							botaotipo.style.opacity = 1;
 						} else if (tipo == "menor") {
 							botaotipo.textContent = "Menor que";
+							botaotipo.style.opacity = 1;
 						} else if (tipo == "desativado") {
 							botaotipo.textContent = "Desativado";
+							botaotipo.style.opacity = .5;
 						}
 						celulatipo.appendChild(botaotipo);
 
@@ -1300,7 +1303,7 @@
 			</div>
 			<div id="modalAlerta" class="modal">
 				<div class="modal-content">
-					<p>Alertas</p>
+					<p>ALERTAS</p>
 					<form id="inputForm">
 						<input type="number" id="valorAlerta" name="valor" title="Valor em Reais a ser monitorado." required></br>
 						<table id="alertasTabela">

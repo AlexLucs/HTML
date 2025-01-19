@@ -2,8 +2,9 @@
 
 ## PYTHON
 
-![Captura de tela 2025-01-13 070636](https://github.com/user-attachments/assets/f525a87e-54a2-445d-90e9-cf82d1162492)
+![Screenshot_20250119_161541_Firefox](https://github.com/user-attachments/assets/19f4b00e-0dbd-487e-ae05-c041768bb092)
 
 ## NAVEGADOR
 
-![Screenshot_20250113_070455_Firefox](https://github.com/user-attachments/assets/c96a65f5-7fe7-48ac-8ba4-e68ce32a7959)
+![IMG_20250119_161727_439](https://github.com/user-attachments/assets/3d8fe91b-fb6e-4cc8-8e22-681e00f6887d)
+

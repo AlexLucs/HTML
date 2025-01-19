@@ -490,6 +490,7 @@
 		<script src="jquery.min.js"></script>
 		<script src="jquery-confirm.min.js"></script>
 		<script>
+			let transicaoAlarme = 0;
 			let contadorAlerta = 0;
 			let contadorSom = 0;
 			let lastPriceBRL;
@@ -521,6 +522,17 @@
 				intervaloID = setInterval(inicial, update_Time);
 				clearInterval(taxaIntervaloID);
 				taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
+			}
+			
+			// Desligar os alarmes por 10s (na variável tempoTransicao)
+			function fazerTransicaoAlarme(tempoTransicao=15000) {
+				transicaoAlarme = 1;
+				if (typeof trasicaoAlarmeID !== 'undefined') {
+					clearTimeout(trasicaoAlarmeID);
+				}
+				trasicaoAlarmeID = setTimeout(() => {
+					transicaoAlarme = 0;
+				}, tempoTransicao);
 			}
 
 			function verificarInatividade() {
@@ -813,69 +825,71 @@
 				} catch (e) {
 					console.error("Erro ao parsear o JSON:", e);
 				}
-				if (alertas.length > 0) {
-					alertas.forEach((alerta, index) => {
-						if (alerta.tipo == "maior") {
-							if (lastPriceBRL >= alerta.valor) {
-								if (contadorAlerta == 0) {
-									$.alert({
-										title: 'ALERTA',
-										content: 'O Preço do Bitcoin superou<br>' + (parseFloat(alerta.valor) || 0).toLocaleString('pt-BR', {
-											style: 'currency',
-											currency: 'BRL'
-										}),
-										theme: 'dark',
-										onClose: function() {
-											contadorSom = 0;
-											contadorAlerta = 0;
-											mudarTipo(index,desativar=1);
-										},
-										draggable: false,
-										boxWidth: '300px',
-										useBootstrap: false,
-										closeIcon: true,
-									});
-								}
-								contadorAlerta = 1;
-								if (contadorSom < 100) {
-									contadorSom += 1;
-									tocarAlerta();
-								}
-							}
-						}
-						else if (alerta.tipo == "menor") {
-							if (lastPriceBRL <= alerta.valor) {
-								if (contadorAlerta == 0) {
-									$.alert({
-										title: 'ALERTA',
-										content: 'O Preço do Bitcoin caiu abaixo de<br>' + (parseFloat(alerta.valor) || 0).toLocaleString('pt-BR', {
-											style: 'currency',
-											currency: 'BRL'
-										}),
-										theme: 'dark',
-										onClose: function() {
-											contadorSom = 0;
-											contadorAlerta = 0;
-											mudarTipo(index,desativar=1);
-										},
-										draggable: false,
-										boxWidth: '300px',
-										useBootstrap: false,
-										closeIcon: true,
-									});
-								}
-								contadorAlerta = 1;
-								if (contadorSom < 100) {
-									contadorSom += 1;
-									tocarAlerta();
+				if (transicaoAlarme === 0) {
+					if (alertas.length > 0) {
+						alertas.forEach((alerta, index) => {
+							if (alerta.tipo == "maior") {
+								if (lastPriceBRL >= alerta.valor) {
+									if (contadorAlerta == 0) {
+										$.alert({
+											title: 'ALERTA',
+											content: 'O Preço do Bitcoin superou<br>' + (parseFloat(alerta.valor) || 0).toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL'
+											}),
+											theme: 'dark',
+											onClose: function() {
+												contadorSom = 0;
+												contadorAlerta = 0;
+												mudarTipo(index,desativar=1);
+											},
+											draggable: false,
+											boxWidth: '300px',
+											useBootstrap: false,
+											closeIcon: true,
+										});
+									}
+									contadorAlerta = 1;
+									if (contadorSom < 100) {
+										contadorSom += 1;
+										tocarAlerta();
+									}
 								}
 							}
-						} else if (alerta.tipo == "desativado") {
-							// O que fazer caso esteja desativado.
-						} else {
-							console.log("Falha de tipo de alarme.");
-						}
-					});
+							else if (alerta.tipo == "menor") {
+								if (lastPriceBRL <= alerta.valor) {
+									if (contadorAlerta == 0) {
+										$.alert({
+											title: 'ALERTA',
+											content: 'O Preço do Bitcoin caiu abaixo de<br>' + (parseFloat(alerta.valor) || 0).toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL'
+											}),
+											theme: 'dark',
+											onClose: function() {
+												contadorSom = 0;
+												contadorAlerta = 0;
+												mudarTipo(index,desativar=1);
+											},
+											draggable: false,
+											boxWidth: '300px',
+											useBootstrap: false,
+											closeIcon: true,
+										});
+									}
+									contadorAlerta = 1;
+									if (contadorSom < 100) {
+										contadorSom += 1;
+										tocarAlerta();
+									}
+								}
+							} else if (alerta.tipo == "desativado") {
+								// O que fazer caso esteja desativado.
+							} else {
+								console.log("Falha de tipo de alarme.");
+							}
+						});
+					}
 				}
 			}
 
@@ -915,6 +929,7 @@
 						botaotipo.type = "button";
 						botaotipo.onclick = function() {
 							mudarTipo(index);
+							fazerTransicaoAlarme();
 						};
 						if (tipo == "maior") {
 							botaotipo.textContent = "Maior que";
@@ -1190,6 +1205,7 @@
 					if (navigator.userAgent=="pywebview") {
 						sincronizaAlertas();
 					}
+					fazerTransicaoAlarme(5000);
 				}
 			}
 

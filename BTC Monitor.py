@@ -11,7 +11,7 @@ import win32con
 
 window_title = "BTC Status"
 width_btc = 500
-height_btc = 810
+height_btc = 830
 
 
 class exposedApi:
@@ -187,7 +187,6 @@ def abrir_janela():
 
         webview.start(
             user_agent='pywebview',
-            debug=True,
         )
 
     except Exception as e:

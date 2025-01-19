@@ -16,6 +16,30 @@
 			cursor: default;
 			}
 
+			.jconfirm.jconfirm-dark .jconfirm-bg {
+			background-color: black;
+			opacity: .4;
+			}
+
+			.jconfirm.jconfirm-black .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box {
+			border: 3px outset white;
+			}
+
+			.jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default {
+			border: 1px outset white;
+			}
+
+			.jconfirm.jconfirm-black .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default {
+			background: black;
+			color: #f7931a;
+			}
+
+			.jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default:hover{
+			color: white;
+			background: #f7931a;
+			border: 1px outset white;
+			}
+
 			@font-face {
 			font-family: 'Roboto';
 			src: url('Roboto.woff2') format('woff2');
@@ -131,7 +155,9 @@
 			background-color: black;
 			color: #f7931a;
 			border: 1px outset white;
-			transition: background-color 0.5s ease;
+			transition-duration: 0.4s;
+			transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+			transition-property: all, margin;
 			text-align: center;
 			white-space: nowrap;
 			overflow: hidden;
@@ -153,8 +179,10 @@
 			background-color: black;
 			color: #f7931a;
 			padding: 0;
+			transition-duration: 0.4s;
+			transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+			transition-property: all, margin;
 			border: 1px outset white;
-			transition: background-color 0.1s ease;
 			height: 40px;
 			text-align: center;
 			white-space: nowrap;
@@ -169,7 +197,9 @@
 			color: #f7931a;
 			padding: 0;
 			border: 1px outset white;
-			transition: background-color 0.1s ease;
+			transition-duration: 0.4s;
+			transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+			transition-property: all, margin;
 			height: 40px;
 			text-align: center;
 			white-space: nowrap;
@@ -189,7 +219,7 @@
 			background-color: #f7931a;
 			color: white;
 			}
-			
+
 			.overlay {
 			display: none;
 			position: fixed;
@@ -203,14 +233,15 @@
 			flex-direction: column;
 			font-family: 'Roboto', sans-serif;
 			}
-			
+
 			#darkback {
 			z-index: 10;
-			background-color: rgba(0, 0, 0, 0.7);
+			background-color: rgba(0, 0, 0, .4);
+			transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
 			}
-			
+
 			#overlay {
-			background-color: rgba(0, 0, 0, 0.7);
+			background-color: rgba(0, 0, 0, .4);
 			color: white;
 			font-size: 15rem;
 			z-index: 1000;
@@ -531,7 +562,7 @@
 				clearInterval(taxaIntervaloID);
 				taxaIntervaloID = setInterval(atualiza_taxas, update_Taxas);
 			}
-			
+
 			// Desligar os alarmes por 10s (na variável tempoTransicao)
 			function fazerTransicaoAlarme(tempoTransicao=15000) {
 				transicaoAlarme = 1;
@@ -852,7 +883,6 @@
 											draggable: false,
 											boxWidth: '300px',
 											useBootstrap: false,
-											closeIcon: true,
 										});
 									}
 									contadorAlerta = 1;
@@ -880,7 +910,6 @@
 											draggable: false,
 											boxWidth: '300px',
 											useBootstrap: false,
-											closeIcon: true,
 										});
 									}
 									contadorAlerta = 1;
@@ -1031,13 +1060,12 @@
 				if (alertaExistente) {
 					$.alert({
 						title: 'FALHA',
-						content: 'Existe um alerta com esse mesmo valor',
+						content: 'Existe um alerta com esse mesmo valor.',
 						theme: 'dark',
 						draggable: false,
 						boxWidth: '300px',
 						useBootstrap: false,
 						autoClose: 'ok|5000',
-						closeIcon: true,
 					});
 				} else {
 					try {
@@ -1057,7 +1085,7 @@
 
 			// Mostra ou esconder a tela de alertas
 			function mostrarTelaAlerta() {
-				const modal = document.getElementById("modalAlerta");			
+				const modal = document.getElementById("modalAlerta");
 				const darkback = document.getElementById('darkback');
 				if (modal.style.display === "block") {
 					modal.style.display = "none";
@@ -1087,13 +1115,12 @@
 				} else {
 					$.alert({
 						title: 'FALHA',
-						content: 'Digite um número válido',
+						content: 'Digite um número válido.',
 						theme: 'dark',
 						draggable: false,
 						boxWidth: '300px',
 						useBootstrap: false,
 						autoClose: 'ok|15000',
-						closeIcon: true,
 					});
 				}
 				carregarAlertas();
@@ -1119,13 +1146,12 @@
 				if (alertaExistente) {
 					$.alert({
 						title: 'FALHA',
-						content: 'Existe um alerta com esse mesmo valor',
+						content: 'Existe um alerta com esse mesmo valor.',
 						theme: 'dark',
 						draggable: false,
 						boxWidth: '300px',
 						useBootstrap: false,
 						autoClose: 'ok|15000',
-						closeIcon: true,
 					});
 				} else {
 					alertas.push(novoAlerta); // Adicionar o novo alerta
@@ -1172,15 +1198,13 @@
 						if (contador < repeticoes) {
 							audio.play().catch(error => {
 								$.alert({
-									title: 'Falha',
-									content: 'Falha ao reproduzir áudio',
+									title: 'FALHA',
+									content: 'Falha ao reproduzir áudio.',
 									theme: 'dark',
 									draggable: false,
 									boxWidth: '300px',
 									useBootstrap: false,
 									autoClose: 'ok|3000',
-									closeIcon: true,
-									closeIconClass: 'fa fa-close'
 								});
 							});
 							contador++;

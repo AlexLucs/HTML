@@ -752,7 +752,5 @@ window.addEventListener('load', () => {
 	// Verificando a inatividade a cada segundo
 	setInterval(verificarInatividade, tempoVerificarInatividade);
 	// Conferir se as notificações são possíveis, se estão ativas e pedir autorização se não estiverem
-	<
-	!--prepararNotificacao();
-	-- >
+	// prepararNotificacao();
 });

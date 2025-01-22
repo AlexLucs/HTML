@@ -20,12 +20,10 @@ class exposedApi:
         if window:
             window.destroy()
 
-
     def minimizar(self):
         global window
         if window:
             window.minimize()
-
 
     def centralizar(self, move=False):
         global window
@@ -53,7 +51,6 @@ class exposedApi:
             x_position, y_position = exposedApi().centrar(monitor)
             return x_position, y_position
 
-
     def centrar(self, monitor):
         monitor_width = monitor.width
         monitor_height = monitor.height
@@ -64,43 +61,60 @@ class exposedApi:
 
         return x_position, y_position
 
-
     def fixarTopo(self):
         hwnd = win32gui.GetForegroundWindow()
         estilo = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
         if estilo & win32con.WS_EX_TOPMOST:
-            win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, estilo & ~win32con.WS_EX_TOPMOST)
-            win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+            win32gui.SetWindowLong(
+                hwnd, win32con.GWL_EXSTYLE, estilo & ~win32con.WS_EX_TOPMOST
+            )
+            win32gui.SetWindowPos(
+                hwnd,
+                win32con.HWND_NOTOPMOST,
+                0,
+                0,
+                0,
+                0,
+                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE,
+            )
         else:
-            win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, estilo | win32con.WS_EX_TOPMOST)
-            win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
-
+            win32gui.SetWindowLong(
+                hwnd, win32con.GWL_EXSTYLE, estilo | win32con.WS_EX_TOPMOST
+            )
+            win32gui.SetWindowPos(
+                hwnd,
+                win32con.HWND_TOPMOST,
+                0,
+                0,
+                0,
+                0,
+                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE,
+            )
 
     def salvar_alerta(self, alerta):
-        pasta_alertas = os.path.join(os.getenv('APPDATA'), 'btcstatus')
+        pasta_alertas = os.path.join(os.getenv("APPDATA"), "btcstatus")
         if not os.path.exists(pasta_alertas):
             os.makedirs(pasta_alertas)
-        
+
         arquivo_json = os.path.join(pasta_alertas, "Alertas.json")
         try:
-            with open(arquivo_json, 'w') as file:
+            with open(arquivo_json, "w") as file:
                 json.dump(alerta, file, indent=4)
         except (FileNotFoundError, json.JSONDecodeError):
             print("erro")
 
-
     def carregar_alerta(self):
-        pasta_alertas = os.path.join(os.getenv('APPDATA'), 'btcstatus')
-        
+        pasta_alertas = os.path.join(os.getenv("APPDATA"), "btcstatus")
+
         if not os.path.exists(pasta_alertas):
             return []
-        
+
         arquivo_json = os.path.join(pasta_alertas, "Alertas.json")
         if not os.path.isfile(arquivo_json):
             return []
-        
+
         try:
-            with open(arquivo_json, 'r') as file:
+            with open(arquivo_json, "r") as file:
                 dados = json.load(file)
             return dados
         except (json.JSONDecodeError, FileNotFoundError) as e:
@@ -117,16 +131,15 @@ def salvar_janela():
         x_position1 = window1.left
         y_position1 = window1.top
 
-        appdata_dir = os.getenv('APPDATA')
-        config_dir = os.path.join(appdata_dir, 'btcstatus')
+        appdata_dir = os.getenv("APPDATA")
+        config_dir = os.path.join(appdata_dir, "btcstatus")
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
         config_file = os.path.join(config_dir, "BTC Monitor.ini")
 
+        config["Position"] = {"x": str(x_position1), "y": str(y_position1)}
 
-        config['Position'] = {'x': str(x_position1), 'y': str(y_position1)}
-
-        with open(config_file, 'w') as configfile:
+        with open(config_file, "w") as configfile:
             config.write(configfile)
     except Exception as e:
         print(f"Erro ao salvar posição: {e}")
@@ -135,28 +148,33 @@ def salvar_janela():
 def cordenadas_validas(x, y):
     monitors = get_monitors()
     for monitor in monitors:
-        if x >= monitor.x and x <= (monitor.x + monitor.width) and y >= monitor.y and y <= (monitor.y + monitor.height):
+        if (
+            x >= monitor.x
+            and x <= (monitor.x + monitor.width)
+            and y >= monitor.y
+            and y <= (monitor.y + monitor.height)
+        ):
             return True
     return False
 
 
 def posicao_janela():
     config = configparser.ConfigParser()
-    appdata_dir = os.getenv('APPDATA')
-    config_dir = os.path.join(appdata_dir, 'btcstatus')
+    appdata_dir = os.getenv("APPDATA")
+    config_dir = os.path.join(appdata_dir, "btcstatus")
     config_file = os.path.join(config_dir, "BTC Monitor.ini")
     if os.path.exists(config_file):
         config.read(config_file)
         try:
-            x_position = int(config['Position']['x'])
-            y_position = int(config['Position']['y'])
+            x_position = int(config["Position"]["x"])
+            y_position = int(config["Position"]["y"])
             if cordenadas_validas(x_position, y_position):
                 return x_position, y_position
             else:
-                return 0,0
+                return 0, 0
         except:
-            return 0,0
-    return 0,0
+            return 0, 0
+    return 0, 0
 
 
 def abrir_janela():
@@ -168,7 +186,7 @@ def abrir_janela():
             url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
 
         x_position, y_position = posicao_janela()
-        if (x_position == 0 and y_position == 0):
+        if x_position == 0 and y_position == 0:
             x_position, y_position = exposedApi().centralizar()
 
         window = webview.create_window(
@@ -180,17 +198,19 @@ def abrir_janela():
             background_color="#000000",
             x=x_position,
             y=y_position,
-            js_api=exposedApi()
+            js_api=exposedApi(),
         )
 
         window.events.closing += salvar_janela
 
         webview.start(
-            user_agent='pywebview',
+            user_agent="pywebview",
+            debug=True,
         )
 
     except Exception as e:
         print(f"Erro ao tentar abrir: {e}")
+
 
 if __name__ == "__main__":
     abrir_janela()

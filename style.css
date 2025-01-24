@@ -221,6 +221,24 @@ button[type="button"]:hover {
 	color: white;
 }
 
+.grafico {
+	display: none;
+	position: fixed;
+	top: 50px;
+	left: 5%;
+	width: 90%;
+	height: 45%;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	flex-direction: column;
+	font-family: 'Roboto', sans-serif;
+}
+
+#grafico {
+	z-index: 2;
+}
+
 .overlay {
 	display: none;
 	position: fixed;

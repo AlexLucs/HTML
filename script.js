@@ -355,10 +355,7 @@ function checarAlarmes() {
 							});
 						}
 						contadorAlerta = 1;
-						if (contadorSom < 100) {
-							contadorSom += 1;
-							tocarAlerta();
-						}
+						tocarAlerta();
 					}
 				} else if (alerta.tipo == "menor") {
 					if (lastPriceBRL <= alerta.valor) {
@@ -381,10 +378,7 @@ function checarAlarmes() {
 							});
 						}
 						contadorAlerta = 1;
-						if (contadorSom < 100) {
-							contadorSom += 1;
-							tocarAlerta();
-						}
+						tocarAlerta();
 					}
 				} else if (alerta.tipo == "desativado") {
 					fazerTransicaoAlarme();

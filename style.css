@@ -1,521 +1,543 @@
+/* Reset and general styles */
 *, *::before, *::after {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-	cursor: default;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    cursor: default;
 }
 
+/* jConfirm Plugin Styles - Dark Theme */
 .jconfirm.jconfirm-dark .jconfirm-bg {
-	background-color: black;
-	opacity: .4;
+    background-color: black;
+    opacity: 0.4; /* Standardized opacity value */
 }
 
-.jconfirm.jconfirm-black .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box {
-	border: 3px outset white;
+.jconfirm.jconfirm-black .jconfirm-box,
+.jconfirm.jconfirm-dark .jconfirm-box {
+    border: 3px outset white;
 }
 
 .jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default {
-	border: 1px outset white;
+    border: 1px outset white;
 }
 
-.jconfirm.jconfirm-black .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box, .jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default {
-	background: black;
-	color: #f7931a;
+.jconfirm.jconfirm-black .jconfirm-box,
+.jconfirm.jconfirm-dark .jconfirm-box,
+.jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default {
+    background: black;
+    color: #f7931a;
 }
 
 .jconfirm.jconfirm-dark .jconfirm-box .jconfirm-buttons button.btn-default:hover {
-	color: white;
-	background: #f7931a;
-	border: 1px outset white;
+    color: white;
+    background: #f7931a;
+    border: 1px outset white;
 }
 
+/* Font Face Definition */
 @font-face {
-	font-family: 'Roboto';
-     src: url('Roboto.woff2') format('woff2');
-     font-weight: normal;
-     font-style: normal;
+    font-family: 'Roboto';
+    src: url('Roboto.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
 
+/* Body Styles */
 body {
-	background-color: black;
-	color: white;
-	font-family: 'Roboto', sans-serif;
-	margin: 0;
-	padding: 0px;
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-	width: 100vw;
+    background-color: black;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0; /* Corrected padding value */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
 }
 
+/* Loading Screen Styles */
 #tela-carregamento {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 1);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 100px;
-	color: #f7931a;
-	z-index: 10000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    color: #f7931a;
+    z-index: 10000;
 }
 
+/* Spinning Animation Class */
 .girando {
-	animation: girandosimbolo 0.4s infinite linear;
+    animation: girandosimbolo 0.4s infinite linear;
 }
 
+/* Spinning Animation Keyframes */
 @keyframes girandosimbolo {
-	0% {
-		transform: rotate(0deg);
-	}
-
-	25% {
-		transform: rotate(90deg);
-	}
-
-	50% {
-		transform: rotate(180deg);
-	}
-
-	75% {
-		transform: rotate(270deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(90deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    75% {
+        transform: rotate(270deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
+/* pywebview Drag Region Style */
 .pywebview-drag-region {
-	position: fixed;
-	top: 0;
-	height: 100%;
+    position: fixed;
+    top: 0;
+    height: 100%;
 }
 
+/* Alert Modal (Hidden by default) */
 #modalAlerta {
-	display: none;
+    display: none;
 }
 
+/* Modal Container Styles */
 .modal {
-	position: fixed;
-	z-index: 20;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: black;
-	color: white;
-	font-family: 'Roboto', sans-serif;
-	text-align: center;
-	opacity: 1;
-	border: 3px outset white;
+    position: fixed;
+    z-index: 20;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    opacity: 1;
+    border: 3px outset white;
 }
 
+/* Modal Content Styles */
 .modal-content {
-	background-color: black;
-	margin: 0;
-	padding: 15px;
+    background-color: black;
+    margin: 0;
+    padding: 15px;
 }
 
 .modal-content p {
-	font-size: xx-large;
-	color: #f7931a;
-	margin-bottom: 20px;
+    font-size: xx-large;
+    color: #f7931a;
+    margin-bottom: 20px;
 }
 
+/* Number Input Styles */
 input[type="number"] {
-	font-size: larger;
-	font-weight: bolder;
-	border: 1px outset white;
-	margin: 0 0 20px 0;
-	height: 40px;
-	text-align: center;
-	padding: 10px;
-	color: #f7931a;
-	background-color: black;
+    font-size: larger;
+    font-weight: bolder;
+    border: 1px outset white;
+    margin: 0 0 20px 0;
+    height: 40px;
+    text-align: center;
+    padding: 10px;
+    color: #f7931a;
+    background-color: black;
+    -webkit-appearance: textfield; /* Keep for compatibility */
+    -moz-appearance: textfield;    /* Keep for compatibility */
 }
 
-input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+/* Hide Spin Buttons on Number Inputs (Webkit) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-input[type="number"] {
-	-moz-appearance: textfield;
-}
-
+/* Alert Buttons Container */
 #botoesAlerta {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
+/* Button Base Styles */
 button[type="button"] {
-	background-color: black;
-	color: #f7931a;
-	border: 1px outset white;
-	transition-duration: 0.4s;
-	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
-	transition-property: all, margin;
-	text-align: center;
-	white-space: nowrap;
-	overflow: hidden;
-	box-sizing: border-box;
-	cursor: pointer;
+    background-color: black;
+    color: #f7931a;
+    border: 1px outset white;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+    transition-property: all; /* Corrected property to 'all' */
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
-#salvarBotao {
-	width: 100px;
-	height: 40px;
-}
-
+/* Specific Button IDs Styles */
+#salvarBotao,
 #voltarBotao {
-	width: 100px;
-	height: 40px;
+    width: 100px;
+    height: 40px;
 }
 
-#botaoApagar {
-	background-color: black;
-	color: #f7931a;
-	padding: 0;
-	transition-duration: 0.4s;
-	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
-	transition-property: all, margin;
-	border: 1px outset white;
-	height: 40px;
-	text-align: center;
-	white-space: nowrap;
-	overflow: hidden;
-	margin: 3px;
-	box-sizing: border-box;
-	width: 70px;
-}
-
+#botaoApagar,
 #botaoTipo {
-	background-color: black;
-	color: #f7931a;
-	padding: 0;
-	border: 1px outset white;
-	transition-duration: 0.4s;
-	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
-	transition-property: all, margin;
-	height: 40px;
-	text-align: center;
-	white-space: nowrap;
-	overflow: hidden;
-	margin: 3px;
-	box-sizing: border-box;
-	width: 70px;
+    background-color: black;
+    color: #f7931a;
+    padding: 0;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+    transition-property: all; /* Corrected property to 'all' */
+    border: 1px outset white;
+    height: 40px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 3px;
+    box-sizing: border-box;
+    width: 70px;
 }
 
-button[type="button"]:hover {
-	background-color: #f7931a;
-	color: white;
+/* Button Hover State */
+button[type="button"]:hover,
+#botaoApagar:hover,
+#botaoTipo:hover {
+    background-color: #f7931a;
+    color: white;
 }
 
-#botaoApagar:hover, #botaoTipo:hover {
-	background-color: #f7931a;
-	color: white;
-}
-
+/* Graph Container (Hidden by default) */
 .grafico {
-	display: none;
-	position: fixed;
-	top: 50px;
-	left: 5%;
-	width: 90%;
-	height: 45%;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	flex-direction: column;
-	font-family: 'Roboto', sans-serif;
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 5%;
+    width: 90%;
+    height: 45%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
 }
 
 #grafico {
-	z-index: 2;
+    z-index: 2;
 }
 
+/* Overlay Container (Hidden by default) */
 .overlay {
-	display: none;
-	position: fixed;
-	top: 40px;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	flex-direction: column;
-	font-family: 'Roboto', sans-serif;
+    display: none;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
 }
 
+/* Dark Background for Overlays */
 #darkback {
-	z-index: 10;
-	background-color: rgba(0, 0, 0, .4);
-	transition-duration: 0.4s;
-	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.4); /* Standardized opacity value */
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
 }
 
 #overlay {
-	background-color: rgba(0, 0, 0, .4);
-	color: white;
-	font-size: 15rem;
-	z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.4); /* Standardized opacity value */
+    color: white;
+    font-size: 15rem;
+    z-index: 1000;
 }
 
+/* Top Buttons Styles */
 .btns {
-	cursor: pointer;
-	position: absolute;
-	top: 4px;
-	width: 40px;
-	height: 40px;
-	justify-content: center;
-	font-size: x-large;
-	font-weight: lighter;
-	color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    width: 40px;
+    height: 40px;
+    display: flex; /* Added to center content */
+    justify-content: center;
+    align-items: center;
+    font-size: x-large;
+    font-weight: lighter;
+    color: white;
 }
 
-.btns:hover .btns:focus {
-	color: #f7931a;
+/* Top Buttons Hover/Focus State */
+.btns:hover,
+.btns:focus {
+    color: #f7931a;
 }
 
+/* Close Button Style */
 #close-btn {
-	right: 0px;
-	display: none;
+    right: 0px;
+    display: none;
 }
 
+/* Loading Screen Close Button */
 #close-btn-carregamento {
-	right: 4px;
-	position: absolute;
-	top: 0px;
-	width: 40px;
-	height: 40px;
-	justify-content: center;
-	font-size: 1.5rem;
-	color: white;
+    right: 4px;
+    position: absolute;
+    top: 0px;
+    width: 40px;
+    display: flex; /* Added to center content */
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: white;
 }
 
+/* Animation for info-seta */
 @keyframes surgindo {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 #info-seta {
-	font-weight: bold;
-	opacity: 0;
+    font-weight: bold;
+    opacity: 0;
 }
 
+/* Top Button Positions & Display (Hidden by default) */
 #minimize-btn {
-	right: 40px;
-	display: none;
+    right: 40px;
+    display: none;
 }
 
 #reload-btn {
-	left: 40px;
-	display: none;
+    left: 40px;
+    display: none;
 }
 
 #centralizar-btn {
-	left: 0px;
-	display: none;
+    left: 0px;
+    display: none;
 }
 
 #alerta-btn {
-	left: 160px;
-	display: none;
+    left: 160px;
+    display: none;
 }
 
 #fixar-btn {
-	left: 120px;
-	display: none;
+    left: 120px;
+    display: none;
 }
 
 #pausar-btn {
-	left: 80px;
-	display: none;
+    left: 80px;
+    display: none;
 }
 
+/* Info Logo Style */
 #info-logo {
-	color: #f7931a;
-	font-weight: bold;
-	margin-top: 40px;
+    color: #f7931a;
+    font-weight: bold;
+    margin-top: 40px;
 }
 
-#highPriceE, #lowPriceE, #highPriceDolE, #lowPriceDolE, #minimumFeeE, #economyFeeE, #fastestFeeE, #halfHourFeeE, #hourFeeE, #mediumFeeE {
-	text-align: left;
+/* Info Labels Text Alignment */
+#highPriceE,
+#lowPriceE,
+#highPriceDolE,
+#lowPriceDolE,
+#minimumFeeE,
+#economyFeeE,
+#fastestFeeE,
+#halfHourFeeE,
+#hourFeeE,
+#mediumFeeE {
+    text-align: left;
 }
 
-#highPrice, #lowPrice, #highPriceDol, #lowPriceDol, #minimumFee, #economyFee, #fastestFee, #halfHourFee, #hourFee, #mediumFee {
-	color: #ffffff;
-	justify-content: flex-end;
-	display: flex;
+/* Info Values Display and Color */
+#highPrice,
+#lowPrice,
+#highPriceDol,
+#lowPriceDol,
+#minimumFee,
+#economyFee,
+#fastestFee,
+#halfHourFee,
+#hourFee,
+#mediumFee {
+    color: #ffffff;
+    display: flex; /* Added for alignment control */
+    justify-content: flex-end;
 }
 
-#taxa_topico, #info-time, #info-dolar {
-	color: #646464;
+/* Topic Text Colors */
+#taxa_topico,
+#info-time,
+#info-dolar {
+    color: #646464;
 }
 
 #info-usdt {
-	color: #b5b5b5;
+    color: #b5b5b5;
 }
 
 #info-price {
-	color: #f7931a;
+    color: #f7931a;
 }
 
-.btc_em_brl_principal, .percentual, .horario_atualizacao, .btc_em_usdt_secundariol, .dolar_btc_e_b3 {
-	font-weight: 100;
-	color: white;
-	margin-top: 0px;
+/* Main Text Element Styles */
+.btc_em_brl_principal,
+.percentual,
+.horario_atualizacao,
+.btc_em_usdt_secundariol,
+.dolar_btc_e_b3 {
+    font-weight: 100;
+    color: white;
+    margin-top: 0px;
 }
 
-.bottom-left-info, table {
-	border-collapse: collapse;
-	width: 100%;
+/* Bottom Left Info and Table Styles */
+.bottom-left-info,
+table {
+    border-collapse: collapse;
+    width: 100%;
 }
 
 .bottom-left-info {
-	font-size: 1.5vw;
-	color: white;
-	width: 100%;
+    font-size: 1.5vw;
+    color: white;
+    width: 100%;
 }
 
-.bottom-left-info, td {
-	color: #f7931a;
-	margin: 2px 0;
+.bottom-left-info td {
+    color: #f7931a;
+    margin: 2px 0;
 }
 
+/* Separator Line Style */
 .separator {
-	border: none;
-	border-top: 1px solid white;
-	margin: 5px 0;
+    border: none;
+    border-top: 1px solid white;
+    margin: 5px 0;
 }
 
+/* --- Media Queries --- */
+
+/* Extra Large Screens */
 @media (min-width: 1921px) {
-	#info-logo {
-		font-size: 3.7vw;
-	}
-
-	.btc_em_brl_principal {
-		font-size: 3.2vw;
-	}
-
-	.btc_em_usdt_secundariol {
-		font-size: 1.8vw;
-	}
-
-	.dolar_btc_e_b3 {
-		font-size: 0.7vw;
-	}
-
-	.percentual {
-		font-size: 3.7vw;
-	}
-
-	.horario_atualizacao {
-		font-size: 0.7vw;
-	}
-
-	.bottom-left-info, table {
-		font-size: 0.7vw;
-	}
+    #info-logo {
+        font-size: 3.7vw;
+    }
+    .btc_em_brl_principal {
+        font-size: 3.2vw;
+    }
+    .btc_em_usdt_secundariol {
+        font-size: 1.8vw;
+    }
+    .dolar_btc_e_b3 {
+        font-size: 0.7vw;
+    }
+    .percentual {
+        font-size: 3.7vw;
+    }
+    .horario_atualizacao {
+        font-size: 0.7vw;
+    }
+    .bottom-left-info,
+    table {
+        font-size: 0.7vw;
+    }
 }
 
+/* Large Screens */
 @media (max-width: 1920px) {
-	#info-logo {
-		font-size: 4.5vw;
-	}
-
-	.btc_em_brl_principal {
-		font-size: 4vw;
-	}
-
-	.btc_em_usdt_secundariol {
-		font-size: 2vw;
-	}
-
-	.dolar_btc_e_b3 {
-		font-size: 1.4vw;
-	}
-
-	.percentual {
-		font-size: 4.5vw;
-	}
-
-	.horario_atualizacao {
-		font-size: 1.4vw;
-	}
-
-	.bottom-left-info, table {
-		font-size: 1.4vw;
-	}
+    #info-logo {
+        font-size: 4.5vw;
+    }
+    .btc_em_brl_principal {
+        font-size: 4vw;
+    }
+    .btc_em_usdt_secundariol {
+        font-size: 2vw;
+    }
+    .dolar_btc_e_b3 {
+        font-size: 1.4vw;
+    }
+    .percentual {
+        font-size: 4.5vw;
+    }
+    .horario_atualizacao {
+        font-size: 1.4vw;
+    }
+    .bottom-left-info,
+    table {
+        font-size: 1.4vw;
+    }
 }
 
+/* Tablets */
 @media (max-width: 1024px) {
-	#info-logo {
-		font-size: 8vw;
-	}
-
-	.btc_em_brl_principal {
-		font-size: 7vw;
-	}
-
-	.btc_em_usdt_secundariol {
-		font-size: 4vw;
-	}
-
-	.dolar_btc_e_b3 {
-		font-size: 2.7vw;
-	}
-
-	.percentual {
-		font-size: 8vw;
-	}
-
-	.horario_atualizacao {
-		font-size: 2.7vw;
-	}
-
-	.bottom-left-info, table {
-		font-size: 2.7vw;
-	}
+    #info-logo {
+        font-size: 8vw;
+    }
+    .btc_em_brl_principal {
+        font-size: 7vw;
+    }
+    .btc_em_usdt_secundariol {
+        font-size: 4vw;
+    }
+    .dolar_btc_e_b3 {
+        font-size: 2.7vw;
+    }
+    .percentual {
+        font-size: 8vw;
+    }
+    .horario_atualizacao {
+        font-size: 2.7vw;
+    }
+    .bottom-left-info,
+    table {
+        font-size: 2.7vw;
+    }
 }
 
+/* Mobile Devices */
 @media (max-width: 640px) {
-	#info-logo {
-		font-size: 16vw;
-	}
-
-	.btc_em_brl_principal {
-		font-size: 14vw;
-	}
-
-	.btc_em_usdt_secundariol {
-		font-size: 8vw;
-	}
-
-	.dolar_btc_e_b3 {
-		font-size: 3.5vw;
-	}
-
-	.percentual {
-		font-size: 16vw;
-	}
-
-	.horario_atualizacao {
-		font-size: 3.5vw;
-	}
-
-	.bottom-left-info, table {
-		font-size: 3.5vw;
-	}
+    #info-logo {
+        font-size: 16vw;
+    }
+    .btc_em_brl_principal {
+        font-size: 14vw;
+    }
+    .btc_em_usdt_secundariol {
+        font-size: 8vw;
+    }
+    .dolar_btc_e_b3 {
+        font-size: 3.5vw;
+    }
+    .percentual {
+        font-size: 16vw;
+    }
+    .horario_atualizacao {
+        font-size: 3.5vw;
+    }
+    .bottom-left-info,
+    table {
+        font-size: 3.5vw;
+    }
 }

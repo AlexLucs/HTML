@@ -6,114 +6,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link id="favicon" rel="icon" href="btc-logo.svg">
     <title>BTC Status - Monitoramento de Preço do Bitcoin</title>
+    <!-- Incluindo CSS e JS de terceiros -->
     <link rel="stylesheet" href="jquery-confirm.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="jquery.min.js"></script>
     <script src="jquery-confirm.min.js"></script>
+    <!-- Incluindo script principal da aplicação -->
     <script src="script.js"></script>
 </head>
 
 <body>
+    <!-- Container principal com funcionalidade de arrastar pywebview -->
     <div id="conteudo" class="pywebview-drag-region">
+        <!-- Botões de controle da janela -->
         <div class="botao">
             <div class="btns" id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">▣</div>
             <div class="btns" id="reload-btn" title="Atualizar" onclick="reiniciar()" alt="Atualizar">↻</div>
-            <div class="btns" id="pausar-btn" title="Pausar" onclick="pararIniciar()" alt="Pausar">■</div>
-            <div class="btns" id="fixar-btn" title="Fixar" onclick="pyWebviewFixar()" alt="Fixar">△</div>
-            <div class="btns" id="alerta-btn" title="Alertas" onclick="mostrarTelaAlerta()" alt="Alertas">⏱︎</div>
-            <div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar">_</div>
-            <div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
+            <div class="btns" id="pausar-btn" title="Pausar/Iniciar" onclick="pararIniciar()" alt="Pausar/Iniciar">■</div> <!-- Título do botão corrigido para Pausar/Iniciar -->
+            <div class="btns" id="fixar-btn" title="Fixar ao Topo" onclick="pyWebviewFixar()" alt="Fixar ao Topo">△</div> <!-- Título do botão corrigido para Fixar ao Topo -->
+            <div class="btns" id="alerta-btn" title="Alertas de Preço" onclick="mostrarTelaAlerta()" alt="Alertas de Preço">⏱︎</div> <!-- Título do botão corrigido para Alertas de Preço -->
+            <div class="btns" id="minimize-btn" title="Minimizar Janela" onclick="pyWebviewMinimize()" alt="Minimizar Janela">_</div> <!-- Título do botão corrigido para Minimizar Janela -->
+            <div class="btns" id="close-btn" title="Fechar Aplicação" onclick="pyWebviewFechar()" alt="Fechar Aplicação">x</div> <!-- Título do botão corrigido para Fechar Aplicação -->
         </div>
-        <div id="grafico" class="grafico" title="Gráfico" alt="Gráfico"></div>
-		<div id="overlay" class="overlay" title="Clique para Reiniciar" onclick="pararIniciar()" alt="Clique para Reiniciar">⏸</div>
-        <div id="darkback" onclick="mostrarTelaAlerta()" class="overlay""></div>
-	  <div id="tela-carregamento" content="width=device-width, initial-scale=1.0">
+        <!-- Container para gráfico (funcionalidade não implementada/visível) -->
+        <div id="grafico" class="grafico" title="Gráfico (Não implementado)" alt="Gráfico (Não implementado)"></div> <!-- Título e alt atualizados para refletir a não implementação -->
+        <!-- Overlay para indicar estado de pausa/inatividade -->
+		<div id="overlay" class="overlay" title="Clique para Reiniciar Monitoramento" onclick="pararIniciar()" alt="Clique para Reiniciar Monitoramento">⏸</div> <!-- Título e alt atualizados para refletir a ação de reiniciar o monitoramento -->
+        <!-- Background escuro para o modal de alerta -->
+        <div id="darkback" onclick="mostrarTelaAlerta()" class="overlay"></div>
+	    <!-- Tela de carregamento inicial -->
+	    <div id="tela-carregamento">
             <div class="girando">⟳</div>
             <div id="close-btn-carregamento" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar">x</div>
         </div>
+        <!-- Modal de Alertas -->
         <div id="modalAlerta" class="modal">
             <div class="modal-content">
-                <p>ALERTAS</p>
-                <form id="inputForm"> <input type="number" id="valorAlerta" name="valor" title="Valor em Reais a ser monitorado." required> </br>
+                <p>ALERTAS</p> <!-- Título do modal -->
+                <form id="inputForm">
+                    <input type="number" id="valorAlerta" name="valor" title="Valor em Reais a ser monitorado." placeholder="Digite o valor em Reais" required> </br> <!-- Placeholder adicionado para guiar o usuário -->
                     <table id="alertasTabela">
-                        <tbody></tbody>
+                        <thead>
+						</thead>
+                        <tbody>
+                            <!-- Linhas de alerta serão inseridas aqui por script.js -->
+                        </tbody>
                     </table>
-                    <div id="botoesAlerta"> <button type="button" id="salvarBotao" onclick="criarAlerta()">Criar</button> <button type="button" id="voltarBotao" onclick="voltarAlerta()">Voltar</button> </div>
+                    <div id="botoesAlerta">
+                        <button type="button" id="salvarBotao" onclick="criarAlerta()">Criar Alerta</button>  <!-- Texto do botão corrigido para Criar Alerta -->
+                        <button type="button" id="voltarBotao" onclick="voltarAlerta()">Voltar</button>
+                    </div>
                 </form>
             </div>
         </div>
-        <div id="conteudoMenosBotoes" class="conteudoMenosBotoes">
+        <!-- Container principal de informações (abaixo dos botões) -->
+        <div id="conteudoMenosBotoes">
+            <!-- Logo do Bitcoin -->
             <div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
-            <div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais(BRL). Dados da Binance©."></div>
-            <div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares americanos(USDT). Dados da Binance©."></div>
-            <div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar, calculado com base no valor do Bitcoin em reais / Preço do dólar B3. Dados do AwesomeAPI©"></div>
-            <div class="percentual" title="Variação percentual do preço do Bitcoin nas últimas 24hrs."> <span id="info-percent"></span> <span id="info-seta" class="aparecer"></span> </div>
+            <!-- Preço do Bitcoin em BRL -->
+            <div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais (BRL). Dados da Binance©."></div> <!-- Título corrigido para melhor clareza -->
+            <!-- Preço do Bitcoin em USDT -->
+            <div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares Americanos (USDT). Dados da Binance©."></div> <!-- Título corrigido para melhor clareza -->
+            <!-- Preço do Dólar (cálculo próprio + B3) -->
+            <div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar calculado (BTC/BRL da Binance / BTC/USD da Binance) | Dólar B3. Dados AwesomeAPI© e Binance©"></div> <!-- Título e alt atualizados para refletir a fonte de dados combinada -->
+            <!-- Variação percentual do preço -->
+            <div class="percentual" title="Variação percentual do preço do Bitcoin nas últimas 24 horas."> <!-- Título corrigido para horas e não hrs -->
+                <span id="info-percent"></span>
+                <span id="info-seta" class="aparecer"></span>
+            </div>
+            <!-- Data e hora da última atualização -->
             <div id="info-time" class="horario_atualizacao" title="Data e hora da última atualização."></div>
+            <!-- Informações detalhadas e taxas -->
             <div class="bottom-left-info">
                 <table>
-                    <tr>
-                        <td colspan="2">
-                            <hr class="separator">
-                        </td>
-                    </tr>
-                    <tr title="Preço máximo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
-                        <td id="highPriceE">Máxima:</td>
-                        <td id="highPrice"></td>
-                    </tr>
-                    <tr title="Preço mínimo do Bitcoin em Reais nas últimas 24hrs. Dados da Binance©.">
-                        <td id="lowPriceE">Mínima:</td>
-                        <td id="lowPrice"></td>
-                    </tr>
-                    <tr title="Preço máximo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
-                        <td id="highPriceDolE">Max. USDT:</td>
-                        <td id="highPriceDol"></td>
-                    </tr>
-                    <tr title="Preço mínimo do Bitcoin em Dólares americanos(USD) nas últimas 24hrs. Dados da Binance©.">
-                        <td id="lowPriceDolE">Min. USDT:</td>
-                        <td id="lowPriceDol"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <hr class="separator">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="taxa_topico" colspan="2" title="Valores pagos nas transações em Bitcoins. Atualizado a cada 1 minuto.">Taxas</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <hr class="separator">
-                        </td>
-                    </tr>
-                    <tr title="Taxa mínima sugerida pela Mempool©.">
-                        <td id="minimumFeeE">Minima:</td>
-                        <td id="minimumFee"></td>
-                    </tr>
-                    <tr title="Taxa econômica sugerida pela Mempool.">
-                        <td id="economyFeeE">Econômica:</td>
-                        <td id="economyFee"></td>
-                    </tr>
-                    <tr title="Taxa mais rápida sugerida pela Mempool©.">
-                        <td id="fastestFeeE">Prioridade:</td>
-                        <td id="fastestFee"></td>
-                    </tr>
-                    <tr title="Taxa para confirmação em aproximadamente 30 minutos. Fonte Mempool©.">
-                        <td id="halfHourFeeE">~30 min:</td>
-                        <td id="halfHourFee"></td>
-                    </tr>
-                    <tr title="Taxa para confirmação em aproximadamente 1 hora. Fonte Mempool©.">
-                        <td id="hourFeeE">~1 hora:</td>
-                        <td id="hourFee"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <hr class="separator">
-                        </td>
-                    </tr>
-                    <tr title="Média de todas as taxas. Fonte Mempool©.">
-                        <td id="mediumFeeE">Média:</td>
-                        <td id="mediumFee"></td>
-                    </tr>
+                    <tbody> <!-- Adicionado tbody para semântica correta da tabela -->
+                        <tr>
+                            <td colspan="2">
+                                <hr class="separator">
+                            </td>
+                        </tr>
+                        <tr title="Preço máximo do Bitcoin em Reais nas últimas 24 horas. Dados da Binance©."> <!-- Título corrigido para horas e não hrs -->
+                            <td id="highPriceE">Máxima:</td>
+                            <td id="highPrice"></td>
+                        </tr>
+                        <tr title="Preço mínimo do Bitcoin em Reais nas últimas 24 horas. Dados da Binance©."> <!-- Título corrigido para horas e não hrs -->
+                            <td id="lowPriceE">Mínima:</td>
+                            <td id="lowPrice"></td>
+                        </tr>
+                        <tr title="Preço máximo do Bitcoin em Dólares Americanos (USD) nas últimas 24 horas. Dados da Binance©."> <!-- Título corrigido para horas e não hrs -->
+                            <td id="highPriceDolE">Máx. USDT:</td> <!-- Abreviado para Max. USDT para melhor caber em telas menores -->
+                            <td id="highPriceDol"></td>
+                        </tr>
+                        <tr title="Preço mínimo do Bitcoin em Dólares Americanos (USD) nas últimas 24 horas. Dados da Binance©."> <!-- Título corrigido para horas e não hrs -->
+                            <td id="lowPriceDolE">Mín. USDT:</td> <!-- Abreviado para Min. USDT para melhor caber em telas menores -->
+                            <td id="lowPriceDol"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr class="separator">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="taxa_topico" colspan="2" title="Valores estimados para taxas de transação Bitcoin. Fonte: Mempool.space©. Atualizado a cada minuto.">Taxas de Rede</td> <!-- Título e alt atualizados para refletir a fonte de dados e a atualização por minuto -->
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr class="separator">
+                            </td>
+                        </tr>
+                        <tr title="Taxa mínima estimada para transação Bitcoin (menor prioridade, confirmação mais demorada)."> <!-- Título e alt para descrições mais completas -->
+                            <td id="minimumFeeE">Mínima:</td>
+                            <td id="minimumFee"></td>
+                        </tr>
+                        <tr title="Taxa econômica estimada para transação Bitcoin (prioridade baixa, confirmação demorada)."> <!-- Título e alt para descrições mais completas -->
+                            <td id="economyFeeE">Econômica:</td>
+                            <td id="economyFee"></td>
+                        </tr>
+                        <tr title="Taxa de prioridade estimada para transação Bitcoin (confirmação mais rápida)."> <!-- Título e alt para descrições mais completas -->
+                            <td id="fastestFeeE">Prioridade:</td>
+                            <td id="fastestFee"></td>
+                        </tr>
+                        <tr title="Taxa estimada para confirmação em ~30 minutos para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
+                            <td id="halfHourFeeE">~30 min:</td>
+                            <td id="halfHourFee"></td>
+                        </tr>
+                        <tr title="Taxa estimada para confirmação em ~1 hora para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
+                            <td id="hourFeeE">~1 hora:</td>
+                            <td id="hourFee"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr class="separator">
+                            </td>
+                        </tr>
+                        <tr title="Taxa média estimada para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
+                            <td id="mediumFeeE">Média:</td>
+                            <td id="mediumFee"></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

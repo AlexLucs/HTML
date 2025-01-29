@@ -40,9 +40,9 @@ class ExposedApi:
                 x_position1 = window1.left
                 y_position1 = window1.top
                 if x_position1 > -1:
-                    monitor = monitors[0]
-                else:
                     monitor = monitors[1]
+                else:
+                    monitor = monitors[0]
                 x_position, y_position = self.centrar_posicao(monitor) # Correção: Chamando método interno usando self
             else:
                 x_position = 0
@@ -55,7 +55,6 @@ class ExposedApi:
 
             x_position, y_position = self.centrar_posicao(monitor) # Correção: Chamando método interno usando self
             return x_position, y_position
-
 
     def centrar_posicao(self, monitor): # Correção: Renomeando para refletir que é uma função auxiliar interna
         """Calcula a posição centralizada para um monitor."""
@@ -235,7 +234,6 @@ def abrir_janela():
 
         """Salvar posição da janela ao fechar"""
         window.events.closing += salvar_janela
-
 
         webview.start(
             user_agent="pywebview",

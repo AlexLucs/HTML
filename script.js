@@ -209,10 +209,12 @@ async function inicial() {
 				style: 'currency',
 				currency: 'BRL'
 			});
+			
 			document.getElementById('lowPrice').textContent = parseFloat(dataBRL.lowPrice).toLocaleString('pt-BR', {
 				style: 'currency',
 				currency: 'BRL'
 			});
+			
 			// Atualizar preço em BRL, percentual de aumento e hora da última atualização
 			document.getElementById('info-price').textContent = formattedPriceBRL;
 			if (ativo) {
@@ -456,6 +458,7 @@ function carregarAlertas() {
 			celulaAcao.appendChild(botaoApagar);
 		});
 	}
+	
 	// Limpa o campo de valor
 	document.getElementById('valorAlerta').value = "";
 	// Foca no campo para digitar o valor
@@ -476,7 +479,6 @@ function carregarAlertas() {
 			}
 		}
 	});
-
 }
 
 // Mudar tipo
@@ -544,7 +546,6 @@ function mudarTipo(index, desativar = 0) {
 			console.error("Erro ao salvar no localStorage:", e);
 		}
 	}
-
 	carregarAlertas();
 }
 
@@ -708,10 +709,20 @@ function verificarCarregamento() {
 		if (navigator.userAgent == "pywebview") {
 			sincronizaAlertas();
 		}
+		// Aplicar um contador
+		var wts=document.createElement('script');
+		wts.async=true;
+		wts.src='https://app.ardalio.com/log7.js';
+		document.head.appendChild(wts);
+		wts.onload = function(){
+			wtslog7(2193605,5); 
+		};
+		// Pausar alarmes por 5s
 		fazerTransicaoAlarme(5000);
 	}
 }
 
+// Testar se estão disponíveis e enviar notificações // Não usada
 function prepararNotificacao(conteudo = "") {
 	if ("Notification" in window) {
 		if (Notification.permission === "default") {

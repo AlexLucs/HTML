@@ -40,9 +40,9 @@ class ExposedApi:
                 x_position1 = window1.left
                 y_position1 = window1.top
                 if x_position1 > -1:
-                    monitor = monitors[1]
-                else:
                     monitor = monitors[0]
+                else:
+                    monitor = monitors[1]
                 x_position, y_position = self.centrar_posicao(monitor) # Correção: Chamando método interno usando self
             else:
                 x_position = 0

@@ -23,10 +23,10 @@
             <div class="btns" id="centralizar-btn" title="Centralizar" onclick="pyWebviewCentralizar()" alt="Centralizar">▣</div>
             <div class="btns" id="reload-btn" title="Atualizar" onclick="reiniciar()" alt="Atualizar">↻</div>
             <div class="btns" id="pausar-btn" title="Pausar/Iniciar" onclick="pararIniciar()" alt="Pausar/Iniciar">■</div> <!-- Título do botão corrigido para Pausar/Iniciar -->
-            <div class="btns" id="fixar-btn" title="Fixar ao Topo" onclick="pyWebviewFixar()" alt="Fixar ao Topo">△</div> <!-- Título do botão corrigido para Fixar ao Topo -->
+            <div class="btns" id="fixar-btn" title="Fixar no Topo" onclick="pyWebviewFixar()" alt="Fixar ao Topo">△</div> <!-- Título do botão corrigido para Fixar ao Topo -->
             <div class="btns" id="alerta-btn" title="Alertas de Preço" onclick="mostrarTelaAlerta()" alt="Alertas de Preço">⏱︎</div> <!-- Título do botão corrigido para Alertas de Preço -->
-            <div class="btns" id="minimize-btn" title="Minimizar Janela" onclick="pyWebviewMinimize()" alt="Minimizar Janela">_</div> <!-- Título do botão corrigido para Minimizar Janela -->
-            <div class="btns" id="close-btn" title="Fechar Aplicação" onclick="pyWebviewFechar()" alt="Fechar Aplicação">x</div> <!-- Título do botão corrigido para Fechar Aplicação -->
+            <div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar Janela">_</div> <!-- Título do botão corrigido para Minimizar Janela -->
+            <div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar Aplicação">x</div> <!-- Título do botão corrigido para Fechar Aplicação -->
         </div>
         <!-- Container para gráfico (funcionalidade não implementada/visível) -->
         <div id="grafico" class="grafico" title="Gráfico (Não implementado)" alt="Gráfico (Não implementado)"></div> <!-- Título e alt atualizados para refletir a não implementação -->
@@ -42,7 +42,7 @@
         <!-- Modal de Alertas -->
         <div id="modalAlerta" class="modal">
             <div class="modal-content">
-                <p>ALERTAS</p> <!-- Título do modal -->
+                <p title="Alertas" alt="Lista de alertas">ALERTAS</p> <!-- Título do modal -->
                 <form id="inputForm">
                     <input type="number" id="valorAlerta" name="valor" title="Valor em Reais a ser monitorado." placeholder="Digite o valor em Reais" required> </br> <!-- Placeholder adicionado para guiar o usuário -->
                     <table id="alertasTabela">
@@ -53,8 +53,8 @@
                         </tbody>
                     </table>
                     <div id="botoesAlerta">
-                        <button type="button" id="salvarBotao" onclick="criarAlerta()">Criar Alerta</button>  <!-- Texto do botão corrigido para Criar Alerta -->
-                        <button type="button" id="voltarBotao" onclick="voltarAlerta()">Voltar</button>
+                        <button type="button" id="salvarBotao" title="Criar Alerta" onclick="criarAlerta()">Criar Alerta</button>  <!-- Texto do botão corrigido para Criar Alerta -->
+                        <button type="button" id="voltarBotao" title="Fechar Alertas" onclick="voltarAlerta()">Voltar</button>
                     </div>
                 </form>
             </div>

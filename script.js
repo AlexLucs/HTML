@@ -419,6 +419,12 @@ function carregarAlertas() {
 	}
 	if (alertas.length > 0) {
 		alertas.forEach((valorAlerta, index) => {
+			valorAlertaFormatado = parseFloat(valorAlerta.valor).toLocaleString('pt-BR', {
+				style: 'currency',
+				currency: 'BRL',
+				minimumFractionDigits: 2
+			});
+			
 			const novaLinha = tabela.insertRow();
 
 			const celulatipo = novaLinha.insertCell(0);
@@ -432,26 +438,27 @@ function carregarAlertas() {
 			};
 			if (tipo == "maior") {
 				botaotipo.textContent = "Maior △";
+				botaotipo.title = "Alertar quando valor do BTC for maior que "+valorAlertaFormatado;
 				botaotipo.style.opacity = 1;
 			} else if (tipo == "menor") {
 				botaotipo.textContent = "Menor ▽";
+				botaotipo.title = "Alertar quando valor do BTC for menor que "+valorAlertaFormatado;
 				botaotipo.style.opacity = 1;
 			} else if (tipo == "desativado") {
 				botaotipo.textContent = "Desativado";
+				botaotipo.title = "Alarme Desativado";
 				botaotipo.style.opacity = .5;
 			}
 			celulatipo.appendChild(botaotipo);
 
 			const celulaValor = novaLinha.insertCell(1);
-			celulaValor.textContent = parseFloat(valorAlerta.valor).toLocaleString('pt-BR', {
-				style: 'currency',
-				currency: 'BRL',
-				minimumFractionDigits: 2
-			});
+			celulaValor.textContent = valorAlertaFormatado;
+			celulaValor.title = valorAlertaFormatado;
 			const celulaAcao = novaLinha.insertCell(2);
 			const botaoApagar = document.createElement("button");
 			botaoApagar.id = "botaoApagar";
 			botaoApagar.textContent = "Apagar";
+			botaoApagar.title = "Apagar alarme "+valorAlertaFormatado;
 			botaoApagar.onclick = function() {
 				apagarAlertas(index);
 			};

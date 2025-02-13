@@ -237,6 +237,7 @@ def abrir_janela():
 
         webview.start(
             user_agent="pywebview",
+            debug=True,
         )
 
     except Exception as e: # Correção: Capturando Exception genérica para logar qualquer erro

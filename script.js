@@ -3,22 +3,20 @@ let contadorAlerta = 0;
 let contadorSom = 0;
 let lastPriceBRL;
 let wakeLock;
-const tempoVerificarInatividade = 1000;
 let loadingTime = 100;
 let tempoInatividade = 0;
 let varSetaMostrar;
 let ativo = true;
 let falhas = 0;
-let novoIntervalo = 0;
-const maxFalhas = 10;
-// Definir tempo para atualizar iniciar em milisegundos
-const update_Time = 3000;
-// Definir tempo para atualizar taxas em milisegundos
+let novoIntervalo = 0; // Definir tempo máximo de inatividade em segundos(1000s=~17minutos)
+let tempoLimite = 1000;
+const tempoVerificarInatividade = 1000;
+const maxFalhas = 10; // Definir tempo para atualizar iniciar em milisegundos
+const update_Time = 3000; // Definir tempo para atualizar taxas em milisegundos
 const update_Taxas = 50000;
-// Definir tempo máximo de inatividade em segundos(1000s=~17m)
-const tempoLimite = 1000;
-// Função para resetar o tempo de inatividade
 
+
+// Função para resetar o tempo de inatividade
 function resetarInatividade() {
 	tempoInatividade = 0;
 	if (ativo) return;
@@ -48,13 +46,15 @@ function verificarInatividade() {
 	if (!ativo) return;
 	// Adiciona tempo de inatividade
 	tempoInatividade++;
-	if (tempoInatividade >= tempoLimite) {
-		document.getElementById('overlay').style.display = 'flex';
-		ativo = false;
-		clearTimeout(alarmesID);
-		clearInterval(intervaloID);
-		clearInterval(taxaIntervaloID);
-		wakeLock.release();
+	if (tempoLimite > 0) {
+		if (tempoInatividade >= tempoLimite) {
+			document.getElementById('overlay').style.display = 'flex';
+			ativo = false;
+			clearTimeout(alarmesID);
+			clearInterval(intervaloID);
+			clearInterval(taxaIntervaloID);
+			wakeLock.release();
+		}
 	}
 }
 
@@ -78,10 +78,12 @@ function pyWebviewCentralizar() {
 function pyWebviewFixar() {
 	const btn = document.getElementById('fixar-btn');
 	if (btn.textContent === '△') {
+		tempoLimite = 0; // Desativa o tempo para checar inatividade
 		btn.setAttribute('title', 'Desafixar');
 		btn.setAttribute('alt', 'Desafixar');
 		btn.textContent = '▽';
 	} else {
+		tempoLimite = 1000; // Ativa o tempo para checar inatividade
 		btn.setAttribute('title', 'Fixar');
 		btn.setAttribute('alt', 'Fixar');
 		btn.textContent = '△';
@@ -209,12 +211,12 @@ async function inicial() {
 				style: 'currency',
 				currency: 'BRL'
 			});
-			
+
 			document.getElementById('lowPrice').textContent = parseFloat(dataBRL.lowPrice).toLocaleString('pt-BR', {
 				style: 'currency',
 				currency: 'BRL'
 			});
-			
+
 			// Atualizar preço em BRL, percentual de aumento e hora da última atualização
 			document.getElementById('info-price').textContent = formattedPriceBRL;
 			if (ativo) {
@@ -424,7 +426,7 @@ function carregarAlertas() {
 				currency: 'BRL',
 				minimumFractionDigits: 2
 			});
-			
+
 			const novaLinha = tabela.insertRow();
 
 			const celulatipo = novaLinha.insertCell(0);
@@ -465,7 +467,7 @@ function carregarAlertas() {
 			celulaAcao.appendChild(botaoApagar);
 		});
 	}
-	
+
 	// Limpa o campo de valor
 	document.getElementById('valorAlerta').value = "";
 	// Foca no campo para digitar o valor
@@ -722,7 +724,7 @@ function verificarCarregamento() {
 		wts.src='https://app.ardalio.com/log7.js';
 		document.head.appendChild(wts);
 		wts.onload = function(){
-			wtslog7(2193605,5); 
+			wtslog7(2193605,5);
 		};
 		// Pausar alarmes por 5s
 		fazerTransicaoAlarme(5000);

@@ -56,7 +56,7 @@ class ExposedApi:
             x_position, y_position = self.centrar_posicao(monitor) # Correção: Chamando método interno usando self
             return x_position, y_position
 
-    def centrar_posicao(self, monitor): # Correção: Renomeando para refletir que é uma função auxiliar interna
+    def centrar_posicao(self, monitor): # Função auxiliar interna
         """Calcula a posição centralizada para um monitor."""
         if not monitor: # Adicionado verificação para o caso de monitor ser None
             return 0, 0
@@ -190,9 +190,9 @@ def posicao_janela():
                 return x_position, y_position
             else:
                 return 0, 0
-        except Exception as e: # Correção: Capturando Exception genérica para logar qualquer erro
-            print(f"Erro ao carregar posição da janela do config: {e}") # Correção: Mensagem de erro mais específica
-            return 0, 0 # Correção: Retornando valor padrão em caso de erro
+        except Exception as e: # Capturando Exception genérica para logar qualquer erro
+            print(f"Erro ao carregar posição da janela do config: {e}") # Mensagem de erro mais específica
+            return 0, 0 # Retornando valor padrão em caso de erro
     return 0, 0
 
 
@@ -206,19 +206,19 @@ def abrir_janela():
         else:
             """Caminho para desenvolvimento"""
             url = os.path.join(os.path.dirname(__file__), "index.html")
-            if not os.path.exists(url): # Correção: Verificando se o caminho direto existe, senão tenta o caminho alternativo
+            if not os.path.exists(url): # Verificando se o caminho direto existe, senão tenta o caminho alternativo
                 """Caminho alternativo para desenvolvimento (Download folder)"""
                 url = os.environ.get("USERPROFILE") + "/Downloads/Bot/btcstatus/index.html"
-                if not os.path.exists(url): # Correção: Verificando se o caminho alternativo existe, senão usa 'index.html' no diretório de execução
+                if not os.path.exists(url): # Verificando se o caminho alternativo existe, senão usa 'index.html' no diretório de execução
                     """Fallback para index.html no diretório de execução"""
-                    url = 'index.html' # Correção: Caminho relativo para caso index.html esteja no mesmo diretório
+                    url = 'index.html' # Caminho relativo para caso index.html esteja no mesmo diretório
 
         x_position, y_position = posicao_janela()
 
         if x_position == 0 and y_position == 0:
             """Centralizar janela se a posição salva for inválida ou inexistente"""
-            api_instance = ExposedApi() # Correção: Instanciando ExposedApi para usar o método centrar_posicao
-            x_position, y_position = api_instance.centrar_posicao(get_monitors()[0] if get_monitors() else None) # Correção: Passando monitor para centrar_posicao
+            api_instance = ExposedApi() # Instanciando ExposedApi para usar o método centrar_posicao
+            x_position, y_position = api_instance.centrar_posicao(get_monitors()[0] if get_monitors() else None) # Passando monitor para centrar_posicao
 
         window = webview.create_window(
             WINDOW_TITLE,
@@ -229,7 +229,7 @@ def abrir_janela():
             background_color="#000000",
             x=x_position,
             y=y_position,
-            js_api=ExposedApi(), # Correção: Instanciando ExposedApi para ser acessível no JS
+            js_api=ExposedApi(), # Instanciando ExposedApi para ser acessível no JS
         )
 
         """Salvar posição da janela ao fechar"""
@@ -237,10 +237,9 @@ def abrir_janela():
 
         webview.start(
             user_agent="pywebview",
-            debug=True,
         )
 
-    except Exception as e: # Correção: Capturando Exception genérica para logar qualquer erro
+    except Exception as e: # Capturando Exception genérica para logar qualquer erro
         print(f"Erro ao tentar abrir: {e}")
 
 

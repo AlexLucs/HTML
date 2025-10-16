@@ -718,14 +718,16 @@ function verificarCarregamento() {
 		if (navigator.userAgent == "pywebview") {
 			sincronizaAlertas();
 		}
-		// Aplicar um contador
+		
+/* 		// Aplicar um contador
 		var wts=document.createElement('script');
 		wts.async=true;
 		wts.src='https://app.ardalio.com/log7.js';
 		document.head.appendChild(wts);
 		wts.onload = function(){
 			wtslog7(2193605,5);
-		};
+		}; */
+		
 		// Pausar alarmes por 5s
 		fazerTransicaoAlarme(5000);
 	}

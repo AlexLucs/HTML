@@ -5,9 +5,8 @@ pyinstaller --onedir --optimize 1 --windowed --noconfirm --noconsole --noupx --a
 
 ## Preview in Webview
 
-![IMG_20250119_161727_439](https://github.com/user-attachments/assets/3d8fe91b-fb6e-4cc8-8e22-681e00f6887d)
+## Com Gráfico
+<img width="484" height="771" src="https://github.com/user-attachments/assets/15beb53c-6e88-4a50-bd5f-cbd708f640c2" />
 
-## Preview in Browser
-
-![Screenshot_20250119_161541_Firefox](https://github.com/user-attachments/assets/19f4b00e-0dbd-487e-ae05-c041768bb092)
-
+## Com Dados
+<img width="484" height="771" src="https://github.com/user-attachments/assets/4bd4c8d1-87e5-4ff6-947d-aa90b1086186" />

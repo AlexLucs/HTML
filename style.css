@@ -214,13 +214,13 @@ button[type="button"]:hover,
 }
 
 /* Graph Container (Hidden by default) */
-.grafico {
-    display: none;
+.grafico {    
     position: fixed;
-    top: 50px;
+    top: 437px;
     left: 5%;
-    width: 90%;
-    height: 45%;
+	rigth: 5%;
+    /* width: 90%; */
+    /* height: 45%; */
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -229,6 +229,7 @@ button[type="button"]:hover,
 }
 
 #grafico {
+	display: flex;
     z-index: 2;
 }
 
@@ -307,6 +308,15 @@ button[type="button"]:hover,
     0% {
         opacity: 0;
     }
+	25% {
+		opacity: 0.25;
+	}
+	50% {
+        opacity: 0.5;
+    }
+	75% {
+        opacity: 0.75;
+    }
     100% {
         opacity: 1;
     }
@@ -346,6 +356,10 @@ button[type="button"]:hover,
 #pausar-btn {
     left: 80px;
     display: none;
+}
+#grafico-btn {
+	left: 200px;
+	display: none;
 }
 
 /* Info Logo Style */

@@ -11,7 +11,7 @@ import win32con
 # Constantes
 WINDOW_TITLE = "BTC Status"
 WINDOW_WIDTH = 500
-WINDOW_HEIGHT = 830
+WINDOW_HEIGHT = 810
 
 class ExposedApi:
     """API exposta para comunicação Javascript <-> Python."""
@@ -237,6 +237,7 @@ def abrir_janela():
 
         webview.start(
             user_agent="pywebview",
+            # debug=True,
         )
 
     except Exception as e: # Capturando Exception genérica para logar qualquer erro

@@ -157,12 +157,23 @@ function botoesPywebview() {
 		document.getElementById("minimize-btn").style.display = "flex";
 		document.getElementById("close-btn").style.display = "flex";
 		document.getElementById("pausar-btn").style.display = "flex";
+		document.getElementById("grafico-btn").style.display = "flex";		
 	} else {
 		document.getElementById("pausar-btn").style.left = "unset";
 		document.getElementById("pausar-btn").style.right = "0px";
 		document.getElementById("pausar-btn").style.display = "flex";
 		document.getElementById("alerta-btn").style.left = "0px";
 		document.getElementById("alerta-btn").style.display = "flex";
+	}
+}
+
+function graficoAlternar() {
+	if (document.getElementById("grafico").style.display == "flex") {
+		document.getElementById("grafico").style.display = "none";
+	} else if (document.getElementById("grafico").style.display == "none") {
+		document.getElementById("grafico").style.display = "flex";
+	} else {
+		document.getElementById("grafico").style.display = "none";
 	}
 }
 
@@ -183,18 +194,18 @@ async function inicial() {
 			if (typeof varSetaOld !== 'undefined') {
 				let varSetaNew = priceChangePercent;
 				if (varSetaOld > varSetaNew) {
-					varSetaMostrar = "↓";
+					varSetaMostrar = "\u00A0\u00A0↓";
 				} else if (varSetaOld < varSetaNew) {
-					varSetaMostrar = "↑";
+					varSetaMostrar = "\u00A0\u00A0↑";
 				} else {
-					varSetaMostrar = varSetaMostrar;
+					varSetaMostrar = "↔";
 				}
 				varSetaOld = priceChangePercent;
 			} else {
 				varSetaOld = priceChangePercent;
-				varSetaMostrar = "↑";
+				varSetaMostrar = "↔";
 			}
-			const formattedPercent = priceChangePercent.toFixed(2) + '% ';
+			const formattedPercent = priceChangePercent.toFixed(2) + '%';
 
 			// Formatar a variavel de hora e data
 			const now = new Date();
@@ -221,9 +232,11 @@ async function inicial() {
 			document.getElementById('info-price').textContent = formattedPriceBRL;
 			if (ativo) {
 				document.getElementById('info-percent').textContent = formattedPercent;
-				if (varSetaMostrar == '↑') {
+				if (varSetaMostrar.replaceAll('\u00A0', '') === '↑') {
 					document.getElementById('info-seta').style.color = "#f7931a";
-				} else if (varSetaMostrar == '↓') {
+				} else if (varSetaMostrar.replaceAll('\u00A0', '') === '↓') {
+					document.getElementById('info-seta').style.color = "#f7931a";
+				} else if (varSetaMostrar == '↔') {
 					document.getElementById('info-seta').style.color = "white";
 				}
 				// Atualiza a seta indicando a última variação depois apaga e reativa a animação
@@ -315,9 +328,7 @@ async function atualiza_taxas() {
 			document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
 			document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
 			document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
-			document.getElementById('economyFee').textContent = `${dataFees.economyFee} sat/vB`;
 			document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
-			document.getElementById('mediumFee').textContent = `${(dataFees.minimumFee + dataFees.economyFee + dataFees.hourFee + dataFees.halfHourFee + dataFees.fastestFee) / 5} sat/vB`;
 		} catch (error) {
 			console.error('Erro ao buscar dados de taxas:', error);
 		}
@@ -704,7 +715,7 @@ function tocarAlerta(repeticoes = 1, volume = 1) {
 }
 
 function verificarCarregamento() {
-	if (document.getElementById('info-dolar').textContent == '' || document.getElementById('info-seta').textContent == '' || document.getElementById('mediumFee').textContent == '') {
+	if (document.getElementById('info-price').textContent == '') {
 		loadingTime *= 1.2;
 		if (loadingTime > 2000) {
 			location.reload();

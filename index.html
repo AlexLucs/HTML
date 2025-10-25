@@ -26,10 +26,62 @@
             <div class="btns" id="fixar-btn" title="Fixar no Topo" onclick="pyWebviewFixar()" alt="Fixar ao Topo">△</div> <!-- Título do botão corrigido para Fixar ao Topo -->
             <div class="btns" id="alerta-btn" title="Alertas de Preço" onclick="mostrarTelaAlerta()" alt="Alertas de Preço">⏱︎</div> <!-- Título do botão corrigido para Alertas de Preço -->
             <div class="btns" id="minimize-btn" title="Minimizar" onclick="pyWebviewMinimize()" alt="Minimizar Janela">_</div> <!-- Título do botão corrigido para Minimizar Janela -->
-            <div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar Aplicação">x</div> <!-- Título do botão corrigido para Fechar Aplicação -->
+            <div class="btns" id="close-btn" title="Fechar" onclick="pyWebviewFechar()" alt="Fechar Aplicação">x</div> 
+			<div class="btns" id="grafico-btn" title="Gráfico/Dados" onclick="graficoAlternar()" alt="Alternar entre Gráfico e Dados">⇄</div>
         </div>
-        <!-- Container para gráfico (funcionalidade não implementada/visível) -->
-        <div id="grafico" class="grafico" title="Gráfico (Não implementado)" alt="Gráfico (Não implementado)"></div> <!-- Título e alt atualizados para refletir a não implementação -->
+        <!-- Container para gráfico -->
+        <div id="grafico" class="grafico" title="Gráfico" alt="Gráfico">
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget"></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+			  {
+			  "lineWidth": 2,
+			  "lineType": 0,
+			  "chartType": "candlesticks",
+			  "fontColor": "rgba(100, 100, 100, 1)",
+			  "gridLineColor": "rgba(242, 242, 242, 0.06)",
+			  "volumeUpColor": "rgba(34, 171, 148, 0.5)",
+			  "volumeDownColor": "rgba(247, 82, 95, 0.5)",
+			  "backgroundColor": "rgba(0, 0, 0, 1)",
+			  "widgetFontColor": "rgba(100, 100, 100, 1)",
+			  "upColor": "rgba(247, 147, 26, 1)",
+			  "downColor": "rgba(100, 100, 100, 1)",
+			  "borderUpColor": "rgba(247, 147, 26, 1)",
+			  "borderDownColor": "rgba(100, 100, 100, 1)",
+			  "wickUpColor": "rgba(247, 147, 26, 1)",
+			  "wickDownColor": "rgba(100, 100, 100, 1)",
+			  "colorTheme": "dark",
+			  "isTransparent": false,
+			  "locale": "br",
+			  "chartOnly": true,
+			  "scalePosition": "right",
+			  "scaleMode": "Normal",
+			  "fontFamily": "Roboto",
+			  "valuesTracking": "1",
+			  "changeMode": "no-values",
+			  "symbols": [
+				[
+				  "BINANCE:BTCBRL|5D"
+				]
+			  ],
+			  "dateRanges": [
+				"1d|15",
+				"5d|60"
+			  ],
+			  "fontSize": "10",
+			  "headerFontSize": "small",
+			  "autosize": false,
+			  "dateFormat": "dd/MM/yy",
+			  "width": 440,
+			  "height": 310,
+			  "noTimeScale": false,
+			  "hideDateRanges": false
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->		
+		</div> <!-- Título e alt atualizados para refletir a não implementação -->
         <!-- Overlay para indicar estado de pausa/inatividade -->
 		<div id="overlay" class="overlay" title="Clique para Reiniciar Monitoramento" onclick="pararIniciar()" alt="Clique para Reiniciar Monitoramento">⏸</div> <!-- Título e alt atualizados para refletir a ação de reiniciar o monitoramento -->
         <!-- Background escuro para o modal de alerta -->
@@ -64,13 +116,12 @@
             <!-- Logo do Bitcoin -->
             <div id="info-logo" title="Bitcoin Monitor" alt="Logo do Bitcoin">₿</div>
             <!-- Preço do Bitcoin em BRL -->
-            <div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais (BRL). Dados da Binance©."></div> <!-- Título corrigido para melhor clareza -->
-            <!-- Preço do Bitcoin em USDT -->
+            <div id="info-price" class="btc_em_brl_principal" title="Preço atual do Bitcoin em Reais (BRL). Dados da Binance©."></div> <!-- Preço do Bitcoin em USDT -->
             <div id="info-usdt" class="btc_em_usdt_secundariol" title="Preço atual do Bitcoin em Dólares Americanos (USDT). Dados da Binance©."></div> <!-- Título corrigido para melhor clareza -->
             <!-- Preço do Dólar (cálculo próprio + B3) -->
             <div id="info-dolar" class="dolar_btc_e_b3" title="Preço do dólar calculado (BTC/BRL da Binance / BTC/USD da Binance) | Dólar B3. Dados AwesomeAPI© e Binance©"></div> <!-- Título e alt atualizados para refletir a fonte de dados combinada -->
             <!-- Variação percentual do preço -->
-            <div class="percentual" title="Variação percentual do preço do Bitcoin nas últimas 24 horas."> <!-- Título corrigido para horas e não hrs -->
+            <div class="percentual" title="Variação percentual do preço do Bitcoin nas últimas 24 horas."> <!-- Título corrigido para horas -->
                 <span id="info-percent"></span>
                 <span id="info-seta" class="aparecer"></span>
             </div>
@@ -118,31 +169,23 @@
                             <td id="minimumFeeE">Mínima:</td>
                             <td id="minimumFee"></td>
                         </tr>
-                        <tr title="Taxa econômica estimada para transação Bitcoin (prioridade baixa, confirmação demorada)."> <!-- Título e alt para descrições mais completas -->
-                            <td id="economyFeeE">Econômica:</td>
-                            <td id="economyFee"></td>
-                        </tr>
-                        <tr title="Taxa de prioridade estimada para transação Bitcoin (confirmação mais rápida)."> <!-- Título e alt para descrições mais completas -->
-                            <td id="fastestFeeE">Prioridade:</td>
-                            <td id="fastestFee"></td>
+                        <tr title="Taxa estimada para confirmação em ~1 hora para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
+                            <td id="hourFeeE">~1 hora:</td>
+                            <td id="hourFee"></td>
                         </tr>
                         <tr title="Taxa estimada para confirmação em ~30 minutos para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
                             <td id="halfHourFeeE">~30 min:</td>
                             <td id="halfHourFee"></td>
                         </tr>
-                        <tr title="Taxa estimada para confirmação em ~1 hora para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
-                            <td id="hourFeeE">~1 hora:</td>
-                            <td id="hourFee"></td>
+                        <tr title="Taxa de prioridade estimada para transação Bitcoin (confirmação mais rápida)."> <!-- Título e alt para descrições mais completas -->
+                            <td id="fastestFeeE">Próximo bloco:</td>
+                            <td id="fastestFee"></td>
                         </tr>
                         <tr>
                             <td colspan="2">
                                 <hr class="separator">
                             </td>
-                        </tr>
-                        <tr title="Taxa média estimada para transação Bitcoin."> <!-- Título e alt para descrições mais completas -->
-                            <td id="mediumFeeE">Média:</td>
-                            <td id="mediumFee"></td>
-                        </tr>
+                        </tr>                        
                     </tbody>
                 </table>
             </div>

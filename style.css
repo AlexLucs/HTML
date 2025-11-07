@@ -229,7 +229,7 @@ button[type="button"]:hover,
 }
 
 #grafico {
-	display: flex;
+	display: none;
     z-index: 2;
 }
 

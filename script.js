@@ -168,12 +168,14 @@ function botoesPywebview() {
 }
 
 function graficoAlternar() {
-	if (document.getElementById("grafico").style.display == "flex") {
-		document.getElementById("grafico").style.display = "none";
-	} else if (document.getElementById("grafico").style.display == "none") {
-		document.getElementById("grafico").style.display = "flex";
-	} else {
-		document.getElementById("grafico").style.display = "none";
+	if (navigator.userAgent == "pywebview") {
+		if (document.getElementById("grafico").style.display == "flex") {
+			document.getElementById("grafico").style.display = "none";
+		} else if (document.getElementById("grafico").style.display == "none") {
+			document.getElementById("grafico").style.display = "flex";
+		} else {
+			document.getElementById("grafico").style.display = "none";
+		}
 	}
 }
 

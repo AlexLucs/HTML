@@ -1,179 +1,270 @@
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificador de Primo</title>
+    <title>Tempo Primo</title>
     <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #0055aa;
+            --accent: #d32f2f;
+            --success: #2e7d32;
+            --bg: #f5f5f5;
+            --card: #ffffff;
+            --border: #e0e0e0;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-          font-family: Arial, sans-serif;
-          background: #f5f5f5;
-          min-height: 100vh;
-          padding: 20px 10px;
-          text-align: center;
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+            background: var(--bg);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px 10px;
+            text-align: center;
+            line-height: 1.5;
         }
+
         #container {
-          max-width: 100%;
-          width: 100%;
-          margin: 0 auto;
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
         }
+
         h1 {
-          font-size: clamp(1.8rem, 6vw, 2.2rem);
-          margin: 20px 0 25px;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin: 20px 0 25px;
+            color: #222;
         }
+
         .controls {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          margin: 20px 0 30px;
-          align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 20px 0 30px;
+            align-items: center;
         }
-        input[type="number"] {
-          width: 100%;
-          max-width: 320px;
-          padding: 14px;
-          font-size: 1.2rem;
-          border: 2px solid #ccc;
-          border-radius: 6px;
+
+        label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #444;
         }
+
+        input[type="text"] {
+            width: 100%;
+            max-width: 340px;
+            padding: 14px 16px;
+            font-size: 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+        }
+
         button {
-          width: 100%;
-          max-width: 320px;
-          padding: 14px;
-          font-size: 1.2rem;
-          background: #0066cc;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
+            width: 100%;
+            max-width: 340px;
+            padding: 14px 16px;
+            font-size: 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        button:hover { background: #0055aa; }
+
+        button:hover, button:focus {
+            background: var(--primary-dark);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+        }
+
         #info {
-          font-size: clamp(1.3rem, 5vw, 1.6rem);
-          font-weight: bold;
-          margin: 25px 0 20px;
-          word-break: break-word;
+            font-size: clamp(1.3rem, 5vw, 1.6rem);
+            font-weight: 600;
+            margin: 25px 0 20px;
+            min-height: 1.5em;
         }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
         table {
-          border-collapse: collapse;
-          margin: 0 auto;
-          width: 100%;
-          max-width: 100%;
-          background: white;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          border-radius: 6px;
-          overflow: hidden;
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 640px;
+            background: var(--card);
         }
+
+        caption {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 12px;
+            background: #f8f8f8;
+            color: #555;
+        }
+
         td {
-          padding: 10px 12px;
-          font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-          border: 1px solid #e0e0e0;
-          min-width: 0;
-          text-align: center;
-          background: #fffaf5;
-          font-family: monospace;
+            padding: 12px 14px;
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+            border: 1px solid var(--border);
+            text-align: center;
+            font-family: ui-monospace, monospace;
+            transition: background 0.15s;
         }
-        .primo { background: #ffebee; color: #d32f2f; font-weight: bold; }
+
+        td:hover {
+            background: #f0f7ff;
+        }
+
+        .primo { 
+            background: #ffebee !important; 
+            color: var(--accent); 
+            font-weight: 700; 
+        }
+
         .alvo {
-          border: 3px solid #000;
-          background: #e8f5e9 !important;
+            border: 3px solid #000 !important;
+            background: #e8f5e9 !important;
+            font-weight: 700;
         }
+
         #tempo {
-          margin-top: 25px;
-          font-size: 0.7rem;
-          color: #555;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #666;
         }
-    
-        @media (min-width: 600px) {
-          .controls { flex-direction: row; justify-content: center; }
-          input, button { width: auto; }
-          td { padding: 12px 16px; min-width: 110px; }
-        }
+
+        /* Removida a media query que mudava para row */
+        /* .controls permanece sempre column em todas as resoluções */
     </style>
 </head>
-
 <body>
-
     <div id="container">
-
-        <h1>É Primo?</h1>
-
+        <h1>Tempo Primo</h1>
         <div class="controls">
-            <input type="number" id="numero" placeholder="Número" min="0" max="999999999999999" 
-				oninput="this.value = this.value.slice(0,15)" 
-				onkeypress="if(event.key==='Enter') verificar();">
+            <label for="tempoInput">Insira o tempo (ex: 1h10m5s, 90s, 2m ou 123):</label>
+            <br>
+            <input type="text" id="tempoInput" placeholder="Ex: 1h10m5s, 90s, 2m ou 123" autocomplete="off">
+            <button type="button" id="btnObter">Obter</button>
         </div>
-
-        <div id="info"></div>
-
-        <div id="resultado"></div>
+        <div id="info" aria-live="polite"></div>
+        <div class="table-container" id="resultado"></div>
         <div id="tempo"></div>
-
     </div>
 
     <script>
+        'use strict';
+
         function ehPrimo(n) {
-          if (n < 2) return false;
-          if (n === 2 || n === 3) return true;
-          if (n % 2 === 0 || n % 3 === 0) return false;
-          const sqrt = Math.sqrt(n) | 0;
-          for (let i = 5; i <= sqrt; i += 6) {
-            if (n % i === 0 || n % (i + 2) === 0) return false;
-          }
-          return true;
+            if (n < 2) return false;
+            if (n === 2 || n === 3) return true;
+            if (n % 2 === 0 || n % 3 === 0) return false;
+            const sqrt = Math.sqrt(n) | 0;
+            for (let i = 5; i <= sqrt; i += 6) {
+                if (n % i === 0 || n % (i + 2) === 0) return false;
+            }
+            return true;
         }
+
+        function parseTempo(str) {
+            if (!str) return null;
+            str = str.trim().toLowerCase().replace(/\s+/g, '');
+            if (/^\d+$/.test(str)) return parseInt(str, 10);
+
+            const regex = /(\d+)([hms])/g;
+            let total = 0;
+            let match;
+            while ((match = regex.exec(str)) !== null) {
+                const num = parseInt(match[1], 10);
+                const unit = match[2];
+                if (unit === 'h') total += num * 3600;
+                else if (unit === 'm') total += num * 60;
+                else if (unit === 's') total += num;
+            }
+            return (total > 0 || str === '0') ? total : null;
+        }
+
+        function formatarTempo(totalSegundos) {
+            if (totalSegundos < 0) return '0m00s';
+            const minutos = Math.floor(totalSegundos / 60);
+            const segundos = totalSegundos % 60;
+            return `${minutos}m${segundos.toString().padStart(2, '0')}s`;
+        }
+
         function verificar() {
-          const input = document.getElementById('numero').value.trim();
-          const num = Number(input);
-          if (!Number.isInteger(num) || num < 0) {
-            document.getElementById('info').innerHTML = "Número inteiro ≥ 0";
-            document.getElementById('resultado').innerHTML = "";
-            document.getElementById('tempo').innerHTML = "";
-            return;
-          }
-          const start = performance.now();
-          const cache = new Map();
-          function isPrime(n) {
-            if (cache.has(n)) return cache.get(n);
-            const res = ehPrimo(n);
-            cache.set(n, res);
-            return res;
-          }
-          let abaixo = [], acima = [];
-          let i = num - 1;
-          while (abaixo.length < 2 && i >= 0) {
-            if (isPrime(i)) abaixo.unshift(i);
-            i--;
-          }
-          i = num + 1;
-          while (acima.length < 2) {
-            if (isPrime(i)) acima.push(i);
-            i++;
-          }
-          const min = Math.max(0, abaixo[0] || num - 10);
-          const max = acima[acima.length - 1] || num + 10;
-          let parts = [];
-          let count = 0;
-          for (let j = min; j <= max; j++) {
-            if (count % 8 === 0) parts.push('<tr>');
-            let classe = isPrime(j) ? 'primo' : '';
-            if (j === num) classe += (classe ? ' ' : '') + 'alvo';
-            parts.push(`<td class="${classe}">${j}</td>`);
-            count++;
-            if (count % 8 === 0) parts.push('</tr>');
-          }
-          if (count % 8 !== 0) parts.push('</tr>');
-          const html = parts.join('');
-          const tempo = (performance.now() - start).toFixed(2);
-          document.getElementById('info').innerHTML =
-            `${num} → ${isPrime(num) ? '<span style="color:#d32f2f">É primo</span>' : '<span style="color:#e65100">Não é primo</span>'}`;
-          document.getElementById('resultado').innerHTML = `<table>${html}</table>`;
-          document.getElementById('tempo').innerHTML = `Tempo: ${tempo} ms`;
+            const input = document.getElementById('tempoInput').value.trim();
+            const totalSegundos = parseTempo(input);
+
+            const infoEl = document.getElementById('info');
+            const resultadoEl = document.getElementById('resultado');
+            const tempoEl = document.getElementById('tempo');
+
+            infoEl.innerHTML = '';
+
+            if (totalSegundos === null) {
+                infoEl.innerHTML = '<span style="color:#d32f2f;">Formato inválido. Use: 1h10m5s, 90s, 2m, 123...</span>';
+                resultadoEl.innerHTML = '';
+                tempoEl.innerHTML = '';
+                return;
+            }
+
+            const start = performance.now();
+
+            let prevPrimes = [];
+            let i = totalSegundos - 1;
+            while (prevPrimes.length < 2 && i >= 0) {
+                if (ehPrimo(i)) prevPrimes.unshift(i);
+                i--;
+            }
+
+            let nextPrimes = [];
+            i = totalSegundos + 1;
+            while (nextPrimes.length < 2) {
+                if (ehPrimo(i)) nextPrimes.push(i);
+                i++;
+            }
+
+            const min = prevPrimes[0] !== undefined ? prevPrimes[0] : 0;
+            const max = nextPrimes[1] !== undefined ? nextPrimes[1] : totalSegundos + 5;
+
+            let parts = ['<table><caption>Tabela de tempos próximos ao valor informado</caption>'];
+            let count = 0;
+            for (let j = min; j <= max; j++) {
+                if (count % 8 === 0) parts.push('<tr>');
+                let classe = ehPrimo(j) ? 'primo' : '';
+                if (j === totalSegundos) classe += (classe ? ' ' : '') + 'alvo';
+                parts.push(`<td class="${classe}">${formatarTempo(j)}</td>`);
+                count++;
+                if (count % 8 === 0) parts.push('</tr>');
+            }
+            if (count % 8 !== 0) parts.push('</tr>');
+            parts.push('</table>');
+
+            const execTime = (performance.now() - start).toFixed(2);
+
+            resultadoEl.innerHTML = parts.join('');
+            tempoEl.innerHTML = `Tempo de execução: ${execTime} ms`;
         }
+
+        document.getElementById('btnObter').addEventListener('click', verificar);
+        document.getElementById('tempoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificar();
+        });
     </script>
-
 </body>
-
 </html>

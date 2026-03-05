@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<!-- Coloque isso dentro do <head>, logo após o <title> ou antes dos estilos -->
+	<link 
+	rel="icon" 
+	href="
+	data:image/svg+xml,
+	<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+	<circle cx='50' cy='50' r='38' fill='%230066cc'/>
+	<text x='50' y='68' font-family='system-ui,sans-serif' font-size='62' font-weight='bold' text-anchor='middle' fill='white'>P</text>
+	</svg>
+	" 
+	type="image/svg+xml">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tempo Primo</title>
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #0055aa;
+            --accent: #d32f2f;
+            --success: #2e7d32;
+            
+            /* Tema claro (padrão) */
+            --bg: #f5f5f5;
+            --card: #ffffff;
+            --text: #333;
+            --text-light: #555;
+            --border: #e0e0e0;
+            --table-head-bg: #f8f8f8;
+            --hover-bg: #f0f7ff;
+            --info: #444;
+            --toggle-bg: #e0e0e0;
+            --toggle-knob: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #e0e0e0;
+            --text-light: #aaaaaa;
+            --border: #444;
+            --table-head-bg: #252525;
+            --hover-bg: #2a2a3a;
+            --info: #cccccc;
+            --toggle-bg: #444;
+            --toggle-knob: #ffd700;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px 10px;
+            text-align: center;
+            line-height: 1.5;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        #container {
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin: 20px 0 25px;
+            color: #222;
+        }
+
+        [data-theme="dark"] h1 {
+            color: #e0e0e0;
+        }
+
+        /* ==================== INTERRUPTOR DE TEMA ==================== */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 90px;
+            height: 36px;
+            background: var(--toggle-bg);
+            border-radius: 36px;
+            cursor: pointer;
+            transition: background 0.4s ease;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            overflow: hidden;
+            user-select: none;
+            tabindex: 0;
+        }
+
+        .theme-toggle::before {
+            content: "";
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 28px;
+            height: 28px;
+            background: var(--toggle-knob);
+            border-radius: 50%;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            z-index: 2;
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            transform: translateX(48px);
+            background: linear-gradient(135deg, #ffd700, #ffcc00);
+        }
+
+        .theme-toggle .sun-icon,
+        .theme-toggle .moon-icon {
+            font-size: 19px;
+            line-height: 1;
+            z-index: 1;
+            transition: opacity 0.4s ease, color 0.3s ease;
+        }
+
+        .theme-toggle .sun-icon { color: #f39c12; }
+        .theme-toggle .moon-icon { color: #e0e0ff; }
+
+        [data-theme="light"] .moon-icon,
+        [data-theme="dark"] .sun-icon {
+            opacity: 0.35;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.25);
+        }
+
+        .theme-toggle:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 4px;
+        }
+
+        /* ==================== CONTROLES E LAYOUT ==================== */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 65px 0 30px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--info);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            max-width: 340px;
+            padding: 14px 16px;
+            font-size: 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+        }
+
+        button {
+            width: 100%;
+            max-width: 340px;
+            padding: 14px 16px;
+            font-size: 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover, button:focus {
+            background: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+        }
+
+        #info {
+            font-size: clamp(1.3rem, 5vw, 1.6rem);
+            font-weight: 600;
+            margin: 25px 0 20px;
+            min-height: 1.5em;
+            color: var(--info);
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            background: var(--card);
+        }
+
+        [data-theme="dark"] .table-container {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 640px;
+            background: var(--card);
+        }
+
+        caption {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 12px;
+            background: var(--table-head-bg);
+            color: var(--text-light);
+        }
+
+        td {
+            padding: 12px 14px;
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+            border: 1px solid var(--border);
+            text-align: center;
+            font-family: ui-monospace, monospace;
+            color: var(--text);
+            transition: background 0.15s;
+        }
+
+        td:hover {
+            background: var(--hover-bg);
+        }
+
+        .primo {
+            background: #ffebee !important;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        [data-theme="dark"] .primo {
+            background: #4a0000 !important;
+            color: #ff8a80 !important;
+        }
+
+        .alvo {
+            border: 3px solid currentColor !important;
+            background: #e8f5e9 !important;
+            font-weight: 700;
+        }
+
+        [data-theme="dark"] .alvo {
+            background: #1b5e20 !important;
+            color: #a5d6a7 !important;
+        }
+
+        #tempo {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div id="container">
+        <!-- Interruptor de tema -->
+        <div class="theme-toggle" id="themeToggle" role="button" aria-label="Alternar tema claro/escuro" tabindex="0">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </div>
+
+        <h1>Tempo Primo</h1>
+
+        <div class="controls">
+            <label for="tempoInput">Insira o tempo (ex: 1h10m5s, 90s, 2m ou 123):</label>
+            <input type="text" id="tempoInput" placeholder="Ex: 1h10m5s, 90s, 2m ou 123" autocomplete="off">
+            <button type="button" id="btnObter">Obter</button>
+        </div>
+
+        <div id="info" aria-live="polite"></div>
+        <div class="table-container" id="resultado"></div>
+        <div id="tempo"></div>
+    </div>
+
+    <script>
+        'use strict';
+
+        // ==================== CONTROLE DE TEMA ====================
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        function setTema(tema) {
+            html.setAttribute('data-theme', tema);
+            localStorage.setItem('tema', tema);
+            atualizarAriaToggle();
+        }
+
+        function atualizarAriaToggle() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            themeToggle.setAttribute('aria-pressed', isDark);
+        }
+
+        // Carregar tema salvo
+        const temaSalvo = localStorage.getItem('tema') || 'light';
+        setTema(temaSalvo);
+
+        // Clique
+        themeToggle.addEventListener('click', () => {
+            const atual = html.getAttribute('data-theme');
+            const novo = atual === 'dark' ? 'light' : 'dark';
+            setTema(novo);
+        });
+
+        // Teclado no toggle
+        themeToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const atual = html.getAttribute('data-theme');
+                const novo = atual === 'dark' ? 'light' : 'dark';
+                setTema(novo);
+            }
+        });
+
+        // Tecla global "T"
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 't' || e.key === 'T') {
+                const atual = html.getAttribute('data-theme');
+                setTema(atual === 'dark' ? 'light' : 'dark');
+            }
+        });
+
+        // ==================== LÓGICA PRINCIPAL ====================
+        function ehPrimo(n) {
+            if (n < 2) return false;
+            if (n === 2 || n === 3) return true;
+            if (n % 2 === 0 || n % 3 === 0) return false;
+            const sqrt = Math.sqrt(n) | 0;
+            for (let i = 5; i <= sqrt; i += 6) {
+                if (n % i === 0 || n % (i + 2) === 0) return false;
+            }
+            return true;
+        }
+
+        function parseTempo(str) {
+            if (!str) return null;
+            str = str.trim().toLowerCase().replace(/\s+/g, '');
+            if (/^\d+$/.test(str)) return parseInt(str, 10);
+
+            const regex = /(\d+)([hms])/g;
+            let total = 0;
+            let match;
+            while ((match = regex.exec(str)) !== null) {
+                const num = parseInt(match[1], 10);
+                const unit = match[2];
+                if (unit === 'h') total += num * 3600;
+                else if (unit === 'm') total += num * 60;
+                else if (unit === 's') total += num;
+            }
+            return (total > 0 || str === '0') ? total : null;
+        }
+
+        function formatarTempo(totalSegundos) {
+            if (totalSegundos < 0) return '0m00s';
+            const minutos = Math.floor(totalSegundos / 60);
+            const segundos = totalSegundos % 60;
+            return `${minutos}m${segundos.toString().padStart(2, '0')}s`;
+        }
+
+        function verificar() {
+            const input = document.getElementById('tempoInput').value.trim();
+            const totalSegundos = parseTempo(input);
+
+            const infoEl = document.getElementById('info');
+            const resultadoEl = document.getElementById('resultado');
+            const tempoEl = document.getElementById('tempo');
+
+            infoEl.innerHTML = '';
+
+            if (totalSegundos === null) {
+                infoEl.innerHTML = '<span style="color:#d32f2f;">Formato inválido. Use: 1h10m5s, 90s, 2m, 123...</span>';
+                resultadoEl.innerHTML = '';
+                tempoEl.innerHTML = '';
+                return;
+            }
+
+            const start = performance.now();
+
+            let prevPrimes = [];
+            let i = totalSegundos - 1;
+            while (prevPrimes.length < 2 && i >= 0) {
+                if (ehPrimo(i)) prevPrimes.unshift(i);
+                i--;
+            }
+
+            let nextPrimes = [];
+            i = totalSegundos + 1;
+            while (nextPrimes.length < 2) {
+                if (ehPrimo(i)) nextPrimes.push(i);
+                i++;
+            }
+
+            const min = prevPrimes[0] !== undefined ? prevPrimes[0] : 0;
+            const max = nextPrimes[1] !== undefined ? nextPrimes[1] : totalSegundos + 5;
+
+            let parts = ['<table><caption>Tabela de tempos próximos ao valor informado</caption>'];
+            let count = 0;
+
+            for (let j = min; j <= max; j++) {
+                if (count % 8 === 0) parts.push('<tr>');
+                let classe = ehPrimo(j) ? 'primo' : '';
+                if (j === totalSegundos) classe += (classe ? ' ' : '') + 'alvo';
+                parts.push(`<td class="${classe}">${formatarTempo(j)}</td>`);
+                count++;
+                if (count % 8 === 0) parts.push('</tr>');
+            }
+            if (count % 8 !== 0) parts.push('</tr>');
+            parts.push('</table>');
+
+            const execTime = (performance.now() - start).toFixed(2);
+
+            resultadoEl.innerHTML = parts.join('');
+            tempoEl.innerHTML = `Tempo de execução: ${execTime} ms`;
+        }
+
+        document.getElementById('btnObter').addEventListener('click', verificar);
+        document.getElementById('tempoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificar();
+        });
+    </script>
+</body>
+</html>

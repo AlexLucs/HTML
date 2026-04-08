@@ -3,10 +3,11 @@
 ## Preview in Webview
 
 #### Com Gráfico
-<img width="484" height="771" src="https://github.com/user-attachments/assets/15beb53c-6e88-4a50-bd5f-cbd708f640c2" />
+<img width="484" height="771" alt="image" src="https://github.com/user-attachments/assets/2b48efde-4cc1-46be-b70d-ac7f484926d9" />
 
 #### Com Dados
-<img width="484" height="771" src="https://github.com/user-attachments/assets/4bd4c8d1-87e5-4ff6-947d-aa90b1086186" />
+<img width="484" height="771" alt="image" src="https://github.com/user-attachments/assets/06010cec-77f6-4e5c-80d5-1534bfeac8a4" />
+
 
 
 ## Build Executable

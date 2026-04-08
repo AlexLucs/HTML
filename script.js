@@ -168,14 +168,12 @@ function botoesPywebview() {
 }
 
 function graficoAlternar() {
-	if (navigator.userAgent == "pywebview") {
-		if (document.getElementById("grafico").style.display == "flex") {
-			document.getElementById("grafico").style.display = "none";
-		} else if (document.getElementById("grafico").style.display == "none") {
-			document.getElementById("grafico").style.display = "flex";
-		} else {
-			document.getElementById("grafico").style.display = "none";
-		}
+	if (document.getElementById("grafico").style.display == "flex") {
+		document.getElementById("grafico").style.display = "none";
+	} else if (document.getElementById("grafico").style.display == "none") {
+		document.getElementById("grafico").style.display = "flex";
+	} else {
+		document.getElementById("grafico").style.display = "none";
 	}
 }
 
@@ -325,12 +323,12 @@ async function atualiza_USD(lastPriceBRL) {
 async function atualiza_taxas() {
 	if (ativo) {
 		try {
-			const responseFees = await fetch('https://mempool.space/api/v1/fees/recommended');
+			const responseFees = await fetch('https://mempool.space/api/v1/fees/precise');
 			const dataFees = await responseFees.json();
-			document.getElementById('fastestFee').textContent = `${dataFees.fastestFee} sat/vB`;
-			document.getElementById('halfHourFee').textContent = `${dataFees.halfHourFee} sat/vB`;
-			document.getElementById('hourFee').textContent = `${dataFees.hourFee} sat/vB`;
-			document.getElementById('minimumFee').textContent = `${dataFees.minimumFee} sat/vB`;
+			document.getElementById('fastestFee').textContent = `${parseFloat(dataFees.fastestFee).toFixed(2).replace('.', ',')} sat/vB`;
+			document.getElementById('halfHourFee').textContent = `${parseFloat(dataFees.halfHourFee).toFixed(2).replace('.', ',')} sat/vB`;
+			document.getElementById('hourFee').textContent = `${parseFloat(dataFees.hourFee).toFixed(2).replace('.', ',')} sat/vB`;
+			document.getElementById('minimumFee').textContent = `${parseFloat(dataFees.minimumFee).toFixed(2).replace('.', ',')} sat/vB`;
 		} catch (error) {
 			console.error('Erro ao buscar dados de taxas:', error);
 		}
